@@ -1,4 +1,9 @@
-export interface getItemType {
+export interface itemGetType {
+  count: number;
+  rows: itemRowType[];
+}
+
+export interface itemRowType {
   id: string;
   name: string;
   price: number;

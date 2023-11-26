@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import { getItemType } from "../../type/itemType";
+import { itemRowType } from "../../type/itemType";
 
-function ItemRow({ item }: { item: getItemType }) {
+function ItemRow({ item }: { item: itemRowType }) {
   const { id, name, price, quantity, shopId, shopName } = item;
   return (
     <Link to={`/item/${id}`}>

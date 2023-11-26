@@ -1,17 +1,13 @@
-import Spinner from "../../components/Spinner";
+import { itemRowType } from "../../type/itemType";
 import ItemRow from "./ItemRow";
-import useGetItems from "./useGetItems";
 
-function ItemList() {
-  const { isLoading, error, items } = useGetItems(80, 1, []);
-  console.log(items);
+function ItemList({ items }: { items: itemRowType[] }) {
   return (
-    <div>
-      {isLoading && <Spinner />}
-      {!isLoading &&
-        items !== undefined &&
-        items.map((item) => <ItemRow key={item.id} item={item} />)}
-    </div>
+    <>
+      {items.map((item) => (
+        <ItemRow key={item.id} item={item} />
+      ))}
+    </>
   );
 }
 

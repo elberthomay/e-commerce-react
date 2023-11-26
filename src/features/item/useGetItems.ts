@@ -1,6 +1,5 @@
 import { useQuery } from "react-query";
 import { getItems } from "../../api/item";
-import { getItemType } from "../../type/itemType";
 
 export default function useGetItems(
   limit: number,
@@ -11,5 +10,5 @@ export default function useGetItems(
     queryKey: ["getItems", limit, page, tags],
     queryFn: () => getItems(limit, page, tags),
   });
-  return { isLoading, error, items: data as getItemType[] | undefined };
+  return { isLoading, error, items: data };
 }
