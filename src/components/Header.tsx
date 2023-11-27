@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import useGetCurrentUser from "../features/user/useGetCurrentUser";
 import Logout from "./Logout";
+import SearchBar from "./SearchBar";
 
 const StyledHeader = styled.div`
   display: flex;
@@ -15,6 +16,7 @@ function Header() {
       {!isLoading && !error && (
         <StyledHeader>
           <Link to="/">main</Link>
+          <SearchBar />
           {isAuthenticated ? (
             <>
               <Link to="/cart">cart</Link>

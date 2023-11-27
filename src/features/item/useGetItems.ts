@@ -1,14 +1,23 @@
 import { useQuery } from "react-query";
 import { getItems } from "../../api/item";
 
-export default function useGetItems(
-  limit: number,
-  page: number,
-  tags: number[]
-) {
+export default function useGetItems({
+  search,
+  orderBy,
+  limit,
+  page,
+  tags,
+}: {
+  search?: string | null;
+  orderBy?: string | null;
+  limit?: number | null;
+  page?: number | null;
+
+  tags?: number[];
+}) {
   const { isLoading, error, data } = useQuery({
-    queryKey: ["getItems", limit, page, tags],
-    queryFn: () => getItems(limit, page, tags),
+    queryKey: ["getItems", search, orderBy, limit, page, tags],
+    queryFn: () => getItems({ search, orderBy, limit, page, tags }),
   });
   return { isLoading, error, items: data };
 }
