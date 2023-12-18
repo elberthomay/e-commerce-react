@@ -4,7 +4,7 @@ import Paging from "../../components/Paging";
 import Spinner from "../../components/Spinner";
 import useLimitAndPagination from "../../hooks/useLimitAndPagination";
 import ItemList from "./ItemList";
-import useGetItems from "./useGetItems";
+import useGetItems from "../../hooks/item/useGetItems";
 import Sort from "../../components/Sort";
 
 function ItemTable() {

@@ -16,12 +16,16 @@ function CartSummary({ cart }: { cart: cartOutputType[] }) {
   );
   return (
     <>
-      <div>
-        <h1>Cart Summary</h1>
-        <p>TotalPrice({itemCount}):</p>
-        <p>{itemPrice}</p>
-      </div>
-      {itemCount > 0 && allAvailable && <button>Buy now</button>}
+      {itemCount !== 0 && (
+        <>
+          <div>
+            <h1>Cart Summary</h1>
+            <p>TotalPrice({itemCount}):</p>
+            <p>{itemPrice}</p>
+          </div>
+          {itemCount > 0 && allAvailable && <button>Buy now</button>}
+        </>
+      )}
     </>
   );
 }

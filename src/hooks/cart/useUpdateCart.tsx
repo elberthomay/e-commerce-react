@@ -1,10 +1,10 @@
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateCart } from "../../api/cart";
 import { cartUpdateType } from "../../type/cartType";
 
 export default function useUpdateCart() {
   const queryClient = useQueryClient();
-  const { isLoading, error, mutate } = useMutation({
+  const { isPending, error, mutate } = useMutation({
     mutationKey: ["updateCart"],
     mutationFn: ({
       itemId,
@@ -13,7 +13,7 @@ export default function useUpdateCart() {
       itemId: string;
       updateData: cartUpdateType;
     }) => updateCart({ ...updateData, itemId }),
-    onSuccess: () => queryClient.invalidateQueries(["cart"]),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["cart"] }),
   });
-  return { isLoading, error, updateCart: mutate };
+  return { isLoading: isPending, error, updateCart: mutate };
 }

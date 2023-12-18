@@ -1,5 +1,6 @@
 import { RequestError } from "../error/RequestError";
 import { BASE_API_URL } from "../helper/constant";
+import { CurrentUserOutputType } from "../type/userType";
 
 export async function login(loginData: {
   email: string;
@@ -37,7 +38,7 @@ export async function signup(userData: {
   else throw new RequestError(response.status, body);
 }
 
-export async function getCurrentUser() {
+export async function getCurrentUser(): Promise<CurrentUserOutputType> {
   const url = BASE_API_URL + "user/";
   const response = await fetch(url, { credentials: "include" });
   const body = await response.json();

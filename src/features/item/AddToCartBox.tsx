@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import useCreateCart from "../cart/useCreateCart";
+import useCreateCart from "../../hooks/cart/useCreateCart";
 import Counter from "../../components/Counter";
 
 function AddToCartBox({

@@ -1,7 +1,7 @@
-import { itemRowType } from "../../type/itemType";
+import { ItemRowType } from "../../type/itemType";
 import ItemRow from "./ItemRow";
 
-function ItemList({ items }: { items: itemRowType[] }) {
+function ItemList({ items }: { items: ItemRowType[] }) {
   return (
     <>
       {items.map((item) => (

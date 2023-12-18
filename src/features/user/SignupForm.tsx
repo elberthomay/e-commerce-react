@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useForm, FieldValues } from "react-hook-form";
-import useSignup from "./useSignup";
+import useSignup from "../../hooks/user/useSignup";
 import FormRow from "../../components/formRow";
 
 function SignupForm() {
@@ -49,10 +49,7 @@ function SignupForm() {
           id="name"
           {...register("name", {
             required: "Name is required",
-            pattern: {
-              value: /^\w+$/,
-              message: "Name must only contain letter, number or underscore",
-            },
+            maxLength: 60,
           })}
         />
       </FormRow>
@@ -64,7 +61,11 @@ function SignupForm() {
             required: "Password is required",
             minLength: {
               value: 8,
-              message: "Password must be more than 8 character",
+              message: "Password must be more than 8 characters",
+            },
+            maxLength: {
+              value: 90,
+              message: "Password must be shorter than 90 characters",
             },
           })}
         />

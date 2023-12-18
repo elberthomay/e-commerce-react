@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getItems } from "../../api/item";
 
 export default function useGetItems({
@@ -16,7 +16,7 @@ export default function useGetItems({
   tags?: number[];
 }) {
   const { isLoading, error, data } = useQuery({
-    queryKey: ["getItems", search, orderBy, limit, page, tags],
+    queryKey: ["items", search, orderBy, limit, page, tags],
     queryFn: () => getItems({ search, orderBy, limit, page, tags }),
   });
   return { isLoading, error, items: data };

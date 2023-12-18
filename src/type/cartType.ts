@@ -4,6 +4,7 @@ export interface cartOutputType {
   name: string;
   price: number;
   quantity: number;
+  image: string | null;
   selected: boolean;
   shopId: string;
   shopName: string;

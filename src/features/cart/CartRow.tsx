@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom";
 import { cartOutputType } from "../../type/cartType";
 import Counter from "../../components/Counter";
-import useUpdateCart from "./useUpdateCart";
+import useUpdateCart from "../../hooks/cart/useUpdateCart";
 import { useEffect, useState } from "react";
+import { createImageUrl } from "../../api/image";
 
 function CartRow({ cartItem }: { cartItem: cartOutputType }) {
-  const { itemId, name, price, inventory, quantity, selected } = cartItem;
+  const { itemId, name, price, inventory, image, quantity, selected } =
+    cartItem;
   const { isLoading, error, updateCart } = useUpdateCart();
   const [tempQuantity, setTempQuantity] = useState(quantity);
   function toggleSelected() {
@@ -47,10 +49,11 @@ function CartRow({ cartItem }: { cartItem: cartOutputType }) {
         onClick={toggleSelected}
         disabled={isLoading}
       />
-      <Link to={`/item/${itemId}`}>
-        <p>{name}</p>
-        <p>{price}</p>
-      </Link>
+      <img src={createImageUrl(image ?? "image-not-found.webp")} alt="" />
+      <Link to={`/item/${itemId}`}></Link>
+      <p>{name}</p>
+      <p>{price}</p>
+      <button>Delete</button>
       <Counter
         disabled={isLoading}
         min={1}

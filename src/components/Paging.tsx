@@ -1,4 +1,4 @@
-import useGetItems from "../features/item/useGetItems";
+import useGetItems from "../hooks/item/useGetItems";
 import useLimitAndPagination from "../hooks/useLimitAndPagination";
 
 function Paging({ count }: { count: number }) {

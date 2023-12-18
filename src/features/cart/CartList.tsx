@@ -1,6 +1,7 @@
 import { cartOutputType } from "../../type/cartType";
 import CartShopList from "./CartShopList";
-import useUpdateCart from "./useUpdateCart";
+import useDeleteCart from "../../hooks/cart/useDeleteCart";
+import useUpdateCart from "../../hooks/cart/useUpdateCart";
 
 function CartList({ cart }: { cart: cartOutputType[] }) {
   //convert cart to entries by shop
@@ -24,12 +25,23 @@ function CartList({ cart }: { cart: cartOutputType[] }) {
   });
 
   const { isLoading, error, updateCart } = useUpdateCart();
+  const {
+    isLoading: deleteIsLoading,
+    error: deleteError,
+    deleteCart,
+  } = useDeleteCart();
 
   const allSelected = cart.every(({ selected }) => selected);
+  const anySelected = cart.some(({ selected }) => selected);
+
   function handleToggleSelect() {
     cart.map(({ itemId }) =>
       updateCart({ itemId, updateData: { selected: !allSelected } })
     );
+  }
+
+  function handleDeleteSelected() {
+    cart.filter((selected) => selected).map(({ itemId }) => deleteCart(itemId));
   }
 
   return (
@@ -42,6 +54,11 @@ function CartList({ cart }: { cart: cartOutputType[] }) {
         disabled={isLoading}
       />
       <label htmlFor="selectAllCart">Select all</label>
+      {anySelected && (
+        <button onClick={handleDeleteSelected} disabled={deleteIsLoading}>
+          Delete Selected
+        </button>
+      )}
       <ul>
         {Array.from(cartByShop.values()).map((cartShop) => (
           <CartShopList key={cartShop.shopId} cartShop={cartShop} />

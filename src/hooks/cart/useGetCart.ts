@@ -1,0 +1,16 @@
+import { useQuery } from "@tanstack/react-query";
+import { getCart } from "../../api/cart";
+import { RequestError } from "../../error/RequestError";
+
+export default function useGetCart() {
+  const { isLoading, error, data } = useQuery({
+    queryKey: ["cart"],
+    queryFn: () => getCart(),
+    retry: (count, body) =>
+      (body instanceof RequestError && body.status === 401) || count > 10
+        ? false
+        : true,
+  });
+
+  return { isLoading, error, cart: data };
+}

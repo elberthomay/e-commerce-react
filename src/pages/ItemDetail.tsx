@@ -1,26 +1,30 @@
 import { Link, useParams } from "react-router-dom";
-import useGetItem from "../features/item/useGetItem";
+import useGetItem from "../hooks/item/useGetItem";
 import Spinner from "../components/Spinner";
 import AddToCartBox from "../features/item/AddToCartBox";
-import useGetCurrentUser from "../features/user/useGetCurrentUser";
+import useGetCurrentUser from "../hooks/user/useGetCurrentUser";
+import ImageDisplay from "../ui/ImageDisplay";
 function ItemDetail() {
   const { itemId } = useParams();
   const { isLoading, error, item } = useGetItem(itemId ?? "");
   const { isAuthenticated } = useGetCurrentUser();
-  console.log(item);
-  const { id, name, shopId, description, price, quantity } = item ?? {};
+  const { id, name, shopId, shopName, description, price, quantity, images } =
+    item ?? {};
   return (
     <>
       {isLoading && <Spinner />}
 
-      {!isLoading && !error && (
+      {!isLoading && item && (
         <div>
           <h1>{name}</h1>
+          <ImageDisplay images={item.images} />
           <p>Description: {description}</p>
-          <Link to={`/shop/${shopId}`}>Shop: {shopId}</Link>
+          <Link to={`/shop/${shopId}`}>Shop: {shopName}</Link>
           <p>Price: {price}</p>
           <p>Quantity: {quantity}</p>
-          {isAuthenticated && <AddToCartBox itemId={id} inventory={quantity} />}
+          {isAuthenticated && (
+            <AddToCartBox itemId={item.id} inventory={item.quantity} />
+          )}
         </div>
       )}
     </>

@@ -1,7 +1,10 @@
 import { useEffect } from "react";
 import FormRow from "../../components/formRow";
 import { useForm, FieldValues } from "react-hook-form";
-import useLogin from "./useLogin";
+import useLogin from "../../hooks/user/useLogin";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { RequestError } from "../../error/RequestError";
 
 function LoginForm() {
   const {
@@ -11,11 +14,26 @@ function LoginForm() {
     setError,
     formState: { errors },
   } = useForm();
+  const navigate = useNavigate();
 
   const { isLoading, error, login } = useLogin();
 
   async function onSubmit(formData: FieldValues) {
-    login({ email: formData.email, password: formData.password });
+    const loginPromise = login({
+      email: formData.email,
+      password: formData.password,
+    });
+    toast.promise(loginPromise, {
+      loading: "Logging in",
+      success: (data) => {
+        navigate("/");
+        return "Login successful";
+      },
+      error: (error) => {
+        if (error instanceof RequestError) return "Invalid email or password";
+        else return "Failed logging in";
+      },
+    });
   }
 
   useEffect(() => {

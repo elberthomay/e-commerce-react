@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import useGetCurrentUser from "../features/user/useGetCurrentUser";
+import useGetCurrentUser from "../hooks/user/useGetCurrentUser";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {

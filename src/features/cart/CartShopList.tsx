@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { cartOutputType } from "../../type/cartType";
 import CartRow from "./CartRow";
 import { updateCart } from "../../api/cart";
-import useUpdateCart from "./useUpdateCart";
+import useUpdateCart from "../../hooks/cart/useUpdateCart";
 
 function CartShopList({
   cartShop,

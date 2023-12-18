@@ -1,5 +1,5 @@
 import LoginForm from "../features/user/LoginForm";
-import useGetCurrentUser from "../features/user/useGetCurrentUser";
+import useGetCurrentUser from "../hooks/user/useGetCurrentUser";
 import Spinner from "../components/Spinner";
 import { Navigate, useSearchParams } from "react-router-dom";
 

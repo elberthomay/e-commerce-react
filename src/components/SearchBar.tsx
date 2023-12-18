@@ -1,17 +1,34 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import useGetShop from "../hooks/shop/useGetShop";
 
 function SearchBar() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const searchQuery = searchParams.get("search");
+
+  const [searchLocation, setSearchLocation] = useState<string>("all");
   const [searchString, setSearchString] = useState<string>("");
+
+  const { shopId } = useParams();
+  const { shop } = useGetShop(shopId);
+
+  useEffect(() => {
+    setSearchString(searchQuery ?? "");
+  }, [searchQuery]);
+
+  useEffect(() => {
+    if (shop) setSearchLocation("shop");
+  }, [shop]);
+
   function handleSearch(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (searchString !== "") {
+      setSearchString("");
       navigate({
-        pathname: "/",
+        pathname: searchLocation === "shop" ? `/shop/${shopId}` : "/",
         search: `?search=${encodeURIComponent(searchString)}`,
       });
-      setSearchString("");
     }
   }
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -24,6 +41,15 @@ function SearchBar() {
   }
   return (
     <form onSubmit={handleSearch}>
+      {shop && (
+        <select
+          value={searchLocation}
+          onChange={(e) => setSearchLocation(e.target.value)}
+        >
+          <option value="shop">In {shop.name}</option>
+          <option value="all">Everywhere</option>
+        </select>
+      )}
       <input
         type="text"
         value={searchString}

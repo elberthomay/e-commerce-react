@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import AppLayout from "./components/AppLayout";
 import Cart from "./pages/Cart";
 import MyShop from "./pages/MyShop";
@@ -13,12 +13,19 @@ import Signup from "./pages/Signup";
 import MainPage from "./pages/MainPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PathNotFound from "./pages/PathNotFound";
+import { Toaster } from "react-hot-toast";
+import MyShopDashboard from "./features/myshop/MyShopDashboard";
+import MyShopItems from "./features/myshop/MyShopItems";
+import MyShopSettings from "./features/myshop/MyShopSettings";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 function App() {
   const queryClient = new QueryClient();
 
   return (
     <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools />
+      <Toaster />
       <BrowserRouter>
         <Routes>
           <Route element={<AppLayout />}>
@@ -31,7 +38,19 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/myshop" element={<MyShop />} />
+            <Route
+              path="/myshop/"
+              element={
+                <ProtectedRoute>
+                  <MyShop />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<MyShopDashboard />} />
+              <Route path="dashboard" element={<MyShopDashboard />} />
+              <Route path="items" element={<MyShopItems />} />
+              <Route path="settings" element={<MyShopSettings />} />
+            </Route>
             <Route path="/shop/:shopId" element={<Shop />} />
             <Route path="/item/:itemId" element={<ItemDetail />} />
             <Route
@@ -43,7 +62,7 @@ function App() {
               }
             >
               <Route index element={<UserData />} />
-              <Route path="/user/settings/address" element={<UserAddress />} />
+              <Route path="address" element={<UserAddress />} />
             </Route>
           </Route>
           <Route path="/login" element={<Login />} />
