@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import useGetCurrentUser from "../hooks/user/useGetCurrentUser";
-import SearchBar from "./SearchBar";
+import HeaderSearchBar from "./HeaderSearchBar";
 import CartHeader from "../features/cart/HeaderCart";
 import HeaderUser from "../features/user/HeaderUser";
 import HeaderShop from "../features/shop/HeaderShop";
@@ -18,7 +18,7 @@ function Header() {
       {!isLoading && !error && (
         <StyledHeader>
           <Link to="/">main</Link>
-          <SearchBar />
+          <HeaderSearchBar />
           {isAuthenticated ? (
             <>
               <CartHeader />

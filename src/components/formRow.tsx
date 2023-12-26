@@ -46,7 +46,7 @@ function FormRow({
   formErrors: FieldErrors;
   children: React.ReactElement;
 }) {
-  const id = children?.props?.id;
+  const id = children?.props?.name;
   return (
     <StyledFormRow>
       <Label htmlFor={id}>{label}</Label>

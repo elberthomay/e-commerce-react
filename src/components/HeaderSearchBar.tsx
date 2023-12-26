@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import useGetShop from "../hooks/shop/useGetShop";
+import SearchBar from "../ui/SearchBar";
 
-function SearchBar() {
+function HeaderSearchBar() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get("search");
@@ -50,7 +51,7 @@ function SearchBar() {
           <option value="all">Everywhere</option>
         </select>
       )}
-      <input
+      <SearchBar
         type="text"
         value={searchString}
         onChange={handleChange}
@@ -60,4 +61,4 @@ function SearchBar() {
   );
 }
 
-export default SearchBar;
+export default HeaderSearchBar;
