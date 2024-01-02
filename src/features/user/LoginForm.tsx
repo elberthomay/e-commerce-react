@@ -5,6 +5,7 @@ import useLogin from "../../hooks/user/useLogin";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { RequestError } from "../../error/RequestError";
+import { UserLoginType } from "../../type/userType";
 
 function LoginForm() {
   const {
@@ -13,12 +14,12 @@ function LoginForm() {
     handleSubmit,
     setError,
     formState: { errors },
-  } = useForm();
+  } = useForm<UserLoginType>();
   const navigate = useNavigate();
 
   const { isLoading, error, login } = useLogin();
 
-  async function onSubmit(formData: FieldValues) {
+  async function onSubmit(formData: UserLoginType) {
     const loginPromise = login({
       email: formData.email,
       password: formData.password,
@@ -30,17 +31,20 @@ function LoginForm() {
         return "Login successful";
       },
       error: (error) => {
-        if (error instanceof RequestError) return "Invalid email or password";
-        else return "Failed logging in";
+        if (error instanceof RequestError) {
+          if (error.status === 401) return "Invalid email or password";
+          else if (error.status === 409)
+            return "Password is not set, please login using Oauth";
+          else return "Failed logging in";
+        } else return "Failed logging in";
       },
     });
-  }
-
-  useEffect(() => {
-    if (!isLoading && error) {
-      reset();
+    try {
+      await loginPromise;
+    } catch (e) {
+      reset({ password: "" });
     }
-  }, [isLoading, error, reset]);
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -66,6 +70,8 @@ function LoginForm() {
           })}
         />
       </FormRow>
+      <input type="checkbox" {...register("rememberMe")} />
+      <label htmlFor="rememberMe">Remember me</label>
       <button>Submit</button>
     </form>
   );

@@ -4,14 +4,13 @@ export interface ShopGetOutputType {
   id: string;
   name: string;
   description: string;
+  avatar: string | null;
   userId: string;
   createdAt: string;
   updatedAt: string;
 }
 
-export type CurrentShopGetOutputType =
-  | ShopGetOutputType
-  | Record<string, never>;
+export type CurrentShopGetOutputType = ShopGetOutputType;
 
 export interface GetShopItemOptions {
   search?: string;
@@ -27,3 +26,7 @@ export interface ShopGetItemType {
   count: number;
   rows: ShopItemRowType[];
 }
+
+export type ShopUpdateType = {
+  name?: string;
+};

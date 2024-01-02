@@ -17,7 +17,12 @@ function HeaderShopButton(dropdownContextValue: DropdownContextType) {
   }
   return (
     <div onClick={handleNavigate}>
-      <img src={createImageUrl("defaultAvatar.webp", { height: 30 })} alt="" />
+      <img
+        src={createImageUrl(currentShop?.avatar ?? "defaultAvatar.webp", {
+          height: 30,
+        })}
+        alt=""
+      />
       {hasShop ? currentShop?.name : "Shop"}
     </div>
   );

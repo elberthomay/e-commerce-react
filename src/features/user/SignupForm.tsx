@@ -2,6 +2,11 @@ import { useEffect } from "react";
 import { useForm, FieldValues } from "react-hook-form";
 import useSignup from "../../hooks/user/useSignup";
 import FormRow from "../../components/formRow";
+import { UserRegisterType } from "../../type/userType";
+import { pick } from "lodash";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { RequestError } from "../../error/RequestError";
 
 function SignupForm() {
   const {
@@ -10,23 +15,36 @@ function SignupForm() {
     handleSubmit,
     setError,
     formState: { errors },
-  } = useForm();
-
+  } = useForm<UserRegisterType & { repeatPassword: string }>();
+  const navigate = useNavigate();
   const { isLoading, error, signup } = useSignup();
 
-  async function onSubmit(formData: FieldValues) {
-    signup({
-      email: formData.email,
-      password: formData.password,
-      name: formData.name,
+  async function onSubmit(
+    formData: UserRegisterType & { repeatPassword: string }
+  ) {
+    const registerData = pick(formData, ["email", "name", "password"]);
+    const signupPromise = signup(registerData);
+    toast.promise(signupPromise, {
+      loading: "Signing up",
+      success: "Signup is successful",
+      error: "Error signing up",
     });
-  }
-
-  useEffect(() => {
-    if (!isLoading && error) {
-      reset();
+    try {
+      await signupPromise;
+      navigate("/login");
+    } catch (e) {
+      reset({ password: "", repeatPassword: "" });
+      if (e instanceof RequestError) {
+        const inputErrors = e.body.errors as {
+          field: keyof UserRegisterType;
+          message: string;
+        }[];
+        inputErrors.forEach(({ field, message }) =>
+          setError(field, { message })
+        );
+      }
     }
-  }, [isLoading, error, reset]);
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

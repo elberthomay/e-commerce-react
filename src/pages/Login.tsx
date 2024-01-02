@@ -2,6 +2,7 @@ import LoginForm from "../features/user/LoginForm";
 import useGetCurrentUser from "../hooks/user/useGetCurrentUser";
 import Spinner from "../components/Spinner";
 import { Navigate, useSearchParams } from "react-router-dom";
+import GoogleAuthComponent from "../features/auth/GoogleAuthComponent";
 
 function Login() {
   const { isLoading, error, currentUser, isAuthenticated } =
@@ -18,6 +19,7 @@ function Login() {
         <div>
           <h1>Login</h1>
           <LoginForm />
+          <GoogleAuthComponent />
         </div>
       )}
     </>

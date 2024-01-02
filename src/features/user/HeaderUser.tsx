@@ -6,7 +6,8 @@ import Logout from "../../components/Logout";
 
 function HeaderUserButton(dropdownContextValue: DropdownContextType) {
   const { currentUser } = useGetCurrentUser();
-  const nameFirstWord = currentUser?.name.split(" ")[0];
+  //take first word of name, maximum 20 characters
+  const nameFirstWord = currentUser?.name.split(" ")[0].slice(0, 20);
   const { isOpen, toggleIsOpen } = dropdownContextValue;
   return (
     <Link to="/user/settings">

@@ -18,6 +18,7 @@ import MyShopDashboard from "./features/myshop/MyShopDashboard";
 import MyShopItems from "./features/myshop/MyShopItems";
 import MyShopSettings from "./features/myshop/MyShopSettings";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import AuthenticationCheck from "./features/auth/AuthenticationCheck";
 
 function App() {
   const queryClient = new QueryClient();
@@ -68,6 +69,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="*" element={<PathNotFound />} />
+
+          <Route path="/auth/check" element={<AuthenticationCheck />} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>

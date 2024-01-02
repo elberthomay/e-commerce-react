@@ -61,44 +61,88 @@ const Button = styled.button`
 
 const ModalContext = createContext<{
   openId: string | null;
+  confirmationOpen: boolean;
   open: (id: string) => void;
   close: () => void;
+  cancelClose: () => void;
+  closeImmediately: () => void;
 }>({
   openId: "",
+  confirmationOpen: false,
   open: () => {
     return;
   },
   close: () => {
     return;
   },
+  cancelClose: () => {
+    return;
+  },
+  closeImmediately: () => {
+    return;
+  },
 });
 
-function Modal({ children }: { children: ReactNode }) {
+function Modal({
+  children,
+  useConfirmation = false,
+}: {
+  children: ReactNode;
+  useConfirmation?: boolean;
+}) {
   const [openId, setOpenId] = useState<string | null>(null);
+  const [confirmationOpen, setConfirmationOpen] = useState<boolean>(false);
   const open = (id: string) => {
-    console.log("modal open triggered");
     setOpenId(id);
+    setConfirmationOpen(false);
   };
   const close = () => {
+    //if confirmation window already open, or doesn't use confirmation
+    if (confirmationOpen || !useConfirmation) {
+      setOpenId(null);
+      setConfirmationOpen(false);
+    } else setConfirmationOpen(true);
+  };
+
+  const cancelClose = () => {
+    setConfirmationOpen(false);
+  };
+
+  const closeImmediately = () => {
     setOpenId(null);
+    setConfirmationOpen(false);
   };
 
   return (
-    <ModalContext.Provider value={{ openId, open, close }}>
+    <ModalContext.Provider
+      value={{
+        openId,
+        confirmationOpen,
+        open,
+        close,
+        cancelClose,
+        closeImmediately,
+      }}
+    >
       {children}
     </ModalContext.Provider>
   );
 }
 
-function Window({ id, children }: { id: string; children: ReactNode }) {
-  const { openId } = useModal();
+function Window({
+  id,
+  children,
+  style = "overlay",
+}: {
+  id: string;
+  children: ReactNode;
+  style?: "replace" | "overlay";
+}) {
+  const { openId, confirmationOpen, close } = useModal();
   return createPortal(
     <>
-      {openId === id && (
-        <ModalOverlay>
-          <ModalButton>
-            <HiXMark />
-          </ModalButton>
+      {openId === id && !(style === "replace" && confirmationOpen) && (
+        <ModalOverlay onClick={close}>
           <StyledModal
             onClick={(e) => {
               e.stopPropagation();
@@ -113,12 +157,37 @@ function Window({ id, children }: { id: string; children: ReactNode }) {
   );
 }
 
-function ModalOverlay({ children }: { children: ReactNode }) {
-  const { close } = useModal();
+function Confirmation({ children }: { children: ReactNode }) {
+  const { confirmationOpen, cancelClose: closeConfirmation } = useModal();
+  return createPortal(
+    <>
+      {confirmationOpen && (
+        <ModalOverlay onClick={closeConfirmation}>
+          <StyledModal
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            {children}
+          </StyledModal>
+        </ModalOverlay>
+      )}
+    </>,
+    document.body
+  );
+}
+
+function ModalOverlay({
+  children,
+  onClick,
+}: {
+  children: ReactNode;
+  onClick: () => void;
+}) {
   return (
     <Overlay
       onClick={() => {
-        close();
+        onClick();
       }}
     >
       {children}
@@ -143,6 +212,7 @@ function Open({ id, children }: { id: string; children: ReactElement }) {
 
 Modal.Window = Window;
 Modal.Open = Open;
+Modal.Confirmation = Confirmation;
 
 export function useModal() {
   const value = useContext(ModalContext);

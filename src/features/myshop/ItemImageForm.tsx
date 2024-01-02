@@ -1,12 +1,10 @@
 import { ChangeEvent, Dispatch, DragEvent, useState } from "react";
 import { ItemDetailsOutputType } from "../../type/itemType";
 import toast from "react-hot-toast";
-import pica from "pica";
 import { MAX_HEIGHT as MAX_LENGTH } from "../../helper/constant";
 import { createImageUrl } from "../../api/image";
 import { v4 as uuid } from "uuid";
-
-const picaInstance = pica();
+import { resizeImageFile } from "../../utilities/imageUtils";
 
 function ItemImageForm({
   images,
@@ -62,58 +60,22 @@ function ItemImageForm({
       // image count must not exceed 10
       if (selectedFile.length + imageList.length <= 10) {
         //would throw error if image is invalid
-        try {
-          const newImages = await Promise.all(
-            Array.from(selectedFile).map(async (file, index) => {
-              const image = await createImageBitmap(file);
+        const newImages = (
+          await Promise.all(
+            Array.from(selectedFile).map((file) => resizeImageFile(file))
+          )
+        )
+          .filter((i): i is Exclude<typeof i, null> => !!i)
+          .map((image, index) => ({
+            ...image,
+            order: highestIndex + index + 1,
+            id: uuid(),
+          }));
 
-              let size: { width: number; height: number } = {
-                width: image.width,
-                height: image.height,
-              };
-              // resize if width or height exceed MAX_LENGTH, keep aspect ratio
-              if (size.height > MAX_LENGTH || size.width > MAX_LENGTH) {
-                size =
-                  size.height > size.width
-                    ? {
-                        height: MAX_LENGTH,
-                        width: Math.floor(
-                          (size.width * MAX_LENGTH) / size.height
-                        ),
-                      }
-                    : {
-                        height: Math.floor(
-                          (size.height * MAX_LENGTH) / size.width
-                        ),
-                        width: MAX_LENGTH,
-                      };
-              }
-
-              //create new canvas, resize
-              const canvas = document.createElement("canvas");
-              canvas.width = size.width;
-              canvas.height = size.height;
-
-              const resultCanvas = await picaInstance.resize(image, canvas);
-
-              //create blob for upload, dataURL for temporary display
-              const resultBlob = await picaInstance.toBlob(
-                resultCanvas,
-                "image/webp"
-              );
-              const resultDataUrl = resultCanvas.toDataURL("image/webp");
-              return {
-                image: resultBlob,
-                imageUrl: resultDataUrl,
-                order: highestIndex + index + 1,
-                id: uuid(),
-              };
-            })
-          );
+        if (newImages.length === 0) toast.error("Images are not invalid");
+        else {
           setImageList((images) => [...images, ...newImages]);
           setImagesToAdd((images) => [...images, ...newImages]);
-        } catch (e) {
-          toast.error("Invalid input image");
         }
       } else toast.error("Item cannot have more than 10 images");
     }

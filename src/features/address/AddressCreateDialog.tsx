@@ -24,7 +24,7 @@ function AddressCreateDialog({
   >;
 }) {
   const [state, setState] = useState<number>(0);
-  const { close } = useModal();
+  const { close, closeImmediately } = useModal();
   const [address, setAddress] = useState<AddressCreateType>({
     name: "",
     phoneNumber: "",
@@ -68,7 +68,7 @@ function AddressCreateDialog({
       success: "Address has been created",
       error: "Failed creating address",
     });
-    close();
+    closeImmediately();
   }
   return (
     <div>
@@ -128,37 +128,8 @@ function AddressCreateDialog({
           </>
         )}
       </div>
-      {state === 0 ? (
-        <button onClick={close}>Cancel</button>
-      ) : (
-        <Modal>
-          <Modal.Open id="closeDialogConfirm">
-            <button>cancel</button>
-          </Modal.Open>
-          <Modal.Window id="closeDialogConfirm">
-            <CloseDialogConfirmation onClose={close} />
-          </Modal.Window>
-        </Modal>
-      )}
-    </div>
-  );
-}
-
-function CloseDialogConfirmation({ onClose }: { onClose: () => void }) {
-  const { close } = useModal();
-  return (
-    <>
-      <p>Are you sure you want to quit? Your progress will not be saved </p>
-      <button
-        onClick={() => {
-          close();
-          onClose();
-        }}
-      >
-        Close
-      </button>
       <button onClick={close}>Cancel</button>
-    </>
+    </div>
   );
 }
 

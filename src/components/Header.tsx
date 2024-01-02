@@ -11,8 +11,7 @@ const StyledHeader = styled.div`
 `;
 
 function Header() {
-  const { isLoading, error, currentUser, isAuthenticated } =
-    useGetCurrentUser();
+  const { isLoading, error, isAuthenticated } = useGetCurrentUser();
   return (
     <>
       {!isLoading && !error && (
