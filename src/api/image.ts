@@ -8,3 +8,9 @@ export function createImageUrl(
   if (height) queryParams.append("h", height.toString());
   return `https://tomtomtom-528952985.imgix.net/${imageName}?${queryParams.toString()}`;
 }
+
+export function createAvatarImageUrl(imageName?: string | null) {
+  return createImageUrl(imageName ?? "defaultAvatar.webp", {
+    height: 50,
+  });
+}

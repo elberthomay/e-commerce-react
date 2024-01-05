@@ -35,13 +35,13 @@ function HeaderSearchBar() {
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const newSearchString = e.target.value;
     if (
-      newSearchString.match(/^[a-zA-Z0-9_\-., ]+$/) &&
+      newSearchString.match(/^[a-zA-Z0-9_\-., ]*$/) &&
       newSearchString.length <= 50
     )
       setSearchString(newSearchString);
   }
   return (
-    <form onSubmit={handleSearch}>
+    <form onSubmit={handleSearch} className="grow">
       {shop && (
         <select
           value={searchLocation}
@@ -52,10 +52,13 @@ function HeaderSearchBar() {
         </select>
       )}
       <SearchBar
-        type="text"
-        value={searchString}
-        onChange={handleChange}
-        max={50}
+        inputProp={{
+          type: "text",
+          value: searchString,
+          onChange: handleChange,
+          max: 50,
+        }}
+        divProp={{ className: "grow" }}
       />
     </form>
   );

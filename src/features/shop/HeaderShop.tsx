@@ -1,54 +1,57 @@
-import { Link, useNavigate } from "react-router-dom";
-import { createImageUrl } from "../../api/image";
-import Dropdown, {
-  DropdownContextType,
-  useDropdown,
-} from "../../components/Dropdown";
+import { Link } from "react-router-dom";
+import { createAvatarImageUrl } from "../../api/image";
 import useGetCurrentShop from "../../hooks/shop/useGetCurrentShop";
+import * as HoverCard from "@radix-ui/react-hover-card";
+import React, { ButtonHTMLAttributes, HTMLAttributes } from "react";
+import { twJoin } from "tailwind-merge";
+import CustomHoverCard, {
+  useCustomHoverCardContext,
+} from "../../components/CustomHoverCard";
 
-function HeaderShopButton(dropdownContextValue: DropdownContextType) {
-  const { currentShop, hasShop } = useGetCurrentShop();
-  const navigate = useNavigate();
-  function handleNavigate() {
-    if (currentShop) {
-      dropdownContextValue.toggleIsOpen();
-      navigate("/myshop");
-    }
+export const HeaderShopButton = React.forwardRef<HTMLButtonElement>(
+  (props: ButtonHTMLAttributes<HTMLButtonElement>, forwardedRef) => {
+    const { currentShop, hasShop } = useGetCurrentShop();
+
+    return (
+      <button
+        {...props}
+        ref={forwardedRef}
+        className={twJoin("flex items-center gap-2", props?.className)}
+      >
+        <img
+          src={createAvatarImageUrl(currentShop?.avatar)}
+          alt="Shop image"
+          className="h-10 w-10"
+        />
+        <span className="truncate">{hasShop ? currentShop?.name : "Shop"}</span>
+      </button>
+    );
   }
-  return (
-    <div onClick={handleNavigate}>
-      <img
-        src={createImageUrl(currentShop?.avatar ?? "defaultAvatar.webp", {
-          height: 30,
-        })}
-        alt=""
-      />
-      {hasShop ? currentShop?.name : "Shop"}
-    </div>
-  );
-}
+);
 
-function HeaderShopBody() {
-  const { currentShop, hasShop } = useGetCurrentShop();
-  return (
-    <div>
-      {hasShop ? (
-        <p>Shop has been created</p>
-      ) : (
-        <Link to="/myshop">Open your shop</Link>
-      )}
-    </div>
-  );
-}
+const HeaderShopBody = React.forwardRef<HTMLDivElement>(
+  (props: HTMLAttributes<HTMLDivElement>, forwardedRef) => {
+    const { hasShop } = useGetCurrentShop();
+    const { setOpen } = useCustomHoverCardContext();
+    return (
+      <div {...props} ref={forwardedRef}>
+        {hasShop ? (
+          <p>Shop has been created</p>
+        ) : (
+          <Link to="/myshop" onClick={() => setOpen(false)}>
+            Open your shop
+          </Link>
+        )}
+      </div>
+    );
+  }
+);
 
-function HeaderShop() {
+function HeaderShop(buttonProps: ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
-    <Dropdown>
-      <Dropdown.Button body={HeaderShopButton} />
-      <Dropdown.Content>
-        <HeaderShopBody />
-      </Dropdown.Content>
-    </Dropdown>
+    <CustomHoverCard trigger={<HeaderShopButton {...buttonProps} />}>
+      <HeaderShopBody />
+    </CustomHoverCard>
   );
 }
 

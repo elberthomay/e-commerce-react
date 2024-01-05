@@ -4,9 +4,9 @@ function AppLayout() {
   return (
     <>
       <Header />
-      <div>
+      <main id="main" className="relative z-0">
         <Outlet />
-      </div>
+      </main>
     </>
   );
 }

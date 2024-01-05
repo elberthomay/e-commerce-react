@@ -1,7 +1,6 @@
 import { ChangeEvent, Dispatch, DragEvent, useState } from "react";
 import { ItemDetailsOutputType } from "../../type/itemType";
 import toast from "react-hot-toast";
-import { MAX_HEIGHT as MAX_LENGTH } from "../../helper/constant";
 import { createImageUrl } from "../../api/image";
 import { v4 as uuid } from "uuid";
 import { resizeImageFile } from "../../utilities/imageUtils";
