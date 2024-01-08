@@ -5,10 +5,11 @@ import Spinner from "../../components/Spinner";
 import { RequestError } from "../../error/RequestError";
 import ShopItemList from "./ShopItemList";
 import Sort from "../../components/Sort";
-import Paging from "../../components/Paging";
+import PagingLimit from "../../components/PagingLimit";
+import PagingPage from "../../components/PagingPage";
 
 function ShopItemTable({ shopId }: { shopId: string }) {
-  const { limit, page } = useLimitAndPagination();
+  const { limit, page, getPaginationFunctions } = useLimitAndPagination();
 
   const [searchParams, setSearchParams] = useSearchParams();
   const search = searchParams.get("search") ?? undefined;
@@ -21,8 +22,9 @@ function ShopItemTable({ shopId }: { shopId: string }) {
     limit,
     page,
   });
-  console.log(error);
-  console.log(shopItem);
+  const { maxPage, setLimit, setPage } = getPaginationFunctions(
+    shopItem?.count ?? 0
+  );
   return (
     <>
       {isLoading && <Spinner />}
@@ -37,7 +39,10 @@ function ShopItemTable({ shopId }: { shopId: string }) {
         <>
           <Sort />
           <ShopItemList items={shopItem.rows} />
-          <Paging count={shopItem.count} />
+          <div>
+            <PagingLimit limit={limit} setLimit={setLimit} />
+            <PagingPage page={page} maxPage={maxPage} setPage={setPage} />
+          </div>
         </>
       )}
     </>

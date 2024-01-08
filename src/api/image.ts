@@ -14,3 +14,9 @@ export function createAvatarImageUrl(imageName?: string | null) {
     height: 50,
   });
 }
+
+export function createItemCardImageUrl(imageName?: string | null) {
+  return createImageUrl(imageName ?? "image-not-found.webp", {
+    height: 200,
+  });
+}

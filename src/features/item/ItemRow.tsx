@@ -1,18 +1,17 @@
-import { Link } from "react-router-dom";
 import { ItemRowType } from "../../type/itemType";
-import { createImageUrl } from "../../api/image";
+import ItemCard from "../../components/ItemCard";
 
 function ItemRow({ item }: { item: ItemRowType }) {
   const { id, name, price, quantity, image, shopId, shopName } = item;
   return (
-    <Link to={`/item/${id}`}>
-      <li>
-        <img src={createImageUrl(image ?? "image-not-found.webp")} alt="" />
-        <p>{name}</p>
-        <p>Rp.{price}</p>
-        <Link to={`/shop/${shopId}`}>{shopName}</Link>
-      </li>
-    </Link>
+    <ItemCard itemName={name} link={`/item/${id}`} quantity={quantity}>
+      <ItemCard.Image image={image} name={name} />
+      <ItemCard.Body>
+        <ItemCard.Name>{name}</ItemCard.Name>
+        <ItemCard.Price>{price}</ItemCard.Price>
+        <ItemCard.Shop>{shopName}</ItemCard.Shop>
+      </ItemCard.Body>
+    </ItemCard>
   );
 }
 

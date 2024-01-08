@@ -1,6 +1,6 @@
 import { UseFormReturn } from "react-hook-form";
 import FormRow from "../../components/formRow";
-import { countryPhoneCode } from "../../helper/countryPhoneCode";
+import { countryPhoneCode } from "../../variables/countryPhoneCode";
 import { SyntheticEvent, useState } from "react";
 
 export interface AddressCommonFormFieldValues {

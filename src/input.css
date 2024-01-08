@@ -2,6 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
+*,
+*:focus,
+*:hover {
+  outline: none;
+}
+
 html {
-  font-size: 100%;
+  font-size: 62.5%;
+}
+
+/* Medium-sized screens (768px and above) */
+@media (min-width: 768px) {
+  html {
+    font-size: 75%;
+  }
+}
+
+/* Large screens (992px and above) */
+@media (min-width: 1024px) {
+  html {
+    font-size: 85%;
+  }
+}
+
+/* Extra-large screens (1200px and above) */
+@media (min-width: 1536px) {
+  html {
+    font-size: 100%;
+  }
 }

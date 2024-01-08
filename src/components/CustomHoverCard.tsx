@@ -37,7 +37,7 @@ function CustomHoverCard({
         <HoverCard.Portal>
           <HoverCard.Content
             hideWhenDetached={false}
-            className="origin-[var(--radix-hover-card-content-transform-origin)] animate-[fadeIn_0.25s_linear] z-20"
+            className="origin-[var(--radix-hover-card-content-transform-origin)] animate-[fadeInDown_0.25s_linear] z-20"
             asChild
           >
             {children}

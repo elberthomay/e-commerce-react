@@ -3,7 +3,7 @@ import {
   DEFAULT_CLIENT_LIMIT,
   MAX_CLIENT_LIMIT,
   MAX_CLIENT_PAGE,
-} from "../helper/constant";
+} from "../variables/constant";
 
 // convert to string, floor, check against min and max, check default
 function convertAndBoundIntegerString(
@@ -46,25 +46,31 @@ export default function useLimitAndPagination() {
 
     function setLimit(limit: number) {
       searchParams.delete("page");
-      if (limit === 0) searchParams.delete("limit");
+      if (limit <= 0) searchParams.delete("limit");
       else searchParams.set("limit", limit.toString());
       setSearchParams(searchParams);
     }
-    function incPage() {
-      if (page < maxPage) {
-        searchParams.set("page", (page + 1).toString());
-        setSearchParams(searchParams);
-      }
-    }
-    function decPage() {
-      if (page > 1) {
-        if (page === 2) searchParams.delete("page");
-        else searchParams.set("page", (page - 1).toString());
-        setSearchParams(searchParams);
-      }
+
+    function setPage(page: number) {
+      const newPage =
+        page <= 1 ? 1 : page >= maxPage ? maxPage : Math.round(page);
+      searchParams.set("page", newPage.toString());
+      setSearchParams(searchParams);
     }
 
-    return { maxPage, startCount, endCount, setLimit, incPage, decPage };
+    const incPage = () => setPage(page + 1);
+
+    const decPage = () => setPage(page - 1);
+
+    return {
+      maxPage,
+      startCount,
+      endCount,
+      setLimit,
+      setPage,
+      incPage,
+      decPage,
+    };
   }
 
   return {

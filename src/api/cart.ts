@@ -1,5 +1,5 @@
 import { RequestError } from "../error/RequestError";
-import { BASE_API_URL } from "../helper/constant";
+import { BASE_API_URL } from "../variables/constant";
 import { cartOutputType } from "../type/cartType";
 
 export async function getCart(): Promise<cartOutputType[]> {

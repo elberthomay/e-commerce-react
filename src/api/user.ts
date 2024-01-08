@@ -1,5 +1,5 @@
 import { RequestError } from "../error/RequestError";
-import { BASE_API_URL } from "../helper/constant";
+import { BASE_API_URL } from "../variables/constant";
 import { CurrentUserOutputType, UserUpdateType } from "../type/userType";
 
 const API_URL = BASE_API_URL + "user/";

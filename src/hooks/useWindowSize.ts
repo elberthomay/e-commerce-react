@@ -5,7 +5,7 @@ import {
   SM_BREAKPOINT,
   XL2_BREAKPOINT,
   XL_BREAKPOINT,
-} from "../utilities/breakpointUtils";
+} from "../variables/breakpoints";
 
 function getWindowSize() {
   const { innerWidth: width, innerHeight: height } = window;

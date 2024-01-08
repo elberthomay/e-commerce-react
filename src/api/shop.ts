@@ -1,5 +1,5 @@
 import { RequestError } from "../error/RequestError";
-import { BASE_API_URL, DEFAULT_CLIENT_LIMIT } from "../helper/constant";
+import { BASE_API_URL, DEFAULT_CLIENT_LIMIT } from "../variables/constant";
 import {
   CurrentShopGetOutputType,
   GetShopItemOptions,

@@ -1,5 +1,5 @@
 import pica from "pica";
-import { MAX_HEIGHT } from "../helper/constant";
+import { MAX_HEIGHT } from "../variables/constant";
 
 const picaInstance = pica();
 export async function resizeImageFile(

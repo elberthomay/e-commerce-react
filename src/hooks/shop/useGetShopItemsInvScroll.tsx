@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { getShopItems } from "../../api/shop";
 import { GetShopItemOptions, ShopItemRowType } from "../../type/shopType";
-import { DEFAULT_CLIENT_LIMIT } from "../../helper/constant";
+import { DEFAULT_CLIENT_LIMIT } from "../../variables/constant";
 
 export default function useGetShopItemsInvScroll(options: GetShopItemOptions) {
   const { search, shopId, orderBy, limit } = options;
