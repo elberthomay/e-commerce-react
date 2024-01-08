@@ -4,7 +4,7 @@ function AppLayout() {
   return (
     <>
       <Header />
-      <main id="main" className="p-2 lg:p-6 max-w-[80rem] mx-auto">
+      <main id="main" className="p-2 md:p-6 max-w-[80rem] mx-auto">
         <Outlet />
       </main>
     </>

@@ -1,7 +1,15 @@
-import { ReactNode, createContext, useContext, useState } from "react";
+import {
+  AnchorHTMLAttributes,
+  HTMLAttributes,
+  ReactNode,
+  createContext,
+  useContext,
+  useState,
+} from "react";
 import { createItemCardImageUrl } from "../api/image";
 import { Link } from "react-router-dom";
-import { twJoin } from "tailwind-merge";
+import { twJoin, twMerge } from "tailwind-merge";
+import { formatPrice } from "../utilities/intlUtils";
 
 const ItemCardContext = createContext<{
   hovered: boolean;
@@ -13,7 +21,8 @@ function ItemCard({
   link,
   quantity,
   children,
-}: {
+  ...props
+}: AnchorHTMLAttributes<HTMLAnchorElement> & {
   itemName: string;
   link: string;
   quantity: number;
@@ -22,7 +31,7 @@ function ItemCard({
   const [hovered, setHovered] = useState<boolean>(false);
   return (
     <ItemCardContext.Provider value={{ hovered, quantity }}>
-      <Link to={link}>
+      <Link {...props} to={link}>
         <div
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
@@ -102,11 +111,7 @@ function Name({ children }: { children: string }) {
 
 function Price({ children }: { children: number }) {
   //consider internationalization
-  const priceText = Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    maximumFractionDigits: 0,
-  }).format(children);
+  const priceText = formatPrice(children);
   return <p className="text-md font-bold">{priceText}</p>;
 }
 
