@@ -4,6 +4,9 @@ import Counter from "../../components/Counter";
 import useUpdateCart from "../../hooks/cart/useUpdateCart";
 import { useEffect, useState } from "react";
 import { createImageUrl } from "../../api/image";
+import Checkbox from "../../ui/Checkbox";
+import { formatPrice } from "../../utilities/intlUtils";
+import { LuTrash2 } from "react-icons/lu";
 
 function CartRow({ cartItem }: { cartItem: cartOutputType }) {
   const { itemId, name, price, inventory, image, quantity, selected } =
@@ -19,6 +22,9 @@ function CartRow({ cartItem }: { cartItem: cartOutputType }) {
     if (Number.isInteger(newQuantity) && quantity > 1)
       setTempQuantity(newQuantity <= inventory ? newQuantity : inventory);
   }
+
+  const incTempQuantity = () => setTempQuantity((quantity) => quantity + 1);
+  const decTempQuantity = () => setTempQuantity((quantity) => quantity - 1);
 
   useEffect(() => {
     function handleQuantityUpdate(newQuantity: number) {
@@ -41,40 +47,44 @@ function CartRow({ cartItem }: { cartItem: cartOutputType }) {
   }, [tempQuantity, quantity, itemId, updateCart]);
 
   return (
-    <li>
-      <input
+    <div className="flex gap-4">
+      <Checkbox
         type="checkBox"
         checked={selected}
         id={`check${itemId}`}
         onClick={toggleSelected}
         disabled={isLoading}
       />
-      <img src={createImageUrl(image ?? "image-not-found.webp")} alt="" />
-      <Link to={`/item/${itemId}`}></Link>
-      <p>{name}</p>
-      <p>{price}</p>
-      <button>Delete</button>
-      <Counter
-        disabled={isLoading}
-        min={1}
-        max={inventory}
-        onInc={() =>
-          setTempQuantity((quantity) =>
-            quantity + 1 <= inventory ? quantity + 1 : inventory
-          )
-        }
-        onDec={() =>
-          setTempQuantity((quantity) =>
-            quantity - 1 <= inventory ? quantity - 1 : inventory
-          )
-        }
-        onChange={handleChangeTempQuantity}
-        value={tempQuantity}
+      <img
+        className="h-[4.5rem] w-[4.5rem] border border-slate-300 rounded-lg"
+        src={createImageUrl(image ?? "image-not-found.webp")}
+        alt={name}
       />
+      <div className="flex-1 grid grid-cols-[1fr_max-content] gap-y-3">
+        <div className="flex flex-col">
+          <Link className="line-clamp-2 text-elipsis" to={`/item/${itemId}`}>
+            {name}
+          </Link>
+        </div>
+        <p className="font-bold text-lg">{formatPrice(price)}</p>
+        <div className="col-span-2 flex gap-4 justify-end items-center ">
+          <LuTrash2 className="h-6 w-6 text-slate-500" />
+          <Counter
+            disabled={isLoading}
+            min={1}
+            max={inventory}
+            onInc={incTempQuantity}
+            onDec={decTempQuantity}
+            onChange={handleChangeTempQuantity}
+            value={tempQuantity}
+          />
+        </div>
+      </div>
+
       {quantity > inventory && (
         <p>Cannot exceed maximum quantity of {inventory}</p>
       )}
-    </li>
+    </div>
   );
 }
 

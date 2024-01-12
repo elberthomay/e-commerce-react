@@ -1,4 +1,6 @@
 import { cartOutputType } from "../../type/cartType";
+import Button from "../../ui/Button";
+import { formatPrice } from "../../utilities/intlUtils";
 
 function CartSummary({ cart }: { cart: cartOutputType[] }) {
   const allAvailable = cart.every(
@@ -14,19 +16,26 @@ function CartSummary({ cart }: { cart: cartOutputType[] }) {
         : acc,
     { itemCount: 0, itemPrice: 0 }
   );
+
+  const orderEnabled = itemCount > 0 && allAvailable;
   return (
-    <>
-      {itemCount !== 0 && (
-        <>
-          <div>
-            <h1>Cart Summary</h1>
-            <p>TotalPrice({itemCount}):</p>
-            <p>{itemPrice}</p>
-          </div>
-          {itemCount > 0 && allAvailable && <button>Buy now</button>}
-        </>
-      )}
-    </>
+    <div className="flex flex-col gap-3 p-8 rounded-lg shadow-lg border border-slate-200">
+      <h1 className="text-md font-bold">Cart Summary</h1>
+      <div
+        className={`flex justify-between items-center ${
+          !orderEnabled ? "text-slate-500" : ""
+        }`}
+      >
+        <p>Total {orderEnabled && `(${itemCount})`}:</p>
+        <p className="text-lg font-bold ">
+          {orderEnabled ? formatPrice(itemPrice) : "-"}
+        </p>
+      </div>
+      <div className="h-[1px] bg-slate-300 w-full my-3"></div>
+      <Button className="w-full" disabled={!orderEnabled}>
+        Buy now
+      </Button>
+    </div>
   );
 }
 

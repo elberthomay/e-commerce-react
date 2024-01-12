@@ -37,10 +37,10 @@ function CustomHoverCard({
         <HoverCard.Portal>
           <HoverCard.Content
             hideWhenDetached={false}
-            className="pt-2 origin-[var(--radix-hover-card-content-transform-origin)] animate-[fadeInDown_0.25s_linear] z-20"
+            className="pt-2 origin-[var(--radix-hover-card-content-transform-origin)] animate-[fadeInDown_0.25s_linear] z-20 shadow-sm"
             asChild
           >
-            {children}
+            <div>{children}</div>
           </HoverCard.Content>
         </HoverCard.Portal>
       </HoverCard.Root>

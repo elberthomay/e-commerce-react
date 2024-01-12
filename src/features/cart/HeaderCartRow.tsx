@@ -12,7 +12,10 @@ function HeaderCartRow({
   return (
     <div
       {...props}
-      className={twMerge("flex gap-3 items-center py-2", props?.className)}
+      className={twMerge(
+        "flex gap-3 items-center py-2 first:pt-0 last:pb-0",
+        props?.className
+      )}
     >
       <img
         src={createAvatarImageUrl(image ?? "image-not-found.webp")}
@@ -20,7 +23,7 @@ function HeaderCartRow({
         className=" h-12 w-12"
       />
       <div className=" w-48">
-        <p className="truncate font-bold">{name}</p>
+        <p className="truncate font-bold hover:text-governor-bay-700">{name}</p>
         <p className="text-sm text-slate-500">
           {quantity} item{quantity > 1 ? "s" : ""}
         </p>

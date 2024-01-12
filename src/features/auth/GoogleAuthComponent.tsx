@@ -1,6 +1,14 @@
+import { ReactElement, cloneElement } from "react";
 import { useNavigate } from "react-router-dom";
 
-function GoogleAuthComponent() {
+function GoogleAuthComponent({
+  operation = "login",
+  children,
+}: {
+  operation?: "login" | "signup";
+  children: ReactElement;
+}) {
+  const clonedChildren = cloneElement(children, { onClick: handleAuth });
   const navigate = useNavigate();
   function handleAuth() {
     const popup = window.open(
@@ -22,7 +30,7 @@ function GoogleAuthComponent() {
       );
     }
   }
-  return <button onClick={handleAuth}>Login with Google</button>;
+  return clonedChildren;
 }
 
 export default GoogleAuthComponent;

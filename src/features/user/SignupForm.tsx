@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { useForm, FieldValues } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import useSignup from "../../hooks/user/useSignup";
 import FormRow from "../../components/formRow";
 import { UserRegisterType } from "../../type/userType";
@@ -7,6 +6,8 @@ import { pick } from "lodash";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { RequestError } from "../../error/RequestError";
+import TextInput from "../../ui/TextInput";
+import Button from "../../ui/Button";
 
 function SignupForm() {
   const {
@@ -47,9 +48,9 @@ function SignupForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
       <FormRow label="Email" formErrors={errors}>
-        <input
+        <TextInput
           type="text"
           id="email"
           {...register("email", {
@@ -62,7 +63,7 @@ function SignupForm() {
         />
       </FormRow>
       <FormRow label="Name" formErrors={errors}>
-        <input
+        <TextInput
           type="text"
           id="name"
           {...register("name", {
@@ -72,7 +73,7 @@ function SignupForm() {
         />
       </FormRow>
       <FormRow label="password" formErrors={errors}>
-        <input
+        <TextInput
           type="password"
           id="password"
           {...register("password", {
@@ -89,7 +90,7 @@ function SignupForm() {
         />
       </FormRow>
       <FormRow label="Repeat password" formErrors={errors}>
-        <input
+        <TextInput
           type="password"
           id="repeatPassword"
           {...register("repeatPassword", {
@@ -100,7 +101,7 @@ function SignupForm() {
           })}
         />
       </FormRow>
-      <button>Submit</button>
+      <Button className="w-full">Submit</Button>
     </form>
   );
 }

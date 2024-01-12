@@ -2,6 +2,7 @@ import { cartOutputType } from "../../type/cartType";
 import CartShopList from "./CartShopList";
 import useDeleteCart from "../../hooks/cart/useDeleteCart";
 import useUpdateCart from "../../hooks/cart/useUpdateCart";
+import Checkbox from "../../ui/Checkbox";
 
 function CartList({ cart }: { cart: cartOutputType[] }) {
   //convert cart to entries by shop
@@ -45,25 +46,34 @@ function CartList({ cart }: { cart: cartOutputType[] }) {
   }
 
   return (
-    <div>
-      <input
-        type="checkbox"
-        id="selectAllCart"
-        checked={allSelected}
-        onChange={handleToggleSelect}
-        disabled={isLoading}
-      />
-      <label htmlFor="selectAllCart">Select all</label>
-      {anySelected && (
-        <button onClick={handleDeleteSelected} disabled={deleteIsLoading}>
-          Delete Selected
-        </button>
-      )}
-      <ul>
-        {Array.from(cartByShop.values()).map((cartShop) => (
-          <CartShopList key={cartShop.shopId} cartShop={cartShop} />
-        ))}
-      </ul>
+    <div className="flex flex-col gap-4">
+      <div className="p-6 flex justify-between rounded-t-lg shadow-lg border border-slate-300">
+        <div className="flex items-center gap-4">
+          <Checkbox
+            type="checkbox"
+            id="selectAllCart"
+            checked={allSelected}
+            onChange={handleToggleSelect}
+            disabled={isLoading}
+          />
+          <label className="font-bold" htmlFor="selectAllCart">
+            Select All
+          </label>
+        </div>
+        {anySelected && (
+          <button
+            className="text-governor-bay-800 font-bold"
+            onClick={handleDeleteSelected}
+            disabled={deleteIsLoading}
+          >
+            Delete Selected
+          </button>
+        )}
+      </div>
+
+      {Array.from(cartByShop.values()).map((cartShop) => (
+        <CartShopList key={cartShop.shopId} cartShop={cartShop} />
+      ))}
     </div>
   );
 }

@@ -1,11 +1,13 @@
-import { useEffect } from "react";
 import FormRow from "../../components/formRow";
-import { useForm, FieldValues } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import useLogin from "../../hooks/user/useLogin";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { RequestError } from "../../error/RequestError";
 import { UserLoginType } from "../../type/userType";
+import TextInput from "../../ui/TextInput";
+import Checkbox from "../../ui/Checkbox";
+import Button from "../../ui/Button";
 
 function LoginForm() {
   const {
@@ -47,9 +49,9 @@ function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
       <FormRow label="Email" formErrors={errors}>
-        <input
+        <TextInput
           type="text"
           id="email"
           {...register("email", {
@@ -62,7 +64,7 @@ function LoginForm() {
         />
       </FormRow>
       <FormRow label="password" formErrors={errors}>
-        <input
+        <TextInput
           type="password"
           id="password"
           {...register("password", {
@@ -70,9 +72,11 @@ function LoginForm() {
           })}
         />
       </FormRow>
-      <input type="checkbox" {...register("rememberMe")} />
-      <label htmlFor="rememberMe">Remember me</label>
-      <button>Submit</button>
+      <div className="flex items-center gap-2">
+        <Checkbox {...register("rememberMe")} id="rememberMe" />
+        <label htmlFor="rememberMe">Remember me</label>
+      </div>
+      <Button className="w-full">Submit</Button>
     </form>
   );
 }

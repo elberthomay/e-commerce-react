@@ -6,6 +6,7 @@ import HeaderUser, { HeaderUserButton } from "../features/user/HeaderUser";
 import HeaderShop, { HeaderShopButton } from "../features/shop/HeaderShop";
 import { useMaxBreakpoints } from "../hooks/useWindowSize";
 import HeaderSliderMenu from "./HeaderSliderMenu";
+import Button from "../ui/Button";
 
 function Header() {
   const { isLoading, error, isAuthenticated } = useGetCurrentUser();
@@ -32,7 +33,7 @@ function Header() {
               {isMd ? (
                 <>
                   <CartHeader />
-                  <div className="grid grid-cols-2">
+                  <div className="grid grid-cols-2 gap-1">
                     <HeaderShop />
                     <HeaderUser />
                   </div>
@@ -59,8 +60,16 @@ function Header() {
             </>
           ) : (
             <>
-              <Link to="/login">Login</Link>
-              <Link to="/signup">Signup</Link>
+              <Link to="/login">
+                <Button className="px-3 py-1.5 text-sm bg-white border-2 border-governor-bay-800 hover:border-slate-500 text-governor-bay-800 hover:text-slate-200">
+                  Login
+                </Button>
+              </Link>
+              <Link to="/signup">
+                <Button className=" px-3 py-1.5 text-sm hover:text-governor-bay-800">
+                  Signup
+                </Button>
+              </Link>
             </>
           )}
         </header>
