@@ -1,8 +1,13 @@
 import { cartOutputType } from "../../type/cartType";
 import CartShopList from "./CartShopList";
-import useDeleteCart from "../../hooks/cart/useDeleteCart";
-import useUpdateCart from "../../hooks/cart/useUpdateCart";
 import Checkbox from "../../ui/Checkbox";
+import useUpdateCarts, {
+  useUpdateCartsIsLoading,
+} from "../../hooks/cart/useUpdateCarts";
+import toast from "react-hot-toast";
+import useDeleteCarts, {
+  useDeleteCartsIsLoading,
+} from "../../hooks/cart/useDeleteCarts";
 
 function CartList({ cart }: { cart: cartOutputType[] }) {
   //convert cart to entries by shop
@@ -25,24 +30,32 @@ function CartList({ cart }: { cart: cartOutputType[] }) {
       });
   });
 
-  const { isLoading, error, updateCart } = useUpdateCart();
-  const {
-    isLoading: deleteIsLoading,
-    error: deleteError,
-    deleteCart,
-  } = useDeleteCart();
+  const { updateCarts } = useUpdateCarts();
+  const { deleteCarts } = useDeleteCarts();
+
+  const updateIsLoading = useUpdateCartsIsLoading();
+  const deleteIsLoading = useDeleteCartsIsLoading();
+
+  const isLoading = updateIsLoading || deleteIsLoading;
 
   const allSelected = cart.every(({ selected }) => selected);
   const anySelected = cart.some(({ selected }) => selected);
 
-  function handleToggleSelect() {
-    cart.map(({ itemId }) =>
-      updateCart({ itemId, updateData: { selected: !allSelected } })
-    );
+  async function handleAllToggleSelected() {
+    try {
+      await updateCarts(
+        cart.map(({ itemId }) => ({
+          itemId,
+          updateData: { selected: !allSelected },
+        }))
+      );
+    } catch (e) {
+      toast.error("Error updating cart");
+    }
   }
 
   function handleDeleteSelected() {
-    cart.filter((selected) => selected).map(({ itemId }) => deleteCart(itemId));
+    deleteCarts(cart.filter((selected) => selected).map((item) => item.itemId));
   }
 
   return (
@@ -53,7 +66,7 @@ function CartList({ cart }: { cart: cartOutputType[] }) {
             type="checkbox"
             id="selectAllCart"
             checked={allSelected}
-            onChange={handleToggleSelect}
+            onChange={handleAllToggleSelected}
             disabled={isLoading}
           />
           <label className="font-bold" htmlFor="selectAllCart">
@@ -62,9 +75,9 @@ function CartList({ cart }: { cart: cartOutputType[] }) {
         </div>
         {anySelected && (
           <button
-            className="text-governor-bay-800 font-bold"
+            className="text-governor-bay-800 font-bold disabled:text-slate-300"
             onClick={handleDeleteSelected}
-            disabled={deleteIsLoading}
+            disabled={isLoading}
           >
             Delete Selected
           </button>

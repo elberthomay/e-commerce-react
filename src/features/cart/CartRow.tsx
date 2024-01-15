@@ -1,50 +1,58 @@
 import { Link } from "react-router-dom";
 import { cartOutputType } from "../../type/cartType";
 import Counter from "../../components/Counter";
-import useUpdateCart from "../../hooks/cart/useUpdateCart";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { createImageUrl } from "../../api/image";
 import Checkbox from "../../ui/Checkbox";
 import { formatPrice } from "../../utilities/intlUtils";
 import { LuTrash2 } from "react-icons/lu";
+import useUpdateCarts, {
+  useUpdateCartsIsLoading,
+} from "../../hooks/cart/useUpdateCarts";
+import useDeleteCarts, {
+  useDeleteCartsIsLoading,
+} from "../../hooks/cart/useDeleteCarts";
 
 function CartRow({ cartItem }: { cartItem: cartOutputType }) {
   const { itemId, name, price, inventory, image, quantity, selected } =
     cartItem;
-  const { isLoading, error, updateCart } = useUpdateCart();
+  const { updateCarts } = useUpdateCarts();
+  const { deleteCarts } = useDeleteCarts();
+  const updateCartsIsLoading = useUpdateCartsIsLoading();
+  const deleteCartsIsLoading = useDeleteCartsIsLoading();
   const [tempQuantity, setTempQuantity] = useState(quantity);
+
   function toggleSelected() {
-    updateCart({ itemId, updateData: { selected: !selected } });
+    updateCarts([{ itemId, updateData: { selected: !selected } }]);
   }
 
-  function handleChangeTempQuantity(e: React.ChangeEvent<HTMLInputElement>) {
-    const newQuantity = Number(e.target.value);
-    if (Number.isInteger(newQuantity) && quantity > 1)
-      setTempQuantity(newQuantity <= inventory ? newQuantity : inventory);
+  const setQuantity = useCallback(
+    (quantity: number) => {
+      updateCarts([{ itemId, updateData: { quantity } }], {
+        onError: (data) => {
+          setTempQuantity(quantity);
+        },
+      });
+    },
+    [itemId, updateCarts]
+  );
+
+  function handleTempQuantityChange(quantity: number) {
+    if (Number.isInteger(quantity) && quantity > 0 && quantity <= inventory)
+      setTempQuantity(quantity);
   }
 
-  const incTempQuantity = () => setTempQuantity((quantity) => quantity + 1);
-  const decTempQuantity = () => setTempQuantity((quantity) => quantity - 1);
-
+  //debounce
   useEffect(() => {
-    function handleQuantityUpdate(newQuantity: number) {
-      updateCart(
-        { itemId, updateData: { quantity: newQuantity } },
-        {
-          onError: (data) => {
-            setTempQuantity(quantity);
-          },
-        }
-      );
-    }
-
     if (quantity !== tempQuantity) {
       const timeoutId = setTimeout(() => {
-        handleQuantityUpdate(tempQuantity);
+        setQuantity(tempQuantity);
       }, 500);
       return () => clearTimeout(timeoutId);
     }
-  }, [tempQuantity, quantity, itemId, updateCart]);
+  }, [tempQuantity, quantity, itemId, setQuantity]);
+
+  const isLoading = updateCartsIsLoading || deleteCartsIsLoading;
 
   return (
     <div className="flex gap-4">
@@ -52,7 +60,7 @@ function CartRow({ cartItem }: { cartItem: cartOutputType }) {
         type="checkBox"
         checked={selected}
         id={`check${itemId}`}
-        onClick={toggleSelected}
+        onChange={toggleSelected}
         disabled={isLoading}
       />
       <img
@@ -68,14 +76,18 @@ function CartRow({ cartItem }: { cartItem: cartOutputType }) {
         </div>
         <p className="font-bold text-lg">{formatPrice(price)}</p>
         <div className="col-span-2 flex gap-4 justify-end items-center ">
-          <LuTrash2 className="h-6 w-6 text-slate-500" />
+          <button
+            className="group"
+            disabled={isLoading}
+            onClick={() => deleteCarts([itemId])}
+          >
+            <LuTrash2 className="h-6 w-6 text-slate-500 transition-colors duration-100 hover:text-slate-700 group-[:disabled]:text-slate-300" />
+          </button>
           <Counter
             disabled={isLoading}
             min={1}
             max={inventory}
-            onInc={incTempQuantity}
-            onDec={decTempQuantity}
-            onChange={handleChangeTempQuantity}
+            onChange={handleTempQuantityChange}
             value={tempQuantity}
           />
         </div>
