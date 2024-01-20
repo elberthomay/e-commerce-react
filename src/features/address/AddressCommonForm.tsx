@@ -55,8 +55,8 @@ function AddressCommonForm({
         />
       </FormRow>
 
-      <FormRow formErrors={errors} label="Phone number">
-        <div id="phoneNumber" className="group flex gap-2">
+      <FormRow formErrors={errors} label="Phone number" name="phoneNumber">
+        <div className="group flex gap-2">
           <PhoneCodeSelector formApi={formApi} />
           <TextInput
             type="text"

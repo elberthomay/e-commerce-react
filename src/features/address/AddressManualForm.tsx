@@ -12,6 +12,7 @@ import useGetCurrentUser from "../../hooks/user/useGetCurrentUser";
 import { toAdministrativeString } from "../../utilities/addressUtils";
 import useLocationQuerySearch from "../../hooks/location/useLocationQuerySearch";
 import TextInput from "../../ui/TextInput";
+import Button from "../../ui/Button";
 
 function AddressManualForm({
   onSubmit,
@@ -34,7 +35,10 @@ function AddressManualForm({
 
   const displayAddress = newAddress ? toAdministrativeString(newAddress) : "";
 
-  const { locations } = useLocationQuerySearch(locationSearchQuery, true);
+  const { isLoading, locations } = useLocationQuerySearch(
+    locationSearchQuery,
+    true
+  );
   //filter administrative boundary bigger than city
 
   const { currentUser } = useGetCurrentUser();
@@ -89,43 +93,57 @@ function AddressManualForm({
     setResultString("");
   }
   return (
-    <form onSubmit={handleSubmit(handleCreateAddress)}>
-      <TextInput
-        type="hidden"
-        hidden={true}
-        {...register("location", { required: true })}
-      />
-      <FormRow label="Location" formErrors={errors}>
-        <TextInput
-          type="text"
-          value={
-            !locationSearchOpen && newAddress
-              ? displayAddress
-              : locationSearchField
-          }
-          onChange={(e) => setLocationSearchField(e.target.value)}
-          placeholder="Enter district or city name"
-          onBlur={() => setLocationSearchOpen(false)}
-          onFocus={() => setLocationSearchOpen(true)}
+    <div className="p-8 max-h-[calc(80vh-10rem)] overflow-y-scroll">
+      <form
+        className="flex flex-col gap-2"
+        onSubmit={handleSubmit(handleCreateAddress)}
+      >
+        <input
+          type="hidden"
+          hidden={true}
+          {...register("location", { required: true })}
         />
-      </FormRow>
+        <div className="relative">
+          <FormRow label="Location" formErrors={errors}>
+            <TextInput
+              type="text"
+              value={
+                !locationSearchOpen && newAddress
+                  ? displayAddress
+                  : locationSearchField
+              }
+              onChange={(e) => setLocationSearchField(e.target.value)}
+              placeholder="Enter district or city name"
+              onFocus={() => setLocationSearchOpen(true)}
+              onBlur={() => {
+                setLocationSearchOpen(false);
+                setLocationSearchField("");
+              }}
+            />
+          </FormRow>
 
-      {locations && (
-        <div>
-          {locations && locations.length > 0 ? (
-            locations.map((location) => (
-              <p onClick={() => handleSelectLocation(location)}>
-                {location.display_name}
-              </p>
-            ))
-          ) : (
-            <p>No location found</p>
+          {locationSearchField.length > 0 && (
+            <div className="absolute w-full border border-slate-300 rounded-lg p-2 bg-white">
+              {isLoading && <p>Loading...</p>}
+              {!isLoading && locations && locations.length > 0 ? (
+                locations.map((location) => (
+                  <p
+                    className="p-2 hover:bg-slate-300 rounded-lg"
+                    onClick={() => handleSelectLocation(location)}
+                  >
+                    {location.display_name}
+                  </p>
+                ))
+              ) : (
+                <p>No location found</p>
+              )}
+            </div>
           )}
         </div>
-      )}
-      <AddressCommonForm formApi={formApi} />
-      <button>Create Address</button>
-    </form>
+        <AddressCommonForm formApi={formApi} />
+        <Button className="w-full">Create Address</Button>
+      </form>
+    </div>
   );
 }
 

@@ -2,17 +2,19 @@ import { ReactElement, cloneElement } from "react";
 import { FieldErrors } from "react-hook-form";
 
 function FormRow({
+  name,
   label,
   formErrors,
   children,
   countString,
 }: {
+  name?: string;
   label: string;
   formErrors: FieldErrors;
   children: ReactElement;
   countString?: string;
 }) {
-  const id = children?.props?.name;
+  const id = name ?? children?.props?.name;
   const hasError = Boolean(formErrors && formErrors[id]);
 
   const clonedChildren = cloneElement(children, {
