@@ -7,6 +7,7 @@ import useGetCurrentUser from "../../hooks/user/useGetCurrentUser";
 import { omit } from "lodash";
 import { LuMapPin, LuMapPinOff } from "react-icons/lu";
 import { toAdministrativeString } from "../../utilities/addressUtils";
+import Button from "../../ui/Button";
 
 function AddressForm({
   address,
@@ -57,20 +58,25 @@ function AddressForm({
   }
 
   return (
-    <form onSubmit={handleSubmit(handleCreateAddress)}>
-      {longitude !== undefined && (
-        <LocationIncludedIndicator
-          longitude={longitude}
-          location={locationString}
-          onChange={onChangeLocation}
-        />
-      )}
-      <AddressCommonForm formApi={formApi} />
-      {longitude === undefined && (
-        <LocationIncludedIndicator onChange={onChangeLocation} />
-      )}
-      <button>{buttonLabel}</button>
-    </form>
+    <>
+      <form
+        className="flex flex-col gap-3"
+        onSubmit={handleSubmit(handleCreateAddress)}
+      >
+        {longitude !== undefined && (
+          <LocationIncludedIndicator
+            longitude={longitude}
+            location={locationString}
+            onChange={onChangeLocation}
+          />
+        )}
+        <AddressCommonForm formApi={formApi} />
+        {longitude === undefined && (
+          <LocationIncludedIndicator onChange={onChangeLocation} />
+        )}
+        <Button className="">{buttonLabel}</Button>
+      </form>
+    </>
   );
 }
 
@@ -84,21 +90,21 @@ function LocationIncludedIndicator({
   onChange?: () => void;
 }) {
   return (
-    <p>
+    <div className="flex items-center gap-3 p-3 bg-slate-200 rounded-lg">
       {longitude ? (
         <>
-          <LuMapPin />
+          <LuMapPin className="h-5 w-5" />
           {location}
         </>
       ) : (
         <>
-          <LuMapPinOff /> Location is not determined
+          <LuMapPinOff className="h-5 w-5" /> Location is not set
         </>
       )}
       {onChange && (
         <button onClick={onChange}>{longitude ? "Change" : "Add"}</button>
       )}
-    </p>
+    </div>
   );
 }
 

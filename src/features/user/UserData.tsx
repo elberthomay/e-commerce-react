@@ -36,34 +36,50 @@ function UserData() {
     }
   }
   return (
-    <div>
-      <h1>User Data</h1>
-      <img
-        src={createImageUrl(avatar ?? "defaultAvatar.webp", {
-          height: 100,
-        })}
-        alt=""
-      />
-      <label htmlFor="browse" onDrop={handleChangeAvatar}>
-        Change avatar image
-      </label>
-      <input
-        hidden
-        type="file"
-        name="image"
-        id="browse"
-        accept=".png, .jpg, .jpeg .webp"
-        onChange={handleChangeAvatar}
-      />
-      name: {name}
-      <Modal>
-        <Modal.Open id="changeUsername">
-          <button>Change</button>
-        </Modal.Open>
-        <Modal.Window id="changeUsername">
-          <UserNameChangeDialog name={name} />
-        </Modal.Window>
-      </Modal>
+    <div className=" p-8 flex gap-4 items-start">
+      <div className="*:mb-4  *:last:mb-0">
+        <img
+          src={createImageUrl(avatar ?? "defaultAvatar.webp", {
+            height: 300,
+          })}
+          alt="user avatar"
+          className="h-64 w-64 border border-slate-300 rounded-lg"
+        />
+        <input
+          hidden
+          type="file"
+          name="image"
+          id="browse"
+          accept=".png, .jpg, .jpeg .webp"
+          onChange={handleChangeAvatar}
+        />
+        <label
+          htmlFor="browse"
+          onDrop={handleChangeAvatar}
+          className="inline-block text-center border border-slate-400 bg-slate-100 w-full p-3 rounded-xl font-bold text-slate-500 hover:text-governor-bay-500 hover:border-governor-bay-800 transition-colors duration-100"
+        >
+          Change avatar image
+        </label>
+      </div>
+      <div className="grid grid-cols-[10rem_1fr] gap-3">
+        <p className=" col-span-2 text text-slate-500 font-bold">
+          Update personal data
+        </p>
+        <p>name</p>{" "}
+        <p className="flex gap-3">
+          <span className=" text-ellipsis">{name}</span>
+          <Modal>
+            <Modal.Open id="changeUsername">
+              <button className="text-sm font-bold text-governor-bay-500 hover:text-governor-bay-800">
+                Change
+              </button>
+            </Modal.Open>
+            <Modal.Window id="changeUsername">
+              <UserNameChangeDialog name={name} />
+            </Modal.Window>
+          </Modal>
+        </p>
+      </div>
     </div>
   );
 }

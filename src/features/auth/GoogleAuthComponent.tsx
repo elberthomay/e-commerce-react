@@ -1,8 +1,7 @@
-import { ReactElement, cloneElement } from "react";
+import { ReactElement, cloneElement, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function GoogleAuthComponent({
-  operation = "login",
   children,
 }: {
   operation?: "login" | "signup";
@@ -10,25 +9,29 @@ function GoogleAuthComponent({
 }) {
   const clonedChildren = cloneElement(children, { onClick: handleAuth });
   const navigate = useNavigate();
-  function handleAuth() {
-    const popup = window.open(
-      "http://localhost:3000/api/user/login/auth/",
-      "GoogleAuthPopup",
-      "width=500,height=600"
-    );
+  const [popup, setPopup] = useState<Window | null>(null);
+
+  useEffect(() => {
     if (popup) {
-      window.addEventListener(
-        "message",
-        (event) => {
-          console.log("event");
-          if (event.data === "closePopup") {
-            popup.close();
-            navigate("/");
-          }
-        },
-        false
-      );
+      const closeCallback = (event: MessageEvent<any>) => {
+        if (event.data === "closePopup") {
+          popup.close();
+          navigate("/");
+        }
+      };
+      window.addEventListener("message", closeCallback, false);
+      return () => window.removeEventListener("message", closeCallback, false);
     }
+  }, [popup, navigate]);
+
+  function handleAuth() {
+    setPopup(
+      window.open(
+        "http://localhost:3000/api/user/login/auth/",
+        "GoogleAuthPopup",
+        "width=500,height=600"
+      )
+    );
   }
   return clonedChildren;
 }

@@ -5,10 +5,12 @@ function FormRow({
   label,
   formErrors,
   children,
+  countString,
 }: {
   label: string;
   formErrors: FieldErrors;
   children: ReactElement;
+  countString?: string;
 }) {
   const id = children?.props?.name;
   const hasError = Boolean(formErrors && formErrors[id]);
@@ -27,11 +29,18 @@ function FormRow({
       </label>
       <div className="flex flex-col gap-1">
         {clonedChildren}
-        {hasError && (
-          <p className="text-red-600 text-xs">
-            {formErrors[id]?.message?.toString()}
-          </p>
-        )}
+        <div>
+          {hasError && (
+            <p className="text-red-600 text-xs">
+              {formErrors[id]?.message?.toString()}
+            </p>
+          )}
+          {countString && (
+            <p className="text-sm text-slate-500 text-right ml-auto">
+              {countString}
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );

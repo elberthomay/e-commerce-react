@@ -11,6 +11,7 @@ import { omit, pick } from "lodash";
 import useGetCurrentUser from "../../hooks/user/useGetCurrentUser";
 import { toAdministrativeString } from "../../utilities/addressUtils";
 import useLocationQuerySearch from "../../hooks/location/useLocationQuerySearch";
+import TextInput from "../../ui/TextInput";
 
 function AddressManualForm({
   onSubmit,
@@ -89,13 +90,13 @@ function AddressManualForm({
   }
   return (
     <form onSubmit={handleSubmit(handleCreateAddress)}>
-      <input
+      <TextInput
         type="hidden"
         hidden={true}
         {...register("location", { required: true })}
       />
       <FormRow label="Location" formErrors={errors}>
-        <input
+        <TextInput
           type="text"
           value={
             !locationSearchOpen && newAddress

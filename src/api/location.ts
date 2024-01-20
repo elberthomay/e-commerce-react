@@ -39,7 +39,6 @@ export async function reverseLocationLookup({
 
   const body: GeocodejsonDataType | { error: "Unable to geocode" } =
     await response.json();
-  console.log(body);
   if (response.ok) {
     if ("error" in body) return null;
     else

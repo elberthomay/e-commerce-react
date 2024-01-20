@@ -1,10 +1,17 @@
-import Modal, { useModal } from "../../components/Modal";
 import Spinner from "../../components/Spinner";
 import useGetUserAddresses from "../../hooks/address/useGetUserAddresses";
 import useSelectUserAddress from "../../hooks/address/useSelectUserAddress";
 import useCreateUserAddress from "../../hooks/address/useCreateUserAddress";
 import AddressCreateDialog from "../address/AddressCreateDialog";
 import AddressList from "../address/AddressList";
+import Button from "../../ui/Button";
+import { FaPlus } from "react-icons/fa6";
+import CustomDialog, {
+  useCustomDialogContext,
+} from "../../components/CustomDialog";
+import { AddressOutputType } from "../../type/addressType";
+import { ButtonHTMLAttributes, HTMLAttributes, forwardRef } from "react";
+import { twMerge } from "tailwind-merge";
 
 function UserAddress() {
   const { isLoading, isError, isSuccess, userAddresses } =
@@ -13,50 +20,73 @@ function UserAddress() {
   const { selectUserAddress } = useSelectUserAddress();
   return (
     <>
-      <h1>User Address</h1>
       {isLoading && <Spinner />}
       {isError && <p>Error occured, will try again in a moment</p>}
       {isSuccess && userAddresses && (
-        <>
-          <Modal useConfirmation={true}>
-            <Modal.Open id="createAddress">
-              <button disabled={!isSuccess || userAddresses.length >= 10}>
-                Create new address
-              </button>
-            </Modal.Open>
-            <Modal.Window id="createAddress" style="replace">
+        <div className="flex p-8 flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <div>searchbar</div>
+            <CustomDialog
+              trigger={
+                <UseraddressCreateButton userAddresses={userAddresses} />
+              }
+              confirmation={<CloseDialogConfirmation />}
+            >
               <AddressCreateDialog createAddress={createUserAddress} />
-            </Modal.Window>
-            <Modal.Confirmation>
-              <CloseDialogConfirmation />
-            </Modal.Confirmation>
-          </Modal>
+            </CustomDialog>
+          </div>
+
           <AddressList
             addresses={userAddresses}
             onSelect={selectUserAddress}
             allowUnselect={false}
           />
-        </>
+        </div>
       )}
     </>
   );
 }
 
-function CloseDialogConfirmation() {
-  const { close, cancelClose } = useModal();
+const UseraddressCreateButton = forwardRef<
+  HTMLButtonElement,
+  ButtonHTMLAttributes<HTMLButtonElement> & {
+    userAddresses: AddressOutputType[];
+  }
+>(({ userAddresses, ...props }, forwardedRef) => {
   return (
-    <>
-      <p>Are you sure you want to quit? Your progress will not be saved </p>
-      <button
-        onClick={() => {
-          close();
-        }}
-      >
-        Close
-      </button>
-      <button onClick={cancelClose}>Cancel</button>
-    </>
+    <Button
+      {...props}
+      className={twMerge("flex items-center gap-2 rounded-xl", props.className)}
+      ref={forwardedRef}
+      disabled={userAddresses.length >= 10}
+    >
+      <FaPlus className="h-3 w-3" />
+      Create new address
+    </Button>
   );
-}
+});
+
+const CloseDialogConfirmation = forwardRef<
+  HTMLDivElement,
+  HTMLAttributes<HTMLDivElement>
+>((props, forwardedRef) => {
+  const { closeDialog, closeConfirmation } = useCustomDialogContext();
+  return (
+    <div {...props} ref={forwardedRef}>
+      <p>Are you sure you want to quit? Your progress will not be saved </p>
+      <div className="grid grid-cols-2 gap-2 justify-center">
+        <Button
+          className="w-full bg-slate-100 border-governor-bay-800 text-governor-bay-800 hover:border-governor-bay-500 hover:border-l-governor-bay-500"
+          onClick={closeConfirmation}
+        >
+          Continue
+        </Button>
+        <Button className="w-full" onClick={closeDialog}>
+          Close
+        </Button>
+      </div>
+    </div>
+  );
+});
 
 export default UserAddress;

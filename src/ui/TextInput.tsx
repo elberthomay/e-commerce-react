@@ -1,4 +1,5 @@
 import { InputHTMLAttributes, forwardRef } from "react";
+import { twMerge } from "tailwind-merge";
 
 const TextInput = forwardRef<
   HTMLInputElement,
@@ -8,7 +9,10 @@ const TextInput = forwardRef<
     <input
       {...props}
       ref={forwardRef}
-      className="p-1.5 border-2 border-slate-300 focus:border-governor-bay-500 rounded-md data-[error=true]:border-red-400"
+      className={twMerge(
+        "p-1.5 border-2 border-slate-300 focus:border-governor-bay-500 rounded-md data-[error=true]:border-red-400",
+        props.className
+      )}
     />
   );
 });

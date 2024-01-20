@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { HTMLAttributes, forwardRef, useState } from "react";
 import {
   AddressCreateType,
   AddressOutputType,
@@ -6,25 +6,28 @@ import {
 } from "../../type/addressType";
 import AddressForm from "./AddressForm";
 import AddressSearch from "./AddressSearch";
-import { HiArrowLeft, HiCheck } from "react-icons/hi2";
+import { HiArrowLeft } from "react-icons/hi2";
 import AddressMap from "./AddressMap";
 import AddressManualForm from "./AddressManualForm";
-import Modal, { useModal } from "../../components/Modal";
 import toast from "react-hot-toast";
 import { UseMutateAsyncFunction } from "@tanstack/react-query";
+import { useCustomDialogContext } from "../../components/CustomDialog";
+import { twMerge } from "tailwind-merge";
+import { FaCheck } from "react-icons/fa6";
 
-function AddressCreateDialog({
-  createAddress,
-}: {
-  createAddress: UseMutateAsyncFunction<
-    AddressOutputType,
-    Error,
-    AddressCreateType,
-    unknown
-  >;
-}) {
+const AddressCreateDialog = forwardRef<
+  HTMLDivElement,
+  HTMLAttributes<HTMLDivElement> & {
+    createAddress: UseMutateAsyncFunction<
+      AddressOutputType,
+      Error,
+      AddressCreateType,
+      unknown
+    >;
+  }
+>(({ createAddress, ...props }, forwardedRef) => {
   const [state, setState] = useState<number>(0);
-  const { close, closeImmediately } = useModal();
+  const { close, closeDialog } = useCustomDialogContext();
   const [address, setAddress] = useState<AddressCreateType>({
     name: "",
     phoneNumber: "",
@@ -68,25 +71,43 @@ function AddressCreateDialog({
       success: "Address has been created",
       error: "Failed creating address",
     });
-    closeImmediately();
+    closeDialog();
   }
+
   return (
-    <div>
-      <h1>Add address</h1>
-      {state < 3 && (
-        <ul>
-          <li>
-            <span>{state > 0 ? <HiCheck /> : 1}</span>Find your location
-          </li>
-          <li>
-            <span>{state > 1 ? <HiCheck /> : 2}</span>Pinpoint your location
-          </li>
-          <li>
-            <span>{state > 2 ? <HiCheck /> : 3}</span>Complete your address
-          </li>
-        </ul>
+    <div
+      {...props}
+      className={twMerge(
+        props.className,
+        "px-0 max-w-[min(50rem,95vw)] w-full"
       )}
-      <div>
+      ref={forwardedRef}
+    >
+      {state > 0 && (
+        <button
+          className="absolute h-5 w-5 top-4 left-4 rounded-lg"
+          onClick={back}
+        >
+          <HiArrowLeft className="h-5 w-5" />
+        </button>
+      )}
+      <div className="flex flex-col items-center px-8 gap-6 pb-3 border-b border-slate-300">
+        <h1 className="text-xl font-bold">Add Address</h1>
+        {state < 3 && (
+          <div className="grid grid-cols-3 gap-4">
+            <AddressCreateStepsNumber state={state} step={0}>
+              Find your location
+            </AddressCreateStepsNumber>
+            <AddressCreateStepsNumber state={state} step={1}>
+              Pinpoint your location
+            </AddressCreateStepsNumber>
+            <AddressCreateStepsNumber state={state} step={2}>
+              Complete your address
+            </AddressCreateStepsNumber>
+          </div>
+        )}
+      </div>
+      <div className="pt-3">
         {state === 0 && (
           <AddressSearch
             onSubmit={handleCoordinateSubmit}
@@ -94,41 +115,57 @@ function AddressCreateDialog({
           />
         )}
         {state === 1 && (
-          <>
-            <button onClick={back}>
-              <HiArrowLeft />
-            </button>
-            <AddressMap
-              defaultCoordinate={
-                latitude && longitude ? { latitude, longitude } : undefined
-              }
-              onSubmit={handleMapSubmit}
-              onSearchManually={searchManually}
-            />
-          </>
+          <AddressMap
+            defaultCoordinate={
+              latitude && longitude ? { latitude, longitude } : undefined
+            }
+            onSubmit={handleMapSubmit}
+            onSearchManually={searchManually}
+          />
         )}
         {state === 2 && (
-          <>
-            <button onClick={back}>
-              <HiArrowLeft />
-            </button>
+          <div className="px-8 max-h-[calc(80vh-10rem)] overflow-y-scroll">
+            <h2 className="text-lg font-bold mb-4">Complete Your Address</h2>
             <AddressForm
               address={address}
               onSubmit={handleCreateAddress}
               buttonLabel="Create Address"
             />
-          </>
+          </div>
         )}
-        {state === 3 && (
-          <>
-            <button onClick={() => setState(0)}>
-              <HiArrowLeft />
-            </button>
-            <AddressManualForm onSubmit={handleCreateAddress} />
-          </>
+        {state === 3 && <AddressManualForm onSubmit={handleCreateAddress} />}
+      </div>
+    </div>
+  );
+});
+
+function AddressCreateStepsNumber({
+  state,
+  step,
+  children,
+}: {
+  state: number;
+  step: number;
+  children: string;
+}) {
+  const isCompleted = state > step;
+  const isOngoing = state >= step;
+  return (
+    <div
+      data-passed={isOngoing}
+      className="group relative flex flex-col items-center text-center"
+    >
+      <div className="h-8 w-8 flex justify-center items-center rounded-full border border-governor-bay-800 group-data-[passed=true]:bg-governor-bay-700">
+        {isCompleted ? (
+          <FaCheck className="h-4 w-4 text-slate-100" />
+        ) : (
+          <span className="font-bold text-governor-bay-800 group-data-[passed=true]:text-slate-100">
+            {step + 1}
+          </span>
         )}
       </div>
-      <button onClick={close}>Cancel</button>
+      {children}
+      <div className="absolute top-[30%] -right-[calc(50%-0.15rem)] h-[1px] group-last:hidden w-[calc(100%-1.5rem)] bg-black"></div>
     </div>
   );
 }

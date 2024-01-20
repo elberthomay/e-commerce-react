@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { HTMLAttributes, forwardRef, useState } from "react";
 import { AddressCreateType, AddressOutputType } from "../../type/addressType";
-import { useModal } from "../../components/Modal";
 import toast from "react-hot-toast";
 import useUpdateAddress from "../../hooks/address/useUpdateAddress";
 import { omit } from "lodash";
@@ -9,13 +8,18 @@ import { HiArrowLeft } from "react-icons/hi2";
 import AddressMap from "./AddressMap";
 import { toAdministrativeString } from "../../utilities/addressUtils";
 import useLocationQuerySearch from "../../hooks/location/useLocationQuerySearch";
+import { twMerge } from "tailwind-merge";
+import { useCustomDialogContext } from "../../components/CustomDialog";
 
-function AddressEditDialog({ address }: { address: AddressOutputType }) {
+const AddressEditDialog = forwardRef<
+  HTMLDivElement,
+  HTMLAttributes<HTMLDivElement> & { address: AddressOutputType }
+>(({ address, ...props }, forwardedRef) => {
   const [state, setState] = useState<number>(0);
-  const { close } = useModal();
   const [addressValues, setAddressValues] = useState<AddressCreateType>(
     omit(address, ["id", "selected"])
   );
+  const { closeDialog } = useCustomDialogContext();
   const { longitude, latitude } = addressValues;
   const administrativeString = toAdministrativeString(addressValues);
   const { locations } = useLocationQuerySearch(administrativeString, true);
@@ -67,19 +71,25 @@ function AddressEditDialog({ address }: { address: AddressOutputType }) {
       success: "Address has been updated",
       error: "Failed updating address",
     });
-    close();
+    closeDialog();
   }
 
   return (
-    <div>
-      <h1>Edit address</h1>
+    <div
+      {...props}
+      ref={forwardedRef}
+      className={twMerge(props.className, "max-w-[min(50rem,95vw)] w-full")}
+    >
+      <h1 className="font-bold text-xl text-center mb-4">Edit address</h1>
       {state === 0 && (
-        <AddressForm
-          address={addressValues}
-          onChangeLocation={openLocationMap}
-          onSubmit={handleSubmit}
-          buttonLabel="Edit Address"
-        />
+        <div className="px-8 max-h-[calc(80vh-10rem)] overflow-y-scroll">
+          <AddressForm
+            address={addressValues}
+            onChangeLocation={openLocationMap}
+            onSubmit={handleSubmit}
+            buttonLabel="Edit Address"
+          />
+        </div>
       )}
       {state === 1 && (
         <>
@@ -98,6 +108,6 @@ function AddressEditDialog({ address }: { address: AddressOutputType }) {
       )}
     </div>
   );
-}
+});
 
 export default AddressEditDialog;
