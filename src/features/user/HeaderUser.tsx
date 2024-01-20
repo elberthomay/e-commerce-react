@@ -24,7 +24,7 @@ export const HeaderUserButton = React.forwardRef<HTMLButtonElement>(
       >
         <img
           src={createAvatarImageUrl(currentUser?.avatar)}
-          className="h-10 w-10"
+          className="h-10 w-10 rounded-full"
           alt="User avatar"
         />
         <span className="truncate">{nameFirstWord}</span>

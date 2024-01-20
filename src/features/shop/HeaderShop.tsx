@@ -24,7 +24,7 @@ export const HeaderShopButton = React.forwardRef<HTMLButtonElement>(
         <img
           src={createAvatarImageUrl(currentShop?.avatar)}
           alt="Shop image"
-          className="h-10 w-10"
+          className="h-10 w-10 rounded-full"
         />
         <span className="truncate">{hasShop ? currentShop?.name : "Shop"}</span>
       </button>
