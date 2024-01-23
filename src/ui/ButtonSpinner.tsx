@@ -5,7 +5,7 @@ function ButtonSpinner({ className }: { className?: string }) {
   return (
     <CgSpinner
       sdfsfsef="yeah"
-      className={twMerge("h-5 w-5 animate-spin", className)}
+      className={twMerge("h-5 w-5 inline animate-spin", className)}
     />
   );
 }

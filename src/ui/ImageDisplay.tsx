@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { HTMLAttributes, useState } from "react";
 import { createImageUrl } from "../api/image";
 
-function ImageDisplay({ images }: { images: { imageName: string }[] }) {
+function ImageDisplay({
+  images,
+  ...props
+}: HTMLAttributes<HTMLDivElement> & { images: { imageName: string }[] }) {
   // images = [
   //   { imageName: "image-1.webp" },
   //   { imageName: "image-2.webp" },
@@ -13,10 +16,11 @@ function ImageDisplay({ images }: { images: { imageName: string }[] }) {
   const [imageIndex, setImageIndex] = useState<number>(0);
   if (images.length === 0) images = [{ imageName: "image-not-found.webp" }];
   return (
-    <div>
+    <div {...props}>
       <img
         src={createImageUrl(images[imageIndex]?.imageName, { height: 300 })}
         alt=""
+        className="w-full"
       />
       <ul>
         {images.map((image, i) => (

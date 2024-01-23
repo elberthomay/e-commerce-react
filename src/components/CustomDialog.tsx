@@ -1,20 +1,32 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import { ReactElement, createContext, useContext, useState } from "react";
+import {
+  MutableRefObject,
+  ReactElement,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
-const CustomDialogContext = createContext<{
+export type CustomDialogContextType = {
   closeDialog: () => void;
   closeConfirmation: () => void;
   close: () => void;
-} | null>(null);
+  open: () => void;
+};
+
+const CustomDialogContext = createContext<CustomDialogContextType | null>(null);
 
 function CustomDialog({
   children,
   trigger,
   confirmation,
+  contextRef,
 }: {
   children: ReactElement;
-  trigger: ReactElement;
+  trigger?: ReactElement;
   confirmation?: ReactElement;
+  contextRef?: MutableRefObject<CustomDialogContextType | null>;
 }) {
   const [status, setStatus] = useState<"closed" | "main" | "confirmation">(
     "closed"
@@ -33,14 +45,21 @@ function CustomDialog({
   const closeDialog = () => setStatus("closed");
   const closeConfirmation = () => setStatus("main");
   const close = () => handleOpen(false);
+  const open = () => handleOpen(true);
 
   const isOpen = status !== "closed";
+
+  useEffect(() => {
+    if (contextRef)
+      contextRef.current = { closeDialog, closeConfirmation, close, open };
+  }, [contextRef]);
+
   return (
     <CustomDialogContext.Provider
-      value={{ closeDialog, closeConfirmation, close }}
+      value={{ closeDialog, closeConfirmation, close, open }}
     >
       <Dialog.Root open={isOpen} onOpenChange={handleOpen}>
-        <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>
+        <Dialog.Trigger asChild>{trigger ?? null}</Dialog.Trigger>
         <Dialog.Portal>
           <Dialog.Overlay className="fixed left-0 right-0 top-0 bottom-0 bg-black/50 z-10" />
           <Dialog.Content

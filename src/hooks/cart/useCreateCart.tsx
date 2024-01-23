@@ -1,10 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createCart } from "../../api/cart";
+import useMutationIsLoading from "../useMutationIsLoading";
+
+const mutationKey = ["createCart"];
 
 export default function useCreateCart() {
   const queryClient = useQueryClient();
-  const { isPending, error, mutate } = useMutation({
-    mutationKey: ["createCart"],
+  const { isPending, error, mutateAsync } = useMutation({
+    mutationKey: mutationKey,
     mutationFn: (cartData: { itemId: string; quantity: number }) =>
       createCart(cartData),
     onSuccess: (data) => {
@@ -12,5 +15,7 @@ export default function useCreateCart() {
       queryClient.invalidateQueries({ queryKey: ["currentUser"] });
     },
   });
-  return { isLoading: isPending, error, createCart: mutate };
+  return { isLoading: isPending, error, createCart: mutateAsync };
 }
+
+export const useCreateCartsIsLoading = () => useMutationIsLoading(mutationKey);

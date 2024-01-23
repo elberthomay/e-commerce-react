@@ -9,7 +9,7 @@
 }
 
 html {
-  font-size: 62.5%;
+  font-size: 75%;
 }
 
 /* Medium-sized screens (768px and above) */
@@ -40,5 +40,30 @@ html {
     -webkit-appearance: none;
     margin: 0;
     -moz-appearance: textfield !important;
+  }
+}
+
+@layer utilities {
+  *::-webkit-scrollbar {
+    @apply w-3 h-3 opacity-0 transition-all duration-150;
+  }
+
+  *::-webkit-scrollbar:hover {
+    @apply opacity-100;
+  }
+  .scrollbar-small::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+
+  *::-webkit-scrollbar-track {
+    @apply rounded-full bg-slate-100 dark:bg-slate-700;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-slate-300 dark:bg-slate-600;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-500;
   }
 }

@@ -45,7 +45,7 @@ function CustomCombobox({
         <Command className="min-w-full p-0">
           <CommandInput placeholder="Search country code" />
           <CommandEmpty>Country code not found</CommandEmpty>
-          <CommandGroup className=" max-h-64 overflow-y-auto">
+          <CommandGroup className=" max-h-64 overflow-y-auto scrollbar scrollbar-small">
             {datas.map(({ value, key, label }) => (
               <CommandItem
                 key={key ?? value}

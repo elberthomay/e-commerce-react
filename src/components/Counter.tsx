@@ -1,5 +1,6 @@
 import { ChangeEvent } from "react";
 import { FiMinus, FiPlus } from "react-icons/fi";
+import { twMerge } from "tailwind-merge";
 
 function Counter({
   value,
@@ -8,6 +9,7 @@ function Counter({
   disabled,
   min,
   max,
+  className,
 }: {
   value: number;
   step?: number;
@@ -15,6 +17,7 @@ function Counter({
   disabled?: boolean;
   min?: number;
   max?: number;
+  className?: string;
 }) {
   function handleValueChange(e: ChangeEvent<HTMLInputElement>) {
     const newValue = Number(e.target.value);
@@ -24,9 +27,14 @@ function Counter({
   const handleInc = () => onChange(value + step);
   const handleDec = () => onChange(value - step);
   return (
-    <div className="flex items-center border border-slate-400 rounded-lg has-[:focus]:border-governor-bay-800">
+    <div
+      className={twMerge(
+        "flex items-center border border-slate-400 rounded-lg has-[:focus]:border-governor-bay-800",
+        className
+      )}
+    >
       <button
-        className="group h-8 w-8 flex justify-center items-center text-lg"
+        className="group h-8 w-8 flex justify-center items-center text-lg disabled:cursor-not-allowed"
         onClick={handleDec}
         disabled={disabled || (min !== undefined && value <= min)}
       >
@@ -42,7 +50,7 @@ function Counter({
         max={max}
       />
       <button
-        className="h-8 w-8 flex justify-center items-center text-lg"
+        className="h-8 w-8 flex justify-center items-center text-lg disabled:cursor-not-allowed"
         onClick={handleInc}
         disabled={disabled || (max !== undefined && value >= max)}
       >
