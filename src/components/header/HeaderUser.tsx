@@ -1,12 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import { createAvatarImageUrl } from "../../api/image";
 import useGetCurrentUser from "../../hooks/user/useGetCurrentUser";
-import Logout from "../../components/Logout";
+import Logout from "../Logout";
 import React, { ButtonHTMLAttributes, HTMLAttributes } from "react";
 import { twJoin } from "tailwind-merge";
-import CustomHoverCard, {
-  useCustomHoverCardContext,
-} from "../../components/CustomHoverCard";
+import CustomHoverCard, { useCustomHoverCardContext } from "../CustomHoverCard";
 
 export const HeaderUserButton = React.forwardRef<HTMLButtonElement>(
   (props: ButtonHTMLAttributes<HTMLButtonElement>, forwardedRef) => {

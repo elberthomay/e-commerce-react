@@ -9,7 +9,7 @@ function FormRow({
   countString,
 }: {
   name?: string;
-  label: string;
+  label?: string;
   formErrors: FieldErrors;
   children: ReactElement;
   countString?: string;
@@ -23,12 +23,14 @@ function FormRow({
   });
   return (
     <div className="flex flex-col gap-2">
-      <label
-        className="text-sm text-slate-600 font-bold capitalize"
-        htmlFor={id}
-      >
-        {label}
-      </label>
+      {label ?? (
+        <label
+          className="text-sm text-slate-600 font-bold capitalize"
+          htmlFor={id}
+        >
+          {label}
+        </label>
+      )}
       <div className="flex flex-col gap-1">
         {clonedChildren}
         <div>

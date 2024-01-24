@@ -1,4 +1,4 @@
-import { ChangeEvent, DragEvent } from "react";
+import { ChangeEvent, DragEvent, HTMLAttributes, forwardRef } from "react";
 import { createImageUrl } from "../../api/image";
 import useGetCurrentUser from "../../hooks/user/useGetCurrentUser";
 import { resizeImageFile } from "../../utilities/imageUtils";
@@ -8,11 +8,20 @@ import Modal, { useModal } from "../../components/Modal";
 import FormRow from "../../components/formRow";
 import { useForm } from "react-hook-form";
 import useUpdateCurrentUser from "../../hooks/user/useUpdateCurrentUser";
+import { useMaxBreakpoints } from "../../hooks/useWindowSize";
+import CustomDialog, {
+  useCustomDialogContext,
+} from "../../components/CustomDialog";
+import { HiChevronRight } from "react-icons/hi2";
+import Button from "../../ui/Button";
+import { twMerge } from "tailwind-merge";
+import TextInput from "../../ui/TextInput";
 
 function UserData() {
   const { currentUser } = useGetCurrentUser();
   const { name } = currentUser ?? {};
   const { changeUserAvatar } = useChangeUserAvatar();
+  const { isSm } = useMaxBreakpoints();
   const { avatar } = currentUser ?? {};
 
   async function handleChangeAvatar(
@@ -36,8 +45,8 @@ function UserData() {
     }
   }
   return (
-    <div className=" p-8 flex gap-4 items-start">
-      <div className="*:mb-4  *:last:mb-0">
+    <div className="p-3 sm:p-4 md:p-8 flex flex-col items-stretch sm:items-start sm:flex-row gap-4">
+      <div className="flex flex-col gap-3 items-center">
         <img
           src={createImageUrl(avatar ?? "defaultAvatar.webp", {
             height: 300,
@@ -61,32 +70,34 @@ function UserData() {
           Change avatar image
         </label>
       </div>
-      <div className="grid grid-cols-[10rem_1fr] gap-3">
+      <div className="grid grid-cols-[6rem_minmax(0,1fr)] sm:grid-cols-[10rem_minmax(0,1fr)] gap-3">
         <p className=" col-span-2 text text-slate-500 font-bold">
           Update personal data
         </p>
         <p>name</p>{" "}
-        <p className="flex gap-3">
-          <span className=" text-ellipsis">{name}</span>
-          <Modal>
-            <Modal.Open id="changeUsername">
-              <button className="text-sm font-bold text-governor-bay-500 hover:text-governor-bay-800">
-                Change
+        <div className="flex gap-4 w-full items-center">
+          <p className="text-ellipsis overflow-hidden">{name}</p>
+          <CustomDialog
+            trigger={
+              <button className=" shrink-0 text-sm font-bold text-governor-bay-500 hover:text-governor-bay-800">
+                {isSm ? "Change" : <HiChevronRight className="h-6 w-6" />}
               </button>
-            </Modal.Open>
-            <Modal.Window id="changeUsername">
-              <UserNameChangeDialog name={name} />
-            </Modal.Window>
-          </Modal>
-        </p>
+            }
+          >
+            <UserNameChangeDialog name={name} />
+          </CustomDialog>
+        </div>
       </div>
     </div>
   );
 }
 
-function UserNameChangeDialog({ name }: { name: string }) {
+const UserNameChangeDialog = forwardRef<
+  HTMLDivElement,
+  HTMLAttributes<HTMLDivElement> & { name: string }
+>(({ name, className, ...props }, forwardedRef) => {
   const { updateCurrentUser } = useUpdateCurrentUser();
-  const { close } = useModal();
+  const { close } = useCustomDialogContext();
   const {
     register,
     formState: { errors, isDirty },
@@ -103,12 +114,19 @@ function UserNameChangeDialog({ name }: { name: string }) {
     close();
   }
   return (
-    <div>
-      <h1>Change Name</h1>
-      <p>Make sure you have typed your name properly</p>
-      <form onSubmit={handleSubmit(handleChangeName)}>
-        <FormRow label="name" formErrors={errors}>
-          <input
+    <div
+      {...props}
+      ref={forwardedRef}
+      className={twMerge(className, "w-[min(25rem,95vw)] text-center")}
+    >
+      <form
+        onSubmit={handleSubmit(handleChangeName)}
+        className="flex flex-col gap-2"
+      >
+        <h1 className="text-xl font-bold">Change Name</h1>
+        <p>Make sure you have typed your name properly</p>
+        <FormRow formErrors={errors}>
+          <TextInput
             type="text"
             maxLength={60}
             {...register("name", {
@@ -119,12 +137,15 @@ function UserNameChangeDialog({ name }: { name: string }) {
             })}
           />
         </FormRow>
-        <button disabled={Object.keys(errors).length !== 0 || !isDirty}>
+        <Button
+          className="w-full"
+          disabled={Object.keys(errors).length !== 0 || !isDirty}
+        >
           Save
-        </button>
+        </Button>
       </form>
     </div>
   );
-}
+});
 
 export default UserData;

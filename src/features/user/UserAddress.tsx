@@ -56,7 +56,10 @@ const UseraddressCreateButton = forwardRef<
   return (
     <Button
       {...props}
-      className={twMerge("flex items-center gap-2 rounded-xl", props.className)}
+      className={twMerge(
+        " px-4 flex items-center gap-2 rounded-lg",
+        props.className
+      )}
       ref={forwardedRef}
       disabled={userAddresses.length >= 10}
     >
@@ -72,8 +75,15 @@ const CloseDialogConfirmation = forwardRef<
 >((props, forwardedRef) => {
   const { closeDialog, closeConfirmation } = useCustomDialogContext();
   return (
-    <div {...props} ref={forwardedRef}>
-      <p>Are you sure you want to quit? Your progress will not be saved </p>
+    <div
+      {...props}
+      ref={forwardedRef}
+      className={twMerge("flex flex-col gap-3", props.className)}
+    >
+      <div>
+        <p>Are you sure you want to quit?</p>
+        <p>Your progress will not be saved</p>
+      </div>
       <div className="grid grid-cols-2 gap-2 justify-center">
         <Button
           className="w-full bg-slate-100 border-governor-bay-800 text-governor-bay-800 hover:border-governor-bay-500 hover:border-l-governor-bay-500"

@@ -1,11 +1,9 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { createAvatarImageUrl } from "../../api/image";
 import useGetCurrentShop from "../../hooks/shop/useGetCurrentShop";
 import React, { ButtonHTMLAttributes, HTMLAttributes } from "react";
 import { twJoin, twMerge } from "tailwind-merge";
-import CustomHoverCard, {
-  useCustomHoverCardContext,
-} from "../../components/CustomHoverCard";
+import CustomHoverCard, { useCustomHoverCardContext } from "../CustomHoverCard";
 import Button from "../../ui/Button";
 
 export const HeaderShopButton = React.forwardRef<HTMLButtonElement>(

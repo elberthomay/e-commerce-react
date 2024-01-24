@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
-import useGetCurrentUser from "../hooks/user/useGetCurrentUser";
+import useGetCurrentUser from "../../hooks/user/useGetCurrentUser";
 import HeaderSearchBar from "./HeaderSearchBar";
-import CartHeader, { HeaderCartButton } from "../features/cart/HeaderCart";
-import HeaderUser, { HeaderUserButton } from "../features/user/HeaderUser";
-import HeaderShop, { HeaderShopButton } from "../features/shop/HeaderShop";
-import { useMaxBreakpoints } from "../hooks/useWindowSize";
-import HeaderSliderMenu from "./HeaderSliderMenu";
-import Button from "../ui/Button";
+import CartHeader, { HeaderCartButton } from "../../features/cart/HeaderCart";
+import HeaderUser, { HeaderUserButton } from "./HeaderUser";
+import HeaderShop, { HeaderShopButton } from "./HeaderShop";
+import { useMaxBreakpoints } from "../../hooks/useWindowSize";
+import HeaderDrawerMenu from "./HeaderSliderMenu";
+import Button from "../../ui/Button";
 
 function Header() {
   const { isLoading, error, isAuthenticated } = useGetCurrentUser();
@@ -53,7 +53,7 @@ function Header() {
                       </Link>
                     </div>
                   ) : (
-                    <HeaderSliderMenu />
+                    <HeaderDrawerMenu />
                   )}
                 </>
               )}

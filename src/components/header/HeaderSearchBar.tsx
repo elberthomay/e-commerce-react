@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import useGetShop from "../hooks/shop/useGetShop";
-import SearchBar from "../ui/SearchBar";
+import useGetShop from "../../hooks/shop/useGetShop";
+import SearchBar from "../../ui/SearchBar";
 
 function HeaderSearchBar() {
   const navigate = useNavigate();
