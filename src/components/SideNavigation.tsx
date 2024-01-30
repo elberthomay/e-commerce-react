@@ -2,7 +2,6 @@ import {
   Dispatch,
   HTMLAttributes,
   MutableRefObject,
-  ReactNode,
   SetStateAction,
   createContext,
   useContext,
@@ -15,6 +14,7 @@ import { useMaxBreakpoints } from "../hooks/useWindowSize";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi2";
 import { Link, useLocation } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
+import * as Tooltip from "@radix-ui/react-tooltip";
 
 type SideNavigationContextType = {
   open: boolean;
@@ -113,19 +113,46 @@ function Item({
   const { size } = useSideNavigationContext();
 
   const isSelected = isPathEqual(pathname, to);
+
+  const ItemIcon = (
+    <div className="w-full flex justify-center py-1 px-2 rounded-lg data-[size=mini]:hover:bg-slate-300">
+      {isSelected ? (
+        <IconFilledRender className="h-5 w-5 text-governor-bay-800" />
+      ) : (
+        <IconRender className="h-5 w-5 text-slate-800" />
+      )}
+    </div>
+  );
+
   return (
     <Link
       to={to}
       data-selected={isSelected}
       className="p-1 grid grid-cols-[max-content_minmax(0,1fr)] delay-100 group-data-[size=mini]:grid-cols-[3rem_0] items-center border-left-2 border-transparent transition-all data-[selected=true]:border-governor-bay-800 "
     >
-      <div className="w-full flex justify-center py-1 px-2 rounded-lg data-[size=mini]:hover:bg-slate-300">
-        {isSelected ? (
-          <IconFilledRender className="h-5 w-5 text-governor-bay-800" />
-        ) : (
-          <IconRender className="h-5 w-5 text-slate-800" />
-        )}
-      </div>
+      {size === "full" ? (
+        ItemIcon
+      ) : (
+        <Tooltip.Provider delayDuration={150} skipDelayDuration={150}>
+          <Tooltip.Root>
+            <Tooltip.Trigger asChild>{ItemIcon}</Tooltip.Trigger>
+            <Tooltip.Portal>
+              <Tooltip.Content side="right" asChild>
+                <div>
+                  <Tooltip.Arrow asChild>
+                    <div className="flex items-center justify-center h-[calc(0.625rem+1px)] w-[0.75rem+1px] bg-slate-300 triangle-clip border mr-[-1px]">
+                      <div className="h-2.5 w-3 triangle-clip bg-slate-100 "></div>
+                    </div>
+                  </Tooltip.Arrow>
+                  <div className="bg-slate-100 px-3 py-1 rounded-lg border border-slate-300">
+                    {children}
+                  </div>
+                </div>
+              </Tooltip.Content>
+            </Tooltip.Portal>
+          </Tooltip.Root>
+        </Tooltip.Provider>
+      )}
 
       <span className="w-full font-bold group-data-[selected=true]:text-governor-bay-800, transition-all opacity-100 group-data-[size=mini]:opacity-0 group-data-[size=mini]:invisible">
         {children}
