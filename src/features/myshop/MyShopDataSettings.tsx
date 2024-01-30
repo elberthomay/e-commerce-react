@@ -11,7 +11,7 @@ import { useUpdateShop } from "../../hooks/shop/useUpdateCurrentShop";
 import { debounce } from "lodash";
 import useChangeShopAvatar from "../../hooks/shop/useChangeShopAvatar";
 
-function MyShopSettings() {
+function MyShopDataSettings() {
   const { currentShop } = useGetCurrentShop();
   const { changeShopAvatar } = useChangeShopAvatar();
   const { id, avatar, name } = currentShop ?? {};
@@ -38,8 +38,8 @@ function MyShopSettings() {
   }
 
   return (
-    <div>
-      <h1>Shop settings</h1>
+    <div className="">
+      <h1 className="font-bold text-xl">Shop settings</h1>
       <img
         src={createImageUrl(avatar ?? "defaultAvatar.webp", { height: 100 })}
         alt=""
@@ -155,4 +155,4 @@ function ShopNameChangeDialog({
   );
 }
 
-export default MyShopSettings;
+export default MyShopDataSettings;

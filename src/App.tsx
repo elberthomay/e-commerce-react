@@ -6,7 +6,7 @@ import MyShop from "./pages/MyShop";
 import Shop from "./pages/Shop";
 import ItemDetail from "./pages/ItemDetail";
 import UserAddress from "./features/user/UserAddress";
-import UserSettings from "./features/user/UserSettings";
+import UserSettings from "./pages/UserSettings";
 import UserData from "./features/user/UserData";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -16,9 +16,11 @@ import PathNotFound from "./pages/PathNotFound";
 import { Toaster } from "react-hot-toast";
 import MyShopDashboard from "./features/myshop/MyShopDashboard";
 import MyShopItems from "./features/myshop/MyShopItems";
-import MyShopSettings from "./features/myshop/MyShopSettings";
+import MyShopDataSettings from "./features/myshop/MyShopDataSettings";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import AuthenticationCheck from "./features/auth/AuthenticationCheck";
+import MyShopSetting from "./features/myshop/MyShopSetting";
+import MyShopDataAddress from "./features/myshop/MyShopDataAddress";
 
 function App() {
   const queryClient = new QueryClient();
@@ -64,7 +66,11 @@ function App() {
             <Route index element={<MyShopDashboard />} />
             <Route path="dashboard" element={<MyShopDashboard />} />
             <Route path="items" element={<MyShopItems />} />
-            <Route path="settings" element={<MyShopSettings />} />
+            <Route path="settings" element={<MyShopSetting />}>
+              <Route index element={<MyShopDataSettings />} />
+              <Route path="data" element={<MyShopDataSettings />} />
+              <Route path="address" element={<MyShopDataAddress />} />
+            </Route>
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />

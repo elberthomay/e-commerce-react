@@ -1,5 +1,5 @@
 import { HTMLAttributes, ReactNode } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 
 function NavigationTab({
@@ -20,23 +20,25 @@ function NavigationTab({
   );
 }
 
-const isPathEqual = (p1: string, p2: string) =>
-  p1.replace(/\/+$/, "") === p2.replace(/\/+$/, "");
 function Item({ children, to }: { children: ReactNode; to: string }) {
-  const { pathname } = useLocation();
   //make sure to remove trailing slash out of equation
-  const active = isPathEqual(pathname, to);
   return (
-    <Link
-      to={to}
-      className="group flex flex-col items-center"
-      data-active={active}
-    >
-      <div className="p-4 py-2 sm:py-4 text-sm font-bold text-slate-500  hover:text-governor-bay-500 group-data-[active=true]:text-governor-bay-800">
-        {children}
-      </div>
-      <div className="h-[2px] bg-governor-bay-800 w-0 group-data-[active=true]:w-full group-hover:w-full transition-all duration-200"></div>
-    </Link>
+    <NavLink to={to} className="group flex flex-col items-center" end>
+      {({ isActive }: { isActive: boolean }) => (
+        <>
+          <div
+            data-active={isActive}
+            className="p-4 py-2 sm:py-4 text-sm font-bold text-slate-500  hover:text-governor-bay-500 data-[active=true]:text-governor-bay-800"
+          >
+            {children}
+          </div>
+          <div
+            data-active={isActive}
+            className="h-[2px] bg-governor-bay-800 w-0 data-[active=true]:w-full group-hover:w-full transition-all duration-200"
+          ></div>
+        </>
+      )}
+    </NavLink>
   );
 }
 

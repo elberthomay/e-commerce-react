@@ -15,6 +15,7 @@ function ShopMain() {
             IconRender={BsGraphUpArrow}
             IconFilledRender={BsGraphUpArrow}
             to="/myshop/"
+            end
           >
             Dashboard
           </SideNavigation.Item>
@@ -45,7 +46,7 @@ function ShopMain() {
             </SideNavigation.Item>
           ))}
         </SideNavigation>
-        <main className="h-full flex-grow py-4 overflow-y-auto">
+        <main className="h-full p-2 sm:p-6 flex-grow overflow-y-auto">
           <div className="h-[100rem]">
             <Outlet />
           </div>
