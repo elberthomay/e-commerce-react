@@ -9,7 +9,7 @@ const Button = forwardRef<
     <button
       {...props}
       className={twMerge(
-        "p-2 bg-governor-bay-800 hover:bg-governor-bay-500 font-bold text-slate-200 rounded-md transition-colors duration-150 active:bg-governor-bay-600 disabled:bg-slate-300 disabled:text-slate-500",
+        "p-2 px-4 bg-governor-bay-800 hover:bg-governor-bay-500 font-bold text-slate-200 rounded-md transition-colors duration-150 active:bg-governor-bay-600 disabled:bg-slate-300 disabled:text-slate-500",
         props?.className
       )}
       ref={forwardedRef}

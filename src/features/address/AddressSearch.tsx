@@ -22,7 +22,7 @@ function AddressSearch({
     resultString: searchQuery,
     setDebouncingString,
   } = useDebouncedString();
-  const [inputFocused, setInputFocused] = useState<boolean>(false);
+  const [inputFocused, setInputFocused] = useState<boolean>(true);
 
   const handleCloseDropdown = useCallback(() => setInputFocused(false), []);
   const wrapperRef = useRef(null);

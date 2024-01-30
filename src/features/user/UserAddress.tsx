@@ -78,9 +78,12 @@ const CloseDialogConfirmation = forwardRef<
     <div
       {...props}
       ref={forwardedRef}
-      className={twMerge("flex flex-col gap-3", props.className)}
+      className={twMerge(
+        "flex flex-col gap-3 w-[min(20rem,95vh)]",
+        props.className
+      )}
     >
-      <div>
+      <div className="text-center">
         <p>Are you sure you want to quit?</p>
         <p>Your progress will not be saved</p>
       </div>

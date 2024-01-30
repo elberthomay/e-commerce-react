@@ -19,6 +19,7 @@ import { createImageUrl } from "../api/image";
 import { formatPrice } from "../utilities/intlUtils";
 import { useMaxBreakpoints } from "../hooks/useWindowSize";
 import { AddtoCartFooter } from "../features/item/AddToCartDrawer";
+import GutteredBox from "../ui/GutteredBox";
 function ItemDetail() {
   const { itemId } = useParams();
   const { isLoading, error, item } = useGetItem(itemId ?? "");
@@ -54,7 +55,7 @@ function ItemDetail() {
   }
 
   return (
-    <>
+    <GutteredBox>
       {isLoading && <Spinner />}
 
       {!isLoading && item && shop && (
@@ -97,7 +98,7 @@ function ItemDetail() {
           </CustomDialog>
         </>
       )}
-    </>
+    </GutteredBox>
   );
 }
 

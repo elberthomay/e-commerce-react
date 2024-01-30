@@ -95,13 +95,13 @@ const AddressCreateDialog = forwardRef<
         <h1 className="text-xl font-bold">Add Address</h1>
         {state < 3 && (
           <div className="grid grid-cols-3 gap-4">
-            <AddressCreateStepsNumber state={state} step={0}>
+            <AddressCreateStepsNumber currentStep={state} step={0}>
               Find your location
             </AddressCreateStepsNumber>
-            <AddressCreateStepsNumber state={state} step={1}>
+            <AddressCreateStepsNumber currentStep={state} step={1}>
               Pinpoint your location
             </AddressCreateStepsNumber>
-            <AddressCreateStepsNumber state={state} step={2}>
+            <AddressCreateStepsNumber currentStep={state} step={2}>
               Complete your address
             </AddressCreateStepsNumber>
           </div>
@@ -140,16 +140,16 @@ const AddressCreateDialog = forwardRef<
 });
 
 function AddressCreateStepsNumber({
-  state,
+  currentStep,
   step,
   children,
 }: {
-  state: number;
+  currentStep: number;
   step: number;
   children: string;
 }) {
-  const isCompleted = state > step;
-  const isOngoing = state >= step;
+  const isCompleted = currentStep > step;
+  const isOngoing = currentStep >= step;
   return (
     <div
       data-passed={isOngoing}

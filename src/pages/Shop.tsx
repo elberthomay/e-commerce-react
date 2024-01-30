@@ -5,12 +5,13 @@ import useGetShop from "../hooks/shop/useGetShop";
 import { RequestError } from "../error/RequestError";
 import { formatDistanceToNow } from "date-fns";
 import ShopItemTable from "../features/shop/ShopItemTable";
+import GutteredBox from "../ui/GutteredBox";
 function Shop() {
   const { shopId } = useParams();
   const { isLoading, error, shop } = useGetShop(shopId);
   const { name, description, createdAt } = shop ?? {};
   return (
-    <>
+    <GutteredBox>
       {isLoading && <Spinner />}
       {!isLoading &&
         error &&
@@ -31,7 +32,7 @@ function Shop() {
           <ShopItemTable shopId={shopId!} />
         </div>
       )}
-    </>
+    </GutteredBox>
   );
 }
 

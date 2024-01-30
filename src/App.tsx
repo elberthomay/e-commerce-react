@@ -39,19 +39,6 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="/myshop/"
-              element={
-                <ProtectedRoute>
-                  <MyShop />
-                </ProtectedRoute>
-              }
-            >
-              <Route index element={<MyShopDashboard />} />
-              <Route path="dashboard" element={<MyShopDashboard />} />
-              <Route path="items" element={<MyShopItems />} />
-              <Route path="settings" element={<MyShopSettings />} />
-            </Route>
             <Route path="/shop/:shopId" element={<Shop />} />
             <Route path="/item/:itemId" element={<ItemDetail />} />
             <Route
@@ -65,6 +52,19 @@ function App() {
               <Route index element={<UserData />} />
               <Route path="address" element={<UserAddress />} />
             </Route>
+          </Route>
+          <Route
+            path="/myshop/"
+            element={
+              <ProtectedRoute>
+                <MyShop />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<MyShopDashboard />} />
+            <Route path="dashboard" element={<MyShopDashboard />} />
+            <Route path="items" element={<MyShopItems />} />
+            <Route path="settings" element={<MyShopSettings />} />
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />

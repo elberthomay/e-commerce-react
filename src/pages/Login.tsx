@@ -5,6 +5,7 @@ import { Navigate, useSearchParams } from "react-router-dom";
 import GoogleAuthComponent from "../features/auth/GoogleAuthComponent";
 import TextBetweenDash from "../ui/TextBetweenDash";
 import GoogleButton from "../ui/GoogleButton";
+import GutteredBox from "../ui/GutteredBox";
 
 function Login() {
   const { isLoading, error, currentUser, isAuthenticated } =
@@ -12,7 +13,7 @@ function Login() {
   const [searchParams] = useSearchParams();
   const loginRedirect = searchParams.get("loginRedirect");
   return (
-    <>
+    <GutteredBox>
       {isLoading && <Spinner />}
       {!isLoading && !error && isAuthenticated && (
         <Navigate to={loginRedirect ?? "/"} />
@@ -31,7 +32,7 @@ function Login() {
           </div>
         </main>
       )}
-    </>
+    </GutteredBox>
   );
 }
 

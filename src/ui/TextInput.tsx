@@ -10,7 +10,7 @@ const TextInput = forwardRef<
       {...props}
       ref={forwardRef}
       className={twMerge(
-        "p-1.5 border-2 border-slate-300 focus:border-governor-bay-500 rounded-md data-[error=true]:border-red-400",
+        "p-1.5 border border-slate-300 focus:border-governor-bay-500 rounded-md data-[error=true]:border-red-400",
         props.className
       )}
     />

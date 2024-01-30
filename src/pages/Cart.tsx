@@ -4,12 +4,13 @@ import CartList from "../features/cart/CartList";
 import CartSummary from "../features/cart/CartSummary";
 import useGetCart from "../hooks/cart/useGetCart";
 import Button from "../ui/Button";
+import GutteredBox from "../ui/GutteredBox";
 
 function Cart() {
   const { isLoading, error, cart } = useGetCart();
 
   return (
-    <>
+    <GutteredBox>
       {isLoading && <Spinner />}
       {!isLoading && error && <p>Error displaying cart</p>}
       {!isLoading && cart && (
@@ -25,7 +26,7 @@ function Cart() {
           </div>
         </>
       )}
-    </>
+    </GutteredBox>
   );
 }
 

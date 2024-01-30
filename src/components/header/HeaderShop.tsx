@@ -45,7 +45,7 @@ const HeaderShopBody = React.forwardRef<HTMLDivElement>(
         {...props}
         ref={forwardedRef}
         className={twMerge(
-          "text-center p-5 bg-white rounded-md h-40 flex justify-center items-center",
+          "text-center p-5 bg-white rounded-md flex justify-center items-center",
           props?.className
         )}
         onClick={handleMyShopNavigation}
