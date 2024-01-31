@@ -26,7 +26,7 @@ function FormRow({
   });
   return (
     <div className={twMerge("flex flex-col gap-2", className)}>
-      {label ?? (
+      {label && (
         <label
           className="text-sm text-slate-600 font-bold capitalize"
           htmlFor={id}
@@ -36,7 +36,7 @@ function FormRow({
       )}
       <div className="flex flex-col gap-1">
         {clonedChildren}
-        <div>
+        <div className="flex justify-between">
           {hasError && (
             <p className="text-red-600 text-xs">
               {formErrors[id]?.message?.toString()}
