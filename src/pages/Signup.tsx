@@ -1,4 +1,4 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import SignupForm from "../features/user/SignupForm";
 import useGetCurrentUser from "../hooks/user/useGetCurrentUser";
 import ShopHubHeader from "../ui/ShopHubHeader";
@@ -9,6 +9,8 @@ import GutteredBox from "../ui/GutteredBox";
 
 function Signup() {
   const { isAuthenticated } = useGetCurrentUser();
+  const navigate = useNavigate();
+  const onLogin = () => navigate("/");
   return isAuthenticated ? (
     <Navigate to={"/"} />
   ) : (
@@ -21,7 +23,7 @@ function Signup() {
           <TextBetweenDash>
             <p className="text-slate-400 text-sm">Other Method</p>
           </TextBetweenDash>
-          <GoogleAuthComponent>
+          <GoogleAuthComponent onLogin={onLogin}>
             <GoogleButton>Signup with Google</GoogleButton>
           </GoogleAuthComponent>
         </div>

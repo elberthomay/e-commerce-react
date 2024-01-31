@@ -9,7 +9,7 @@ import TextInput from "../../ui/TextInput";
 import Checkbox from "../../ui/Checkbox";
 import Button from "../../ui/Button";
 
-function LoginForm() {
+function LoginForm({ onLogin }: { onLogin: () => void }) {
   const {
     reset,
     register,
@@ -17,7 +17,6 @@ function LoginForm() {
     setError,
     formState: { errors },
   } = useForm<UserLoginType>();
-  const navigate = useNavigate();
 
   const { isLoading, error, login } = useLogin();
 
@@ -29,7 +28,7 @@ function LoginForm() {
     toast.promise(loginPromise, {
       loading: "Logging in",
       success: (data) => {
-        navigate("/");
+        onLogin();
         return "Login successful";
       },
       error: (error) => {

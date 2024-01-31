@@ -2,8 +2,10 @@ import { ReactElement, cloneElement, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function GoogleAuthComponent({
+  onLogin,
   children,
 }: {
+  onLogin?: () => void;
   operation?: "login" | "signup";
   children: ReactElement;
 }) {
@@ -16,7 +18,7 @@ function GoogleAuthComponent({
       const closeCallback = (event: MessageEvent<any>) => {
         if (event.data === "closePopup") {
           popup.close();
-          navigate("/");
+          onLogin?.();
         }
       };
       window.addEventListener("message", closeCallback, false);
