@@ -1,4 +1,4 @@
-import FormRow from "../../components/formRow";
+import FormRow from "../../components/FormRow";
 import { useForm } from "react-hook-form";
 import useLogin from "../../hooks/user/useLogin";
 import toast from "react-hot-toast";

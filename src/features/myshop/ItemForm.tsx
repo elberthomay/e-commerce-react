@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import FormRow from "../../components/formRow";
+import FormRow from "../../components/FormRow";
 import ItemImageForm from "./ItemImageForm";
 import { pick } from "lodash";
 import { Dispatch } from "react";

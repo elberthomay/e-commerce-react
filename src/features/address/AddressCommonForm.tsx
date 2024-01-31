@@ -1,5 +1,5 @@
 import { UseFormReturn } from "react-hook-form";
-import FormRow from "../../components/formRow";
+import FormRow from "../../components/FormRow";
 import { countryPhoneCode } from "../../variables/countryPhoneCode";
 import { ButtonHTMLAttributes, useMemo, useState } from "react";
 import TextInput from "../../ui/TextInput";

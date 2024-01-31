@@ -11,7 +11,7 @@ import useGetCurrentShop from "../../hooks/shop/useGetCurrentShop";
 import { resizeImageFile } from "../../utilities/imageUtils";
 import toast from "react-hot-toast";
 import Modal, { useModal } from "../../components/Modal";
-import FormRow from "../../components/formRow";
+import FormRow from "../../components/FormRow";
 import { useForm } from "react-hook-form";
 import useCheckShopName from "../../hooks/shop/useCheckShopName";
 import { useUpdateShop } from "../../hooks/shop/useUpdateCurrentShop";

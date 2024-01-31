@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import useGetCurrentUser from "../../hooks/user/useGetCurrentUser";
-import FormRow from "../../components/formRow";
+import FormRow from "../../components/FormRow";
 import useCheckShopName from "../../hooks/shop/useCheckShopName";
 import { ReactElement, useEffect, useState } from "react";
 import useActivateShop from "../../hooks/shop/useActivateShop";

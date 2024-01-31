@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import useSignup from "../../hooks/user/useSignup";
-import FormRow from "../../components/formRow";
+import FormRow from "../../components/FormRow";
 import { UserRegisterType } from "../../type/userType";
 import { pick } from "lodash";
 import toast from "react-hot-toast";

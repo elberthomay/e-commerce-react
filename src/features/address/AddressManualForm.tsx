@@ -6,7 +6,7 @@ import AddressCommonForm, {
 } from "./AddressCommonForm";
 import useDebouncedString from "../../hooks/useDebouncedString";
 import { CollatedLocationDataType } from "../../type/locationType";
-import FormRow from "../../components/formRow";
+import FormRow from "../../components/FormRow";
 import { omit, pick } from "lodash";
 import useGetCurrentUser from "../../hooks/user/useGetCurrentUser";
 import { toAdministrativeString } from "../../utilities/addressUtils";
