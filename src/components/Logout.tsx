@@ -6,10 +6,13 @@ function Logout({ children }: { children: React.ReactNode }) {
   const { logout } = useLogout();
   const navigate = useNavigate();
   async function handleLogout() {
-    const logoutPromise = logout(undefined, { onSuccess: () => navigate("/") });
+    const logoutPromise = logout();
     toast.promise(logoutPromise, {
       loading: "Logging out",
-      success: "Logout successful",
+      success: (data) => {
+        navigate("/");
+        return "Logout successful";
+      },
       error: "Error logging out",
     });
     await logoutPromise;
