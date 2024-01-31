@@ -1,4 +1,11 @@
-import { ChangeEvent, DragEvent, useCallback, useState } from "react";
+import {
+  ChangeEvent,
+  DragEvent,
+  HTMLAttributes,
+  forwardRef,
+  useCallback,
+  useState,
+} from "react";
 import { createImageUrl } from "../../api/image";
 import useGetCurrentShop from "../../hooks/shop/useGetCurrentShop";
 import { resizeImageFile } from "../../utilities/imageUtils";
@@ -10,6 +17,12 @@ import useCheckShopName from "../../hooks/shop/useCheckShopName";
 import { useUpdateShop } from "../../hooks/shop/useUpdateCurrentShop";
 import { debounce } from "lodash";
 import useChangeShopAvatar from "../../hooks/shop/useChangeShopAvatar";
+import CustomDialog, {
+  useCustomDialogContext,
+} from "../../components/CustomDialog";
+import TextInput from "../../ui/TextInput";
+import Button from "../../ui/Button";
+import { twMerge } from "tailwind-merge";
 
 function MyShopDataSettings() {
   const { currentShop } = useGetCurrentShop();
@@ -38,47 +51,69 @@ function MyShopDataSettings() {
   }
 
   return (
-    <div className="">
-      <h1 className="font-bold text-xl">Shop settings</h1>
-      <img
-        src={createImageUrl(avatar ?? "defaultAvatar.webp", { height: 100 })}
-        alt=""
-      />
-      <label htmlFor="browse" onDrop={handleChangeAvatar}>
-        Change avatar image
-      </label>
-      <input
-        hidden
-        type="file"
-        name="image"
-        id="browse"
-        accept=".png, .jpg, .jpeg .webp"
-        onChange={handleChangeAvatar}
-      />
-      name: {name}
-      <Modal>
-        <Modal.Open id="changeUsername">
-          <button>Change</button>
-        </Modal.Open>
-        <Modal.Window id="changeUsername">
-          <ShopNameChangeDialog shopId={id ?? ""} name={name ?? ""} />
-        </Modal.Window>
-      </Modal>
+    <div className="p-2 flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
+        <h2 className="text-xl font-bold">Shop Information</h2>
+        <div className="p-2 flex flex-col gap-3">
+          <div>
+            <p className="text-sm font-bold text-slate-500">Shop name</p>
+            <p className=" font-bold text-slate-500">{name}</p>
+          </div>
+          <CustomDialog
+            trigger={
+              <button className="w-32 p-1.5 border-2 border-slate-300 hover:border-slate-500 bg-slate-100 rounded-md">
+                Change
+              </button>
+            }
+          >
+            <ShopNameChangeDialog shopId={id ?? ""} name={name ?? ""} />
+          </CustomDialog>
+        </div>
+      </div>
+      <div className="p-2 flex flex-col gap-4 items-start">
+        <h2 className="text-xl font-bold">Shop Avatar</h2>
+        <div className="grid grid-cols-[max-content] justify-items-center gap-2">
+          <div className="h-28 w-28 rounded-md border border-slate-300 overflow-clip ">
+            <img
+              src={createImageUrl(avatar ?? "defaultAvatar.webp", {
+                height: 100,
+              })}
+              alt={`${name}'s avatar`}
+              className="h-full w-full"
+            />
+          </div>
+          <label
+            htmlFor="browse"
+            className="inline-block p-1.5 px-3 border-2 border-slate-300 hover:border-slate-500 bg-slate-100 rounded-md font-bold text-slate-500"
+            onDrop={handleChangeAvatar}
+          >
+            Change avatar image
+          </label>
+        </div>
+        <input
+          hidden
+          type="file"
+          name="image"
+          id="browse"
+          accept=".png, .jpg, .jpeg .webp"
+          onChange={handleChangeAvatar}
+        />
+      </div>
     </div>
   );
 }
 
-function ShopNameChangeDialog({
-  shopId,
-  name,
-}: {
-  shopId: string;
-  name: string;
-}) {
+const ShopNameChangeDialog = forwardRef<
+  HTMLDivElement,
+  {
+    shopId: string;
+    name: string;
+  } & HTMLAttributes<HTMLDivElement>
+>(({ shopId, name, className, ...props }, forwardedRef) => {
   const [shopNameNotChecked, setShopNameNotChecked] = useState<boolean>(false);
   const { updateShop } = useUpdateShop(shopId);
   const { checkShopName } = useCheckShopName();
-  const { close } = useModal();
+  const { close } = useCustomDialogContext();
   const {
     register,
     formState: { errors, isDirty, isValidating },
@@ -87,6 +122,7 @@ function ShopNameChangeDialog({
     setError,
     getFieldState,
     clearErrors,
+    watch,
   } = useForm<{ name: string }>({ defaultValues: { name } });
 
   const checkNameDebouncedFn = useCallback(
@@ -117,22 +153,39 @@ function ShopNameChangeDialog({
     });
     close();
   }
+
   return (
-    <div>
-      <h1>Change shop Name</h1>
+    <div
+      {...props}
+      ref={forwardedRef}
+      className={twMerge(className, "flex flex-col gap-3")}
+    >
+      <h1 className="font-bold text-xl text-center">Change shop Name</h1>
       <p>Make sure you have typed your shop name properly</p>
       <form onSubmit={handleSubmit(handleChangeName)}>
-        <FormRow label="name" formErrors={errors}>
-          <input
+        <FormRow
+          label="name"
+          countString={`${watch("name").length}/60`}
+          formErrors={errors}
+        >
+          <TextInput
             type="text"
             maxLength={60}
             {...register("name", {
-              required: true,
-              minLength: 5,
-              maxLength: 60,
+              required: { value: true, message: "Shop name cannot be empty" },
+              minLength: {
+                value: 5,
+                message: "Shop name must be longer than 4 characters",
+              },
+              maxLength: {
+                value: 60,
+                message: "Shop name must be shorter than 60 characters",
+              },
               validate: (value: string) => {
-                setShopNameNotChecked(true);
-                checkNameDebouncedFn(value);
+                if (value !== name) {
+                  setShopNameNotChecked(true);
+                  checkNameDebouncedFn(value);
+                }
                 return true;
               },
               onChange: () => trigger(),
@@ -140,19 +193,20 @@ function ShopNameChangeDialog({
           />
         </FormRow>
         {shopNameNotChecked && <p>Loading...</p>}
-        <button
+        <Button
           disabled={
             Object.keys(errors).length !== 0 ||
             !isDirty ||
             isValidating ||
             shopNameNotChecked
           }
+          className="w-full"
         >
           Save
-        </button>
+        </Button>
       </form>
     </div>
   );
-}
+});
 
 export default MyShopDataSettings;
