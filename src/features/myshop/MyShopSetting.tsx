@@ -14,7 +14,7 @@ function MyShopSetting() {
       <NavigationTab>
         <NavigationTab.Item to="/myshop/settings">Shop Data</NavigationTab.Item>
         <NavigationTab.Item to="/myshop/settings/address">
-          Address
+          Locations
         </NavigationTab.Item>
       </NavigationTab>
       <Outlet />

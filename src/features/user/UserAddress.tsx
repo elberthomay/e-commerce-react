@@ -12,6 +12,7 @@ import CustomDialog, {
 import { AddressOutputType } from "../../type/addressType";
 import { ButtonHTMLAttributes, HTMLAttributes, forwardRef } from "react";
 import { twMerge } from "tailwind-merge";
+import CloseDialogConfirmation from "../../ui/CloseDialogConfirmation";
 
 function UserAddress() {
   const { isLoading, isError, isSuccess, userAddresses } =
@@ -66,39 +67,6 @@ const UseraddressCreateButton = forwardRef<
       <FaPlus className="h-3 w-3" />
       Create new address
     </Button>
-  );
-});
-
-const CloseDialogConfirmation = forwardRef<
-  HTMLDivElement,
-  HTMLAttributes<HTMLDivElement>
->((props, forwardedRef) => {
-  const { closeDialog, closeConfirmation } = useCustomDialogContext();
-  return (
-    <div
-      {...props}
-      ref={forwardedRef}
-      className={twMerge(
-        "flex flex-col gap-3 w-[min(20rem,95vh)]",
-        props.className
-      )}
-    >
-      <div className="text-center">
-        <p>Are you sure you want to quit?</p>
-        <p>Your progress will not be saved</p>
-      </div>
-      <div className="grid grid-cols-2 gap-2 justify-center">
-        <Button
-          className="w-full bg-slate-100 border-governor-bay-800 text-governor-bay-800 hover:border-governor-bay-500 hover:border-l-governor-bay-500"
-          onClick={closeConfirmation}
-        >
-          Continue
-        </Button>
-        <Button className="w-full" onClick={closeDialog}>
-          Close
-        </Button>
-      </div>
-    </div>
   );
 });
 

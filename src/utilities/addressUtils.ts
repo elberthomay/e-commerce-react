@@ -1,4 +1,10 @@
-import { CollatedLocationDataType } from "../type/locationType";
+type AdministrativeObjectType = {
+  village?: string | null;
+  district?: string | null;
+  city: string | null;
+  province: string | null;
+  country: string | null;
+};
 
 export const toAdministrativeString = ({
   village,
@@ -6,5 +12,5 @@ export const toAdministrativeString = ({
   city,
   province,
   country,
-}: CollatedLocationDataType["address"]) =>
+}: AdministrativeObjectType) =>
   [village, district, city, province, country].filter((i) => !!i).join(", ");

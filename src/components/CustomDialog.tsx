@@ -33,7 +33,6 @@ function CustomDialog({
   );
 
   function handleOpen(open: boolean) {
-    console.log(open);
     if (open) setStatus("main"); // open signal could only when dialog is closed
     else if (!open && status === "main" && confirmation)
       setStatus("confirmation"); //open confirmation

@@ -20,7 +20,7 @@ import MyShopDataSettings from "./features/myshop/MyShopDataSettings";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import AuthenticationCheck from "./features/auth/AuthenticationCheck";
 import MyShopSetting from "./features/myshop/MyShopSetting";
-import MyShopDataAddress from "./features/myshop/MyShopDataAddress";
+import MyShopAddressSettings from "./features/myshop/MyShopAddressSettings";
 
 function App() {
   const queryClient = new QueryClient();
@@ -69,7 +69,7 @@ function App() {
             <Route path="settings" element={<MyShopSetting />}>
               <Route index element={<MyShopDataSettings />} />
               <Route path="data" element={<MyShopDataSettings />} />
-              <Route path="address" element={<MyShopDataAddress />} />
+              <Route path="address" element={<MyShopAddressSettings />} />
             </Route>
           </Route>
           <Route path="/login" element={<Login />} />

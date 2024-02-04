@@ -47,7 +47,7 @@ function AddressForm({
   const formApi = useForm<AddressCommonFormFieldValues>({ defaultValues });
   const { handleSubmit } = formApi;
 
-  function handleCreateAddress(commonFormData: AddressCommonFormFieldValues) {
+  function handleSubmitAddress(commonFormData: AddressCommonFormFieldValues) {
     const { phoneCountryCode, phoneNumber } = commonFormData;
     const formData: AddressCreateType = {
       ...address,
@@ -61,18 +61,17 @@ function AddressForm({
     <>
       <form
         className="flex flex-col gap-3"
-        onSubmit={handleSubmit(handleCreateAddress)}
+        onSubmit={handleSubmit(handleSubmitAddress)}
       >
         {longitude !== undefined && (
-          <LocationIncludedIndicator
-            longitude={longitude}
+          <LocationChangeBox
             location={locationString}
             onChange={onChangeLocation}
           />
         )}
         <AddressCommonForm formApi={formApi} />
         {longitude === undefined && (
-          <LocationIncludedIndicator onChange={onChangeLocation} />
+          <LocationChangeBox onChange={onChangeLocation} />
         )}
         <Button className="">{buttonLabel}</Button>
       </form>
@@ -80,18 +79,16 @@ function AddressForm({
   );
 }
 
-function LocationIncludedIndicator({
-  longitude,
+function LocationChangeBox({
   location,
   onChange,
 }: {
-  longitude?: number;
   location?: string;
   onChange?: () => void;
 }) {
   return (
     <div className="flex items-center gap-3 p-3 bg-slate-200 rounded-lg">
-      {longitude ? (
+      {location ? (
         <>
           <LuMapPin className="h-5 w-5 shrink-0" />
           {location}
@@ -102,7 +99,7 @@ function LocationIncludedIndicator({
         </>
       )}
       {onChange && (
-        <button onClick={onChange}>{longitude ? "Change" : "Add"}</button>
+        <button onClick={onChange}>{location ? "Change" : "Add"}</button>
       )}
     </div>
   );
