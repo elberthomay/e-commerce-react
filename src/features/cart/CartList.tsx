@@ -55,7 +55,9 @@ function CartList({ cart }: { cart: cartOutputType[] }) {
   }
 
   function handleDeleteSelected() {
-    deleteCarts(cart.filter((selected) => selected).map((item) => item.itemId));
+    deleteCarts(
+      cart.filter(({ selected }) => selected).map((item) => item.itemId)
+    );
   }
 
   return (
