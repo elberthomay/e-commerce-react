@@ -1,13 +1,19 @@
-import { useForm } from "react-hook-form";
 import { AddressCreateType } from "../../type/addressType";
-import AddressCommonForm, {
-  AddressCommonFormFieldValues,
-} from "./AddressCommonForm";
+import { Name, PhoneNumber, Detail, Recipient } from "./AddressFormFragment";
 import useGetCurrentUser from "../../hooks/user/useGetCurrentUser";
 import { omit } from "lodash";
 import { LuMapPin, LuMapPinOff } from "react-icons/lu";
 import { toAdministrativeString } from "../../utilities/addressUtils";
+import { Form } from "../../components/Form";
 import Button from "../../ui/Button";
+
+type AddressFormFieldValues = {
+  name: string;
+  phoneCountryCode: string;
+  phoneNumber: string;
+  detail: string;
+  recipient: string;
+};
 
 function AddressForm({
   address,
@@ -44,10 +50,7 @@ function AddressForm({
     recipient: recipient || userName,
   };
 
-  const formApi = useForm<AddressCommonFormFieldValues>({ defaultValues });
-  const { handleSubmit } = formApi;
-
-  function handleSubmitAddress(commonFormData: AddressCommonFormFieldValues) {
+  function handleSubmitAddress(commonFormData: AddressFormFieldValues) {
     const { phoneCountryCode, phoneNumber } = commonFormData;
     const formData: AddressCreateType = {
       ...address,
@@ -58,24 +61,26 @@ function AddressForm({
   }
 
   return (
-    <>
-      <form
-        className="flex flex-col gap-3"
-        onSubmit={handleSubmit(handleSubmitAddress)}
-      >
-        {longitude !== undefined && (
-          <LocationChangeBox
-            location={locationString}
-            onChange={onChangeLocation}
-          />
-        )}
-        <AddressCommonForm formApi={formApi} />
-        {longitude === undefined && (
-          <LocationChangeBox onChange={onChangeLocation} />
-        )}
-        <Button className="">{buttonLabel}</Button>
-      </form>
-    </>
+    <Form
+      submitFunc={handleSubmitAddress}
+      defaultValues={defaultValues}
+      className="flex flex-col gap-3"
+    >
+      {longitude !== undefined && (
+        <LocationChangeBox
+          location={locationString}
+          onChange={onChangeLocation}
+        />
+      )}
+      <Name name="name" />
+      <PhoneNumber name="phoneNumber" />
+      <Detail name="detail" />
+      <Recipient name="recipient" />
+      {longitude === undefined && (
+        <LocationChangeBox onChange={onChangeLocation} />
+      )}
+      <Button className="">{buttonLabel}</Button>
+    </Form>
   );
 }
 

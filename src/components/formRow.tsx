@@ -12,7 +12,7 @@ function FormRow({
 }: {
   name?: string;
   label?: string;
-  formErrors: FieldErrors;
+  formErrors?: FieldErrors;
   children: ReactElement;
   countString?: string;
   className?: string;
@@ -39,7 +39,7 @@ function FormRow({
         <div className="flex justify-between">
           {hasError && (
             <p className="text-red-600 text-xs">
-              {formErrors[id]?.message?.toString()}
+              {formErrors ? formErrors[id]?.message?.toString() : ""}
             </p>
           )}
           {countString && (
