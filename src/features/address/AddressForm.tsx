@@ -92,7 +92,7 @@ function LocationChangeBox({
   onChange?: () => void;
 }) {
   return (
-    <div className="flex items-center gap-3 p-3 bg-slate-200 rounded-lg">
+    <div className="flex items-center gap-3 p-3 px-4 text-slate-500 bg-slate-200 rounded-lg">
       {location ? (
         <>
           <LuMapPin className="h-5 w-5 shrink-0" />
@@ -104,7 +104,9 @@ function LocationChangeBox({
         </>
       )}
       {onChange && (
-        <button onClick={onChange}>{location ? "Change" : "Add"}</button>
+        <button className="ml-auto font-bold " onClick={onChange}>
+          {location ? "Change" : "Add"}
+        </button>
       )}
     </div>
   );
