@@ -18,29 +18,30 @@ const ItemCardContext = createContext<{
 
 function ItemCard({
   itemName,
-  link,
   quantity,
   children,
+  className,
   ...props
-}: AnchorHTMLAttributes<HTMLAnchorElement> & {
+}: HTMLAttributes<HTMLDivElement> & {
   itemName: string;
-  link: string;
   quantity: number;
   children: ReactNode;
 }) {
   const [hovered, setHovered] = useState<boolean>(false);
   return (
     <ItemCardContext.Provider value={{ hovered, quantity }}>
-      <Link {...props} to={link}>
-        <div
-          onMouseEnter={() => setHovered(true)}
-          onMouseLeave={() => setHovered(false)}
-          title={itemName}
-          className="rounded-lg h-full w-48 overflow-hidden shadow-sm shadow-black/40"
-        >
-          {children}
-        </div>
-      </Link>
+      <div
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        title={itemName}
+        {...props}
+        className={twMerge(
+          "rounded-lg h-full w-48 overflow-hidden shadow-sm shadow-black/40",
+          className
+        )}
+      >
+        {children}
+      </div>
     </ItemCardContext.Provider>
   );
 }

@@ -3,13 +3,12 @@ import Spinner from "../components/Spinner";
 
 import useGetShop from "../hooks/shop/useGetShop";
 import { RequestError } from "../error/RequestError";
-import { formatDistanceToNow } from "date-fns";
 import ShopItemTable from "../features/shop/ShopItemTable";
 import GutteredBox from "../ui/GutteredBox";
+import ShopInformation from "../components/shop/ShopInformation";
 function Shop() {
   const { shopId } = useParams();
   const { isLoading, error, shop } = useGetShop(shopId);
-  const { name, description, createdAt } = shop ?? {};
   return (
     <GutteredBox>
       {isLoading && <Spinner />}
@@ -21,15 +20,9 @@ function Shop() {
           <p>Error fetching shop</p>
         ))}
       {!isLoading && shop && (
-        <div>
-          <h1>{name}</h1>
-          <p>{description}</p>
-          <p>
-            created{" "}
-            {formatDistanceToNow(new Date(createdAt!), { addSuffix: true })}
-          </p>
-          <h1>Items</h1>
-          <ShopItemTable shopId={shopId!} />
+        <div className="flex flex-col gap-2">
+          <ShopInformation shop={shop} />
+          <ShopItemTable shopId={shop.id} />
         </div>
       )}
     </GutteredBox>

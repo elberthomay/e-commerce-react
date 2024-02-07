@@ -1,26 +1,24 @@
 import { ItemRowType } from "../../type/itemType";
 import ItemCard from "../../components/ItemCard";
-import { AnchorHTMLAttributes } from "react";
+import { HTMLAttributes } from "react";
+import { Link } from "react-router-dom";
 
 function ItemRow({
   item,
   ...props
-}: AnchorHTMLAttributes<HTMLAnchorElement> & { item: ItemRowType }) {
+}: HTMLAttributes<HTMLDivElement> & { item: ItemRowType }) {
   const { id, name, price, quantity, image, shopId, shopName } = item;
   return (
-    <ItemCard
-      itemName={name}
-      link={`/item/${id}`}
-      quantity={quantity}
-      {...props}
-    >
-      <ItemCard.Image image={image} name={name} />
-      <ItemCard.Body>
-        <ItemCard.Name>{name}</ItemCard.Name>
-        <ItemCard.Price>{price}</ItemCard.Price>
-        <ItemCard.Shop>{shopName}</ItemCard.Shop>
-      </ItemCard.Body>
-    </ItemCard>
+    <Link to={`/item/${id}`}>
+      <ItemCard itemName={name} quantity={quantity} {...props}>
+        <ItemCard.Image image={image} name={name} />
+        <ItemCard.Body>
+          <ItemCard.Name>{name}</ItemCard.Name>
+          <ItemCard.Price>{price}</ItemCard.Price>
+          <ItemCard.Shop>{shopName}</ItemCard.Shop>
+        </ItemCard.Body>
+      </ItemCard>
+    </Link>
   );
 }
 

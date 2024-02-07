@@ -36,14 +36,15 @@ function ShopItemTable({ shopId }: { shopId: string }) {
           <p>Error fetching shop items</p>
         ))}
       {!isLoading && shopItem && (
-        <>
-          <Sort />
+        <div className="flex flex-col gap-4">
+          <h2 className="text-2xl font-bold">All Items</h2>
+          <Sort className="justify-end" />
           <ShopItemList items={shopItem.rows} />
-          <div>
+          <div className="flex justify-between">
             <PagingLimit limit={limit} setLimit={setLimit} />
             <PagingPage page={page} maxPage={maxPage} setPage={setPage} />
           </div>
-        </>
+        </div>
       )}
     </>
   );

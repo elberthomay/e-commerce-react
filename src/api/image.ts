@@ -9,9 +9,12 @@ export function createImageUrl(
   return `https://tomtomtom-528952985.imgix.net/${imageName}?${queryParams.toString()}`;
 }
 
-export function createAvatarImageUrl(imageName?: string | null) {
+export function createAvatarImageUrl(
+  imageName?: string | null,
+  height?: number
+) {
   return createImageUrl(imageName ?? "defaultAvatar.webp", {
-    height: 50,
+    height: height ?? 50,
   });
 }
 
