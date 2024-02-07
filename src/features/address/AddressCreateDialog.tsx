@@ -39,7 +39,10 @@ const AddressCreateDialog = forwardRef<
   });
   const { longitude, latitude } = address;
 
-  const back = () => setState((state) => state - 1);
+  const handleBack = () => {
+    if (state > 0 && state < 3) setState((state) => state - 1);
+    else if (state === 3) setState(0);
+  };
   const nextState = () => setState((state) => state + 1);
   const searchManually = () => setState(3);
 
@@ -86,7 +89,7 @@ const AddressCreateDialog = forwardRef<
       {state > 0 && (
         <button
           className="absolute h-5 w-5 top-4 left-4 rounded-lg"
-          onClick={back}
+          onClick={handleBack}
         >
           <HiArrowLeft className="h-5 w-5" />
         </button>
