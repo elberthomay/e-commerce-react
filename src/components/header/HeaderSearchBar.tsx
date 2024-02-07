@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import useGetShop from "../../hooks/shop/useGetShop";
 import SearchBar from "../../ui/SearchBar";
+import { CustomSelect, CustomSelectItem } from "../CustomSelect";
 
 function HeaderSearchBar() {
   const navigate = useNavigate();
@@ -42,24 +43,25 @@ function HeaderSearchBar() {
   }
   return (
     <form onSubmit={handleSearch} className="grow">
-      {shop && (
-        <select
-          value={searchLocation}
-          onChange={(e) => setSearchLocation(e.target.value)}
-        >
-          <option value="shop">In {shop.name}</option>
-          <option value="all">Everywhere</option>
-        </select>
-      )}
-      <SearchBar
-        inputProp={{
-          type: "text",
-          value: searchString,
-          onChange: handleChange,
-          max: 50,
-        }}
-        divProp={{ className: "grow" }}
-      />
+      <SearchBar.Box className="grow py-1">
+        {shop && (
+          <CustomSelect
+            onValueChange={setSearchLocation}
+            value={searchLocation}
+            name="location"
+            triggerClassName="border-0 border-r border-slate-300 rounded-none"
+          >
+            <CustomSelectItem value="shop">In {shop.name}</CustomSelectItem>
+            <CustomSelectItem value="all">Everywhere</CustomSelectItem>
+          </CustomSelect>
+        )}
+        <SearchBar.Icon />
+        <SearchBar.Input
+          value={searchString}
+          onChange={handleChange}
+          max={50}
+        />
+      </SearchBar.Box>
     </form>
   );
 }

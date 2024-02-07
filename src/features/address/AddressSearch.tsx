@@ -54,14 +54,14 @@ function AddressSearch({
     <div className="px-8 flex flex-col gap-4 items-start">
       <p className="text-xl font-bold text-center">Select your address</p>
       <div className="max-w-[32rem] w-full" ref={wrapperRef}>
-        <SearchBar
-          divProp={{ className: "w-full" }}
-          inputProp={{
-            value: debouncingString,
-            onChange: (e) => setDebouncingString(e.target.value),
-            onFocus: () => setInputFocused(true),
-          }}
-        />
+        <SearchBar.Box className={"w-full py-0.5"}>
+          <SearchBar.Icon />
+          <SearchBar.Input
+            value={debouncingString}
+            onChange={(e) => setDebouncingString(e.target.value)}
+            onFocus={() => setInputFocused(true)}
+          />
+        </SearchBar.Box>
         {dropdownIsOpen && (
           <div className="flex flex-col w-full border border-slate-300 rounded-lg justify-start *:border-b *:border-slate-300">
             <button
