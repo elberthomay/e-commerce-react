@@ -1,4 +1,4 @@
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import useLimitAndPagination from "../../hooks/useLimitAndPagination";
 import useGetShopItems from "../../hooks/shop/useGetShopItems";
 import Spinner from "../../components/Spinner";
@@ -7,6 +7,7 @@ import ShopItemList from "./ShopItemList";
 import Sort from "../../components/Sort";
 import PagingLimit from "../../components/PagingLimit";
 import PagingPage from "../../components/PagingPage";
+import Button from "../../ui/Button";
 
 function ShopItemTable({ shopId }: { shopId: string }) {
   const { limit, page, getPaginationFunctions } = useLimitAndPagination();
@@ -39,11 +40,24 @@ function ShopItemTable({ shopId }: { shopId: string }) {
         <div className="flex flex-col gap-4">
           <h2 className="text-2xl font-bold">All Items</h2>
           <Sort className="justify-end" />
-          <ShopItemList items={shopItem.rows} />
-          <div className="flex justify-between">
-            <PagingLimit limit={limit} setLimit={setLimit} />
-            <PagingPage page={page} maxPage={maxPage} setPage={setPage} />
-          </div>
+          {shopItem.count > 0 ? (
+            <>
+              <ShopItemList items={shopItem.rows} />
+              <div className="flex justify-between">
+                <PagingLimit limit={limit} setLimit={setLimit} />
+                <PagingPage page={page} maxPage={maxPage} setPage={setPage} />
+              </div>
+            </>
+          ) : (
+            <div className="flex justify-center">
+              <div className="p-4 rounded-lg border border-slate-500 w-[min(max-content,95vw)] text-center">
+                <p>No item could be displayed</p>
+                <Link to={`/shop/${shopId}`}>
+                  <Button className="w-full">View All Items</Button>
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </>
