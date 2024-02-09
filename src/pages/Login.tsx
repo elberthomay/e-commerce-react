@@ -11,7 +11,7 @@ function Login() {
   const loginRedirect = searchParams.get("loginRedirect");
 
   function onLogin() {
-    navigate(loginRedirect ?? "/");
+    navigate(loginRedirect ?? "/", { replace: true });
   }
 
   return (

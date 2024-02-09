@@ -12,7 +12,7 @@ function Signup() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const loginRedirect = searchParams.get("loginRedirect");
-  const onLogin = () => navigate(loginRedirect ?? "/");
+  const onLogin = () => navigate(loginRedirect ?? "/", { replace: true });
   return isAuthenticated ? (
     <Navigate to={loginRedirect ?? "/"} />
   ) : (
