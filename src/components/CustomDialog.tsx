@@ -17,17 +17,19 @@ export type CustomDialogContextType = {
 
 const CustomDialogContext = createContext<CustomDialogContextType | null>(null);
 
+export type CustomDialogPropsType = {
+  children: ReactElement;
+  trigger?: ReactElement;
+  confirmation?: ReactElement;
+  contextRef?: MutableRefObject<CustomDialogContextType | null>;
+};
+
 function CustomDialog({
   children,
   trigger,
   confirmation,
   contextRef,
-}: {
-  children: ReactElement;
-  trigger?: ReactElement;
-  confirmation?: ReactElement;
-  contextRef?: MutableRefObject<CustomDialogContextType | null>;
-}) {
+}: CustomDialogPropsType) {
   const [status, setStatus] = useState<"closed" | "main" | "confirmation">(
     "closed"
   );

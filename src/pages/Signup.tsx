@@ -1,4 +1,4 @@
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import SignupForm from "../features/user/SignupForm";
 import useGetCurrentUser from "../hooks/user/useGetCurrentUser";
 import ShopHubHeader from "../ui/ShopHubHeader";
@@ -10,9 +10,11 @@ import GutteredBox from "../ui/GutteredBox";
 function Signup() {
   const { isAuthenticated } = useGetCurrentUser();
   const navigate = useNavigate();
-  const onLogin = () => navigate("/");
+  const [searchParams] = useSearchParams();
+  const loginRedirect = searchParams.get("loginRedirect");
+  const onLogin = () => navigate(loginRedirect ?? "/");
   return isAuthenticated ? (
-    <Navigate to={"/"} />
+    <Navigate to={loginRedirect ?? "/"} />
   ) : (
     <GutteredBox>
       <ShopHubHeader />

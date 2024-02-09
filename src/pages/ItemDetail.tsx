@@ -20,6 +20,7 @@ import { formatPrice } from "../utilities/intlUtils";
 import { useMaxBreakpoints } from "../hooks/useWindowSize";
 import { AddtoCartFooter } from "../features/item/AddToCartDrawer";
 import GutteredBox from "../ui/GutteredBox";
+import LoginDialog from "../components/LoginDialog";
 function ItemDetail() {
   const { itemId } = useParams();
   const { isLoading, error, item } = useGetItem(itemId ?? "");
@@ -27,18 +28,34 @@ function ItemDetail() {
   const { isSm } = useMaxBreakpoints();
   const { shop } = useGetShop(item?.shopId);
   const { isAuthenticated } = useGetCurrentUser();
-  const { id, name, shopId, shopName, description, price, quantity, images } =
-    item ?? {};
 
-  const dialogContextRef = useRef<CustomDialogContextType | null>(null);
+  const AddedToCartDialogRef = useRef<CustomDialogContextType | null>(null);
+  const loginDialogRef = useRef<CustomDialogContextType | null>(null);
 
   const [popupQuantity, setPopupQuantity] = useState<number>(0);
+  const [unauthenticatedOnLogin, setUnauthenticatedOnLogin] = useState<
+    () => void
+  >(() => {
+    return;
+  });
+
+  const openLoginDialogToCreateCart =
+    (createCartFunction: (itemId: string, quantity: number) => void) =>
+    (itemId: string, quantity: number) => {
+      if (isAuthenticated) createCartFunction(itemId, quantity);
+      else {
+        setUnauthenticatedOnLogin(
+          (_) => () => createCartFunction(itemId, quantity)
+        );
+        loginDialogRef.current?.open();
+      }
+    };
 
   async function handleCreateCart(itemId: string, quantity: number) {
     try {
       await createCart({ itemId, quantity });
       setPopupQuantity(quantity);
-      dialogContextRef.current?.open();
+      AddedToCartDialogRef.current?.open();
     } catch (e) {
       toast.error("Error adding item to cart");
     }
@@ -60,15 +77,15 @@ function ItemDetail() {
 
       {!isLoading && item && shop && (
         <>
-          <div className=" w-full max-w- p-4 pt-8 flex flex-col items-stretch sm:grid sm:grid-cols-[1fr,1fr,auto] sm:items-start gap-x-4">
-            <ImageDisplay images={item.images} />
+          <div className=" w-full max-w- p-4 pt-8 flex justify-center flex-col items-stretch sm:grid sm:grid-cols-[auto,1fr,auto] sm:items-start gap-x-6">
+            <ImageDisplay images={item.images} className="max-w-80" />
             <div className="flex flex-col gap-4 h-[200rem]">
-              <h1 className="font-bold text-xl">{name}</h1>
+              <h1 className="font-bold text-xl">{item.name}</h1>
               {!isSm && (
                 <p className=" text-2xl font-bold">{formatPrice(item.price)}</p>
               )}
               <p className="font-bold text-lg">Description:</p>
-              <p className="">{description}</p>
+              <p className="">{item.description}</p>
 
               <ShopBadge
                 id={item.shopId}
@@ -76,26 +93,32 @@ function ItemDetail() {
                 name={shop.name}
               />
             </div>
-            {isAuthenticated &&
-              (isSm ? (
-                <AddToCartBox
-                  itemId={item.id}
-                  price={item.price}
-                  inventory={item.quantity}
-                  onAddToCart={handleCreateCart}
-                />
-              ) : (
-                <AddtoCartFooter
-                  itemId={item.id}
-                  price={item.price}
-                  inventory={item.quantity}
-                  onAddToCart={handleCreateCartDialog}
-                />
-              ))}
+            {isSm ? (
+              <AddToCartBox
+                itemId={item.id}
+                price={item.price}
+                inventory={item.quantity}
+                onAddToCart={openLoginDialogToCreateCart(handleCreateCart)}
+              />
+            ) : (
+              <AddtoCartFooter
+                itemId={item.id}
+                price={item.price}
+                inventory={item.quantity}
+                onAddToCart={openLoginDialogToCreateCart(
+                  handleCreateCartDialog
+                )}
+              />
+            )}
           </div>
-          <CustomDialog contextRef={dialogContextRef}>
+          <CustomDialog contextRef={AddedToCartDialogRef}>
             <AddedToCartBody item={item} quantity={popupQuantity} />
           </CustomDialog>
+
+          <LoginDialog
+            contextRef={loginDialogRef}
+            onLogin={unauthenticatedOnLogin}
+          />
         </>
       )}
     </GutteredBox>

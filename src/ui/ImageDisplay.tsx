@@ -1,8 +1,10 @@
 import { HTMLAttributes, useState } from "react";
 import { createImageUrl } from "../api/image";
+import { twMerge } from "tailwind-merge";
 
 function ImageDisplay({
   images,
+  className,
   ...props
 }: HTMLAttributes<HTMLDivElement> & { images: { imageName: string }[] }) {
   // images = [
@@ -16,7 +18,7 @@ function ImageDisplay({
   const [imageIndex, setImageIndex] = useState<number>(0);
   if (images.length === 0) images = [{ imageName: "image-not-found.webp" }];
   return (
-    <div {...props}>
+    <div {...props} className={twMerge("", className)}>
       <img
         src={createImageUrl(images[imageIndex]?.imageName, { height: 300 })}
         alt=""
