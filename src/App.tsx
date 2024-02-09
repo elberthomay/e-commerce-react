@@ -21,6 +21,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import AuthenticationCheck from "./features/auth/AuthenticationCheck";
 import MyShopSetting from "./features/myshop/MyShopSetting";
 import MyShopAddressSettings from "./features/myshop/MyShopAddressSettings";
+import CursorFollowingCircle from "./components/CursorFollowingCircle";
 
 function App() {
   const queryClient = new QueryClient();
@@ -29,6 +30,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools />
       <Toaster />
+      <CursorFollowingCircle />
       <BrowserRouter>
         <Routes>
           <Route element={<AppLayout />}>
