@@ -23,6 +23,7 @@ import { Popover, PopoverTrigger } from "../../../@/components/ui/popover";
 import { PopoverContent } from "@radix-ui/react-popover";
 import { useRef } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
+import CustomTable from "../../ui/CustomTable";
 
 const columnHelper = createColumnHelper<AddressOutputType>();
 
@@ -33,18 +34,32 @@ const defaultColumns = [
   }),
   columnHelper.accessor("detail", {
     header: "Address Details",
-    cell: (info) => info.getValue(),
+    cell: (info) => (
+      <p
+        title={info.getValue()}
+        className=" line-clamp-2 break-words text-ellipsis"
+      >
+        {info.getValue()}
+      </p>
+    ),
   }),
   columnHelper.accessor((row) => toAdministrativeString(row), {
     header: "City/ District",
-    cell: (info) => info.getValue(),
+    cell: (info) => (
+      <p
+        title={info.getValue()}
+        className=" line-clamp-2 break-words text-ellipsis"
+      >
+        {info.getValue()}
+      </p>
+    ),
   }),
   columnHelper.accessor("postCode", {
     header: "Post Code",
-    cell: (info) => info.getValue() ?? "-",
+    cell: (info) => <p className="text-center">{info.getValue() ?? "-"}</p>,
   }),
   columnHelper.accessor((row) => !!row.latitude && !!row.latitude, {
-    header: "Pinpoint",
+    header: "Point",
     cell: (info) => (
       <div className="flex justify-center items-center">
         <PinpointDisplay pinpointAvailable={info.getValue()} />
@@ -60,7 +75,7 @@ const defaultColumns = [
     ),
   }),
   columnHelper.display({
-    header: "Actions",
+    header: " ",
     cell: (info) => (
       <div className="flex justify-center items-center">
         <ShopAddressActions shopAddress={info.row.original} />
@@ -81,35 +96,13 @@ function ShopAddressTable({
   });
   return (
     <div className="w-full">
-      <table className="w-full text-left">
-        <thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr className="text-slate-500 font-bold capitalize border-b border-slate-300">
-              {headerGroup.headers.map((header) => (
-                <th key={header.id} className="p-3">
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id} className="*:py-2">
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id} className="text-slate-500 px-1">
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <CustomTable
+        table={table}
+        className="grid-cols-[minmax(5rem,10rem)_minmax(10rem,2.5fr)_minmax(5rem,1fr)_5rem_auto_auto_max-content]"
+      >
+        <CustomTable.Header />
+        <CustomTable.Body />
+      </CustomTable>
     </div>
   );
 }
@@ -122,11 +115,14 @@ function PinpointDisplay({
   return (
     <div className="flex gap-3 items-center text-slate-400">
       {pinpointAvailable ? (
-        <LuMapPin className="h-6 w-6 shrink-0" />
+        <LuMapPin className="h-6 w-6 shrink-0 text-governor-bay-800" />
       ) : (
         <LuMapPinOff className="h-6 w-6 shrink-0" />
       )}
-      <span className="font-bold text-center hidden md:inline-block">
+      <span
+        data-available={pinpointAvailable}
+        className="font-bold text-center hidden md:inline-block data-[available=true]:text-governor-bay-800"
+      >
         {pinpointAvailable ? "Point Available" : "Point Unavailable"}
       </span>
     </div>
@@ -174,15 +170,15 @@ function ShopAddressActions({
   }
 
   const actionMenu = (
-    <div className="h-full grid grid-flow-row sm:grid-cols-2 gap-y-2 sm:gap-3">
+    <div className="h-full grid grid-flow-column lg:grid-cols-[repeat(2,1fr)] gap-y-2 sm:gap-3">
       <Button
-        className="px-3 py-1.5 w-full h-full"
+        className="px-3 py-1 lg:py-1.5 w-full h-full"
         onClick={() => editDialogContextRef.current?.open()}
       >
         Edit
       </Button>
       <Button
-        className="px-3 py-1.5 w-full h-full bg-red-600 hover:bg-red-400"
+        className="px-3 py-1 lg:py-1.5 w-full h-full bg-red-600 hover:bg-red-400"
         onClick={() => deleteDialogContextRef.current?.open()}
       >
         Delete
