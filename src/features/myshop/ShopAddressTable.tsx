@@ -1,8 +1,6 @@
 import { AddressOutputType } from "../../type/addressType";
 import {
   createColumnHelper,
-  createTable,
-  flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
@@ -186,6 +184,7 @@ function ShopAddressActions({
     </div>
   );
 
+  //display action menu in hamburger if screen is smaller than sm
   return (
     <>
       {isSm ? (

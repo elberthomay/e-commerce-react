@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { createImageUrl } from "../../api/image";
 import { v4 as uuid } from "uuid";
 import { resizeImageFile } from "../../utilities/imageUtils";
+import { RxCross2 } from "react-icons/rx";
 
 function ItemImageForm({
   images,
@@ -71,7 +72,7 @@ function ItemImageForm({
             id: uuid(),
           }));
 
-        if (newImages.length === 0) toast.error("Images are not invalid");
+        if (newImages.length === 0) toast.error("Image(s) are invalid");
         else {
           setImageList((images) => [...images, ...newImages]);
           setImagesToAdd((images) => [...images, ...newImages]);
@@ -126,14 +127,29 @@ function ItemImageForm({
   }
 
   const sortedImageList = [...imageList].sort((a, b) => a.order - b.order);
+
+  const [imageInputHovered, setImageInputHovered] = useState<boolean>(false);
+
   return (
     <div>
       <label
         htmlFor="browse"
-        onDrop={handleAddImages}
-        onDragOver={(e) => e.preventDefault()}
+        onDrop={(e) => {
+          e.preventDefault();
+          setImageInputHovered(false);
+          handleAddImages(e);
+        }}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setImageInputHovered(true);
+        }}
+        onDragLeave={() => setImageInputHovered(false)}
+        data-draghovered={imageInputHovered}
+        className=" h-16 w-[min(20rem,90%)] border-4 border-dashed rounded-lg border-slate-300 flex justify-center items-center data-[draghovered=true]:scale-105 transition-all"
       >
-        Add Image
+        <span className="text-lg font-bold text-slate-500 pointer-events-none">
+          {imageInputHovered ? "Drop Your Images Here!" : "Add New Image Here!"}
+        </span>
       </label>
       <input
         hidden
@@ -144,15 +160,24 @@ function ItemImageForm({
         onChange={handleAddImages}
         multiple
       />
-      <div>
+
+      <div className="p-4 grid grid-cols-[repeat(2,max-content)] justify-items-center items-center gap-y-3 gap-x-5">
         {sortedImageList.map((image) => (
-          <div key={image.order}>
-            <img
-              {...("imageName" in image
-                ? { src: createImageUrl(image.imageName, { height: 30 }) }
-                : { src: image.imageUrl, width: 30 })}
+          <div key={image.order} className="contents">
+            <div
+              className="relative flex justify-center items-center min-w-8 w-max border-2 border-slate-300 rounded-md overflow-clip"
               onClick={() => handleDeleteImage(image.id)}
-            />
+            >
+              <img
+                {...("imageName" in image
+                  ? { src: createImageUrl(image.imageName, { height: 80 }) }
+                  : { src: image.imageUrl, width: 30 })}
+                className="h-14"
+              />
+              <div className="absolute inset-0 bg-black/50 opacity-0 hover:opacity-100 transition-all flex justify-center items-center">
+                <RxCross2 className="h-7 w-7 text-white" />
+              </div>
+            </div>
             {sortedImageList.length > 1 && (
               <select
                 name={"imageOrder" + image.order}
@@ -161,6 +186,7 @@ function ItemImageForm({
                 onChange={(e) =>
                   handleReorderImage(image.order, Number(e.target.value))
                 }
+                className="p-1 border border-slate-400 rounded-md"
               >
                 {Array.from(
                   { length: sortedImageList.length },

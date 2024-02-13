@@ -65,7 +65,7 @@ function CustomDialog({
           <Dialog.Overlay className="fixed left-0 right-0 top-0 bottom-0 bg-black/50 z-10" />
           <Dialog.Content
             asChild
-            className="z-10 max-w-full bg-slate-100 rounded-2xl p-8 dark:bg-slate-700 overflow-clip fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"
+            className="z-10 max-w-[95vw] max-h-[95dvh] bg-slate-100 rounded-2xl p-8 dark:bg-slate-700 overflow-clip fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"
           >
             {status === "confirmation" ? confirmation : children}
           </Dialog.Content>

@@ -4,6 +4,9 @@ import ItemImageForm from "./ItemImageForm";
 import { pick } from "lodash";
 import { Dispatch } from "react";
 import { ItemDetailsOutputType } from "../../type/itemType";
+import TextInput from "../../ui/TextInput";
+import TextArea from "../../ui/TextArea";
+import Button from "../../ui/Button";
 
 function ItemForm({
   item,
@@ -38,58 +41,69 @@ function ItemForm({
 }) {
   const fieldValue = item
     ? pick(item, ["name", "description", "price", "quantity"])
-    : undefined;
+    : { name: "", description: "", price: 0, quantity: 0 };
   const { images } = item ?? {};
 
   const {
     handleSubmit,
     register,
+    watch,
     formState: { errors, isDirty },
-  } = useForm({ values: fieldValue, defaultValues: fieldValue });
+  } = useForm({ defaultValues: fieldValue });
 
   return (
-    <div>
-      <form onSubmit={handleSubmit((formData) => onSubmit(isDirty, formData))}>
-        <FormRow label="name" formErrors={errors}>
-          <input
-            type="text"
-            {...register("name", { required: true, maxLength: 255 })}
-          />
-        </FormRow>
-        <FormRow label="price" formErrors={errors}>
-          <input
-            type="number"
-            {...register("price", {
-              required: true,
-              min: 0,
-              max: 1000000000,
-            })}
-          />
-        </FormRow>
-        <FormRow label="quantity" formErrors={errors}>
-          <input
-            type="number"
-            {...register("quantity", { required: true, min: 0, max: 9999 })}
-          />
-        </FormRow>
-        <FormRow label="description" formErrors={errors}>
-          <textarea
-            {...register("description", {
-              required: true,
-              maxLength: 2000,
-            })}
-          />
-        </FormRow>
-        <ItemImageForm
-          images={images}
-          setImagesToAdd={setImagesToAdd}
-          setImagesToDelete={setImagesToDelete}
-          setImagesOrder={setImagesOrder}
+    <form onSubmit={handleSubmit((formData) => onSubmit(isDirty, formData))}>
+      <FormRow
+        label="name"
+        formErrors={errors}
+        countString={`${watch("name").length}/200`}
+      >
+        <TextInput
+          type="text"
+          {...register("name", { required: true, maxLength: 200 })}
         />
-        <button>{buttonText}</button>
-        <button onClick={onCancel}>Cancel</button>
-      </form>
-    </div>
+      </FormRow>
+      <FormRow label="price" formErrors={errors}>
+        <TextInput
+          type="number"
+          {...register("price", {
+            required: true,
+            min: 0,
+            max: 1000000000,
+          })}
+        />
+      </FormRow>
+      <FormRow label="quantity" formErrors={errors}>
+        <TextInput
+          type="number"
+          {...register("quantity", { required: true, min: 0, max: 9999 })}
+        />
+      </FormRow>
+      <FormRow
+        label="description"
+        formErrors={errors}
+        countString={`${watch("description").length}/2000`}
+      >
+        <TextArea
+          {...register("description", {
+            required: true,
+            maxLength: 2000,
+          })}
+        />
+      </FormRow>
+      <ItemImageForm
+        images={images}
+        setImagesToAdd={setImagesToAdd}
+        setImagesToDelete={setImagesToDelete}
+        setImagesOrder={setImagesOrder}
+      />
+      <div className="flex justify-between">
+        <Button>{buttonText}</Button>
+        <Button variant="grey" onClick={onCancel}>
+          Cancel
+        </Button>
+      </div>
+    </form>
   );
 }
 

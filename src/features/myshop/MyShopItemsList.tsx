@@ -1,43 +1,37 @@
-import { InView, useInView } from "react-intersection-observer";
-import { ShopItemRowType } from "../../type/shopType";
-import MyShopItemsRow from "./MyShopItemsRow";
-import { useEffect } from "react";
-import Menus from "../../components/Menus";
-import Modal from "../../components/Modal";
+import { useSearchParams } from "react-router-dom";
+import useGetCurrentShop from "../../hooks/shop/useGetCurrentShop";
+import useGetShopItemsInvScroll from "../../hooks/shop/useGetShopItemsInvScroll";
+import Sort from "../../components/Sort";
+import MyShopItemsTable from "./MyShopItemsTable";
 
-function MyShopItemsList({
-  shopItem,
-  fetchNextPage,
-  hasNextPage,
-  isFetching,
-}: {
-  shopItem: ShopItemRowType[];
-  fetchNextPage: () => any;
-  hasNextPage: boolean;
-  isFetching: boolean;
-}) {
-  console.log(shopItem);
+function MyshopItemsList() {
+  const { currentShop } = useGetCurrentShop();
+  const [searchParams, setSearchParams] = useSearchParams();
 
+  const search = searchParams.get("search") ?? undefined;
+  const orderBy = searchParams.get("sort") ?? undefined;
+  const { isLoading, error, fetchNextPage, hasNextPage, isFetching, shopItem } =
+    useGetShopItemsInvScroll({
+      search,
+      orderBy,
+      shopId: currentShop?.id ?? "",
+    });
   return (
-    <div>
-      <Menus>
-        <Modal>
-          {shopItem.map((item) => (
-            <MyShopItemsRow key={item.id} item={item} />
-          ))}
-        </Modal>
-      </Menus>
-      {shopItem.length > 0 && (
-        <InView
-          onChange={(inView, entry) =>
-            inView && hasNextPage && !isFetching ? fetchNextPage() : null
-          }
-        >
-          <div>{isFetching ? <p>Loading...</p> : null}</div>
-        </InView>
-      )}
+    <div className="flex flex-col gap-3">
+      <div className="flex justify-between items-center">
+        <div>Search Bar</div>
+        <div className="flex gap-2">
+          <Sort />
+        </div>
+      </div>
+      <MyShopItemsTable
+        shopItem={shopItem ?? []}
+        fetchNextPage={fetchNextPage}
+        hasNextPage={hasNextPage}
+        isFetching={isFetching}
+      />
     </div>
   );
 }
 
-export default MyShopItemsList;
+export default MyshopItemsList;
