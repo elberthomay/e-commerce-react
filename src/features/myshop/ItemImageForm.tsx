@@ -40,7 +40,6 @@ function ItemImageForm({
         }
     )[]
   >(images?.map((img) => ({ ...img, id: uuid() })) ?? []);
-  console.log(imageList);
 
   const highestIndex = imageList.reduce(
     (acc, image) => (image.order > acc ? image.order : acc),
@@ -76,6 +75,12 @@ function ItemImageForm({
         else {
           setImageList((images) => [...images, ...newImages]);
           setImagesToAdd((images) => [...images, ...newImages]);
+          //add orders of new images to if images are scheduled to be reordered
+          setImagesOrder((orders) =>
+            orders
+              ? [...orders, ...newImages.map(({ order }) => order)]
+              : orders
+          );
         }
       } else toast.error("Item cannot have more than 10 images");
     }
@@ -88,12 +93,15 @@ function ItemImageForm({
     if (imageToDelete) {
       const { order, id } = imageToDelete;
       //delete image with given id from display list
-      setImageList((images) =>
-        images
-          .filter((image) => image.order !== order)
-          .map((image) =>
-            image.order > order ? { ...image, order: image.order - 1 } : image
-          )
+      const newImageList = imageList
+        .filter((image) => image.order !== order)
+        .map((image) =>
+          image.order > order ? { ...image, order: image.order - 1 } : image
+        );
+      setImageList(newImageList);
+      //add orders of new images to if images are scheduled to be reordered
+      setImagesOrder((orders) =>
+        orders ? newImageList.map(({ order }) => order) : orders
       );
       //having imageName property means image is in server and needs to be deleted
       if ("imageName" in imageToDelete) {
@@ -117,15 +125,14 @@ function ItemImageForm({
   //reorder happens after image create and delete
   function handleReorderImage(from: number, to: number) {
     // swap order of image in imageDisplay
-    setImageList((images) =>
-      images.map((image) => ({
-        ...image,
-        order:
-          image.order === from ? to : image.order === to ? from : image.order,
-      }))
-    );
-    // set new server image order to changed image display
-    setImagesOrder(imageList.map((image) => image.order));
+    const newImageList = imageList.map((image) => ({
+      ...image,
+      order:
+        image.order === from ? to : image.order === to ? from : image.order,
+    }));
+    setImageList(newImageList);
+    // set new server image order
+    setImagesOrder(newImageList.map((image) => image.order));
   }
 
   const sortedImageList = [...imageList].sort((a, b) => a.order - b.order);

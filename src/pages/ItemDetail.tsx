@@ -71,6 +71,10 @@ function ItemDetail() {
     }
   }
 
+  const orderedImages = [...(item?.images ?? [])].sort(
+    (a, b) => a.order - b.order
+  );
+
   return (
     <GutteredBox>
       {isLoading && <Spinner />}
@@ -85,7 +89,7 @@ function ItemDetail() {
       {!isLoading && item && shop && (
         <>
           <div className=" w-full max-w- p-4 pt-8 flex justify-center flex-col items-stretch sm:grid sm:grid-cols-[auto,1fr,auto] sm:items-start gap-x-6">
-            <ImageDisplay images={item.images} className="max-w-80" />
+            <ImageDisplay images={orderedImages} className="max-w-80" />
             <div className="flex flex-col gap-4 h-[200rem]">
               <h1 className="font-bold text-xl">{item.name}</h1>
               {!isSm && (

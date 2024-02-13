@@ -7,14 +7,7 @@ function ImageDisplay({
   className,
   ...props
 }: HTMLAttributes<HTMLDivElement> & { images: { imageName: string }[] }) {
-  // images = [
-  //   { imageName: "image-1.webp" },
-  //   { imageName: "image-2.webp" },
-  //   { imageName: "image-1.webp" },
-  //   { imageName: "image-2.webp" },
-  //   { imageName: "image-1.webp" },
-  //   { imageName: "image-2.webp" },
-  // ];
+  console.log(images);
   const [imageIndex, setImageIndex] = useState<number>(0);
   if (images.length === 0) images = [{ imageName: "image-not-found.webp" }];
   return (

@@ -44,6 +44,8 @@ function ItemForm({
     : { name: "", description: "", price: 0, quantity: 0 };
   const { images } = item ?? {};
 
+  const orderedImages = [...(images ?? [])].sort((a, b) => a.order - b.order);
+
   const {
     handleSubmit,
     register,
@@ -92,7 +94,7 @@ function ItemForm({
         />
       </FormRow>
       <ItemImageForm
-        images={images}
+        images={orderedImages}
         setImagesToAdd={setImagesToAdd}
         setImagesToDelete={setImagesToDelete}
         setImagesOrder={setImagesOrder}
