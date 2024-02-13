@@ -173,7 +173,7 @@ function ItemImageForm({
               <img
                 {...("imageName" in image
                   ? { src: createImageUrl(image.imageName, { height: 80 }) }
-                  : { src: image.imageUrl, width: 30 })}
+                  : { src: image.imageUrl })}
                 className="h-14"
               />
               <div className="absolute inset-0 bg-black/50 opacity-0 hover:opacity-100 transition-all flex justify-center items-center">

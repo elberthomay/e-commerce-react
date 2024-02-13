@@ -74,7 +74,14 @@ function ItemDetail() {
   return (
     <GutteredBox>
       {isLoading && <Spinner />}
-
+      {!isLoading && error && (
+        <div>
+          <p>Oops. Looks like the item you're trying to access doesn't exist</p>
+          <Link to="/">
+            <Button>Return</Button>
+          </Link>
+        </div>
+      )}
       {!isLoading && item && shop && (
         <>
           <div className=" w-full max-w- p-4 pt-8 flex justify-center flex-col items-stretch sm:grid sm:grid-cols-[auto,1fr,auto] sm:items-start gap-x-6">

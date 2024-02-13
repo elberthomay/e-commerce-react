@@ -3,7 +3,6 @@ import useAddImage from "../../hooks/item/useAddImage";
 import useDeleteImage from "../../hooks/item/useDeleteImage";
 import useReorderImage from "../../hooks/item/useReorderImage";
 import useUpdateItem from "../../hooks/item/useUpdateItem";
-import { useModal } from "../../components/Modal";
 import { pick } from "lodash";
 import useGetItem from "../../hooks/item/useGetItem";
 import toast from "react-hot-toast";

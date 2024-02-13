@@ -49,17 +49,19 @@ const CreateItemForm = forwardRef<HTMLDivElement, ComponentProps<"div">>(
           "w-[min(40rem,95vw)] flex flex-col gap-4"
         )}
       >
-        <h1 className="text-xl font-bold">Create New Item</h1>
-        <ItemForm
-          {...{
-            setImagesToAdd,
-            setImagesOrder,
-            setImagesToDelete,
-            onSubmit: handleCreate,
-            onCancel: close,
-            buttonText: "Create Item",
-          }}
-        />
+        <div className="h-full overflow-y-auto pb-2">
+          <h1 className="text-xl font-bold">Create New Item</h1>
+          <ItemForm
+            {...{
+              setImagesToAdd,
+              setImagesOrder,
+              setImagesToDelete,
+              onSubmit: handleCreate,
+              onCancel: close,
+              buttonText: "Create Item",
+            }}
+          />
+        </div>
       </div>
     );
   }
