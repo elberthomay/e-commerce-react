@@ -83,9 +83,11 @@ function ItemImageForm({
 
   //
   function handleDeleteImage(id: string) {
+    //check if image with given id exist
     const imageToDelete = imageList.find((image) => image.id === id);
     if (imageToDelete) {
       const { order, id } = imageToDelete;
+      //delete image with given id from display list
       setImageList((images) =>
         images
           .filter((image) => image.order !== order)
@@ -93,13 +95,14 @@ function ItemImageForm({
             image.order > order ? { ...image, order: image.order - 1 } : image
           )
       );
+      //having imageName property means image is in server and needs to be deleted
       if ("imageName" in imageToDelete) {
-        const originalIndex =
-          images?.findIndex(
-            (img) => img.imageName === imageToDelete.imageName
-          ) ?? 0; //this should never be undefined
-        setImagesToDelete((orders) => [...orders, originalIndex]);
+        const originalOrder =
+          images?.find((img) => img.imageName === imageToDelete.imageName)
+            ?.order ?? 0; //this should never be undefined
+        setImagesToDelete((orders) => [...orders, originalOrder]);
       } else {
+        // remove image from toAdd list otherwise
         setImagesToAdd((images) =>
           images
             .filter((image) => image.id !== id)
@@ -111,7 +114,9 @@ function ItemImageForm({
     }
   }
 
+  //reorder happens after image create and delete
   function handleReorderImage(from: number, to: number) {
+    // swap order of image in imageDisplay
     setImageList((images) =>
       images.map((image) => ({
         ...image,
@@ -119,11 +124,8 @@ function ItemImageForm({
           image.order === from ? to : image.order === to ? from : image.order,
       }))
     );
-    setImagesOrder(
-      imageList
-        .map((image) => image.order)
-        .map((order) => (order === from ? to : order === to ? from : order))
-    );
+    // set new server image order to changed image display
+    setImagesOrder(imageList.map((image) => image.order));
   }
 
   const sortedImageList = [...imageList].sort((a, b) => a.order - b.order);
