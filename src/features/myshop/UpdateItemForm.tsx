@@ -48,9 +48,9 @@ const UpdateItemForm = forwardRef<
     >
   ) {
     if (isDirty) await updateItem(formData);
+    if (imagesToDelete.length > 0) await deleteItemImage(imagesToDelete);
     if (imagesToAdd.length > 0)
       await addItemImage(imagesToAdd.map((img) => img.image));
-    if (imagesToDelete.length > 0) await deleteItemImage(imagesToDelete);
     if (imagesOrder) await reorderItemImage(imagesOrder);
   }
 
