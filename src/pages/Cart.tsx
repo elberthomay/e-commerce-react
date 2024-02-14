@@ -35,7 +35,7 @@ function EmptyCartMessage() {
     <div className=" p-10 rounded-lg flex justify-center border border-slate-200 shadow-lg">
       <div className="grid grid-rows-[repeat(3,min-content)] grid-cols-[auto_1fr] gap-2 gap-x-5">
         <div className="row-span-3 h-0 min-h-full">
-          <img src="basket.webp" alt="empty cart icon" className="h-full" />
+          <img src="/basket.webp" alt="empty cart icon" className="h-full" />
         </div>
         <p className="text-xl font-bold">There's no item in cart</p>
         <p className="text-slate-500 text-sm mb-2">
