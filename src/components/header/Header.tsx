@@ -17,7 +17,7 @@ function Header() {
         <header className="flex p-5 pl-8 sticky top-0 bg-slate-100 dark:bg-slate-800 items-center gap-8 z-10">
           <Link to="/" className=" flex items-center gap-2">
             <img
-              src="shopping.png"
+              src="/shopping.png"
               alt="ecommerce logo"
               className="w-10 h-10 dark:border-2 border-solid border-governor-bay-800"
             />

@@ -10,7 +10,7 @@ function GoogleButton(props: ButtonHTMLAttributes<HTMLButtonElement>) {
         props.className
       )}
     >
-      <img src="google.png" alt="google icon" className=" h-5 w-5" />
+      <img src="/google.png" alt="google icon" className=" h-5 w-5" />
       <p className="text-sm font-bold">{props.children}</p>
       <div className="h-5 w-5"></div>
     </button>
