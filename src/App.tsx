@@ -1,26 +1,30 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Suspense, lazy } from "react";
 import AppLayout from "./components/AppLayout";
-import Cart from "./pages/Cart";
-import MyShop from "./pages/MyShop";
-import Shop from "./pages/Shop";
+const Cart = lazy(() => import("./pages/Cart"));
+const MyShop = lazy(() => import("./pages/MyShop"));
+const Shop = lazy(() => import("./pages/Shop"));
 import ItemDetail from "./pages/ItemDetail";
-import UserAddress from "./features/user/UserAddress";
-import UserSettings from "./pages/UserSettings";
-import UserData from "./features/user/UserData";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
+const UserAddress = lazy(() => import("./features/user/UserAddress"));
+const UserSettings = lazy(() => import("./pages/UserSettings"));
+const UserData = lazy(() => import("./features/user/UserData"));
+const Login = lazy(() => import("./pages/Login"));
+const Signup = lazy(() => import("./pages/Signup"));
 import MainPage from "./pages/MainPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PathNotFound from "./pages/PathNotFound";
 import { Toaster } from "react-hot-toast";
-import MyShopDashboard from "./features/myshop/MyShopDashboard";
-import MyShopItems from "./features/myshop/MyShopItems";
-import MyShopDataSettings from "./features/myshop/MyShopDataSettings";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+const MyShopDashboard = lazy(() => import("./features/myshop/MyShopDashboard"));
+const MyShopItems = lazy(() => import("./features/myshop/MyShopItems"));
+const MyShopDataSettings = lazy(
+  () => import("./features/myshop/MyShopDataSettings")
+);
 import AuthenticationCheck from "./features/auth/AuthenticationCheck";
-import MyShopSetting from "./features/myshop/MyShopSetting";
-import MyShopAddressSettings from "./features/myshop/MyShopAddressSettings";
+const MyShopSetting = lazy(() => import("./features/myshop/MyShopSetting"));
+const MyShopAddressSettings = lazy(
+  () => import("./features/myshop/MyShopAddressSettings")
+);
 import CursorFollowingCircle from "./components/CursorFollowingCircle";
 
 function App() {
@@ -28,7 +32,6 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools />
       <Toaster />
       <CursorFollowingCircle />
       <BrowserRouter>
@@ -39,43 +42,140 @@ function App() {
               path="/cart"
               element={
                 <ProtectedRoute>
-                  <Cart />
+                  <Suspense>
+                    <Cart />
+                  </Suspense>
                 </ProtectedRoute>
               }
             />
-            <Route path="/shop/:shopId" element={<Shop />} />
-            <Route path="/item/:itemId" element={<ItemDetail />} />
+            <Route
+              path="/shop/:shopId"
+              element={
+                <Suspense>
+                  <Shop />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/item/:itemId"
+              element={
+                <Suspense>
+                  <ItemDetail />
+                </Suspense>
+              }
+            />
             <Route
               path="/user/settings/"
               element={
                 <ProtectedRoute>
-                  <UserSettings />
+                  <Suspense>
+                    <UserSettings />
+                  </Suspense>
                 </ProtectedRoute>
               }
             >
-              <Route index element={<UserData />} />
-              <Route path="address" element={<UserAddress />} />
+              <Route
+                index
+                element={
+                  <Suspense>
+                    <UserData />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="address"
+                element={
+                  <Suspense>
+                    <UserAddress />
+                  </Suspense>
+                }
+              />
             </Route>
           </Route>
           <Route
             path="/myshop/"
             element={
               <ProtectedRoute>
-                <MyShop />
+                <Suspense>
+                  <MyShop />
+                </Suspense>
               </ProtectedRoute>
             }
           >
-            <Route index element={<MyShopDashboard />} />
-            <Route path="dashboard" element={<MyShopDashboard />} />
-            <Route path="items" element={<MyShopItems />} />
-            <Route path="settings" element={<MyShopSetting />}>
-              <Route index element={<MyShopDataSettings />} />
-              <Route path="data" element={<MyShopDataSettings />} />
-              <Route path="address" element={<MyShopAddressSettings />} />
+            <Route
+              index
+              element={
+                <Suspense>
+                  <MyShopDashboard />
+                </Suspense>
+              }
+            />
+            <Route
+              path="dashboard"
+              element={
+                <Suspense>
+                  <MyShopDashboard />
+                </Suspense>
+              }
+            />
+            <Route
+              path="items"
+              element={
+                <Suspense>
+                  <MyShopItems />
+                </Suspense>
+              }
+            />
+            <Route
+              path="settings"
+              element={
+                <Suspense>
+                  <MyShopSetting />
+                </Suspense>
+              }
+            >
+              <Route
+                index
+                element={
+                  <Suspense>
+                    <MyShopDataSettings />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="data"
+                element={
+                  <Suspense>
+                    <MyShopDataSettings />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="address"
+                element={
+                  <Suspense>
+                    <MyShopAddressSettings />
+                  </Suspense>
+                }
+              />
             </Route>
           </Route>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
+          <Route
+            path="/login"
+            element={
+              <Suspense>
+                <Login />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/signup"
+            element={
+              <Suspense>
+                <Signup />
+              </Suspense>
+            }
+          />
           <Route path="*" element={<PathNotFound />} />
 
           <Route path="/auth/check" element={<AuthenticationCheck />} />
