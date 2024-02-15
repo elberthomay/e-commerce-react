@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import useGetCurrentUser from "../../hooks/user/useGetCurrentUser";
 
 function AuthenticationCheck() {
-  const { isLoading, error, currentUser } = useGetCurrentUser();
+  const { isLoading, currentUser } = useGetCurrentUser();
   useEffect(() => {
     if (!isLoading) {
       console.log("use effect");

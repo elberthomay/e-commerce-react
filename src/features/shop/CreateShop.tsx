@@ -16,7 +16,7 @@ import GutteredBox from "../../ui/GutteredBox";
 function CreateShop() {
   const { currentUser } = useGetCurrentUser();
   const { checkShopName } = useCheckShopName();
-  const { isLoading, error, activateShop } = useActivateShop();
+  const { activateShop } = useActivateShop();
   const [step, setStep] = useState<number>(1);
 
   const {
@@ -32,8 +32,7 @@ function CreateShop() {
     if (validationResult && step === 1) setStep(2);
   }
 
-  function handleCreateShop(formData: any) {
-    console.log(formData);
+  function handleCreateShop(formData: { name: string; description: string }) {
     if (step === 2) {
       const activateShopPromise = activateShop(formData);
       toast.promise(activateShopPromise, {
@@ -49,10 +48,9 @@ function CreateShop() {
   }
 
   useEffect(() => {
-    console.log("effect triggers");
     const timeOutId = setTimeout(() => trigger("name"), 500);
     return () => clearTimeout(timeOutId);
-  }, [watch("name"), trigger]);
+  }, [trigger]);
 
   return (
     <GutteredBox>

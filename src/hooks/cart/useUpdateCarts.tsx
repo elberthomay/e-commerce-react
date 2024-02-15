@@ -41,7 +41,7 @@ export default function useUpdateCarts() {
       );
       return { prevCart };
     },
-    onError: (err, newTodo, context) =>
+    onError: (_, __, context) =>
       queryClient.setQueriesData(cartKeyObject, context?.prevCart),
     onSettled: () => {
       return queryClient.invalidateQueries(cartKeyObject);

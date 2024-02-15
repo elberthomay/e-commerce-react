@@ -18,7 +18,7 @@ function SignupForm() {
     formState: { errors },
   } = useForm<UserRegisterType & { repeatPassword: string }>();
   const navigate = useNavigate();
-  const { isLoading, error, signup } = useSignup();
+  const { isLoading, signup } = useSignup();
 
   async function onSubmit(
     formData: UserRegisterType & { repeatPassword: string }
@@ -101,7 +101,9 @@ function SignupForm() {
           })}
         />
       </FormRow>
-      <Button className="w-full">Submit</Button>
+      <Button disabled={isLoading} className="w-full">
+        Submit
+      </Button>
     </form>
   );
 }

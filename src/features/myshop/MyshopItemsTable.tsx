@@ -54,7 +54,7 @@ function MyShopItemsTable({
   isFetching,
 }: {
   shopItem: ShopItemRowType[];
-  fetchNextPage: () => any;
+  fetchNextPage: () => void;
   hasNextPage: boolean;
   isFetching: boolean;
 }) {
@@ -74,7 +74,7 @@ function MyShopItemsTable({
       </CustomTable>
       {shopItem.length > 0 && (
         <InView
-          onChange={(inView, entry) =>
+          onChange={(inView) =>
             inView && hasNextPage && !isFetching ? fetchNextPage() : null
           }
         >
@@ -118,7 +118,7 @@ const ItemDeleteConfirmationBody = forwardRef<
 >(({ item, className, ...props }, forwardedRef) => {
   const { id, name } = item;
   const truncatedName = name.length > 50 ? name.slice(0, 50) + "..." : name;
-  const { isLoading, error, deleteItem } = useDeleteItem(id);
+  const { isLoading, deleteItem } = useDeleteItem(id);
   function handleDelete() {
     const deletePromise = deleteItem();
     toast.promise(deletePromise, {

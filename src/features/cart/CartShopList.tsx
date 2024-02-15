@@ -3,11 +3,9 @@ import { cartOutputType } from "../../type/cartType";
 import CartRow from "./CartRow";
 import Checkbox from "../../ui/Checkbox";
 import useUpdateCarts, {
-  mutationKey,
   useUpdateCartsIsLoading,
 } from "../../hooks/cart/useUpdateCarts";
 import toast from "react-hot-toast";
-import { useMutationState } from "@tanstack/react-query";
 import { useDeleteCartsIsLoading } from "../../hooks/cart/useDeleteCarts";
 
 function CartShopList({

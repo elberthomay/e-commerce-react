@@ -1,5 +1,4 @@
 import {
-  AnchorHTMLAttributes,
   HTMLAttributes,
   ReactNode,
   createContext,
@@ -7,7 +6,6 @@ import {
   useState,
 } from "react";
 import { createItemCardImageUrl } from "../api/image";
-import { Link } from "react-router-dom";
 import { twJoin, twMerge } from "tailwind-merge";
 import { formatPrice } from "../utilities/intlUtils";
 

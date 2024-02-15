@@ -7,7 +7,7 @@ function ItemRow({
   item,
   ...props
 }: HTMLAttributes<HTMLDivElement> & { item: ItemRowType }) {
-  const { id, name, price, quantity, image, shopId, shopName } = item;
+  const { id, name, price, quantity, image, shopName } = item;
   return (
     <Link to={`/item/${id}`}>
       <ItemCard itemName={name} quantity={quantity} {...props}>

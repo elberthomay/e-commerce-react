@@ -133,7 +133,7 @@ function ShopAddressSwitch({
   shopAddress: AddressOutputType;
 }) {
   const { id, name, selected } = shopAddress;
-  const { isLoading, error, toggleShopAddress } = useToggleShopAddress();
+  const { isLoading, toggleShopAddress } = useToggleShopAddress();
   function handleToggle() {
     const togglePromise = toggleShopAddress(id);
     toast.promise(togglePromise, {

@@ -15,12 +15,12 @@ export default function useGetShopItemsInvScroll(options: GetShopItemOptions) {
           limit,
         }),
       initialPageParam: 1,
-      getNextPageParam: (lastPage, allPage, lastPageParam) =>
+      getNextPageParam: (lastPage, _, lastPageParam) =>
         lastPageParam + 1 <=
         Math.ceil(lastPage.count / (limit ?? DEFAULT_CLIENT_LIMIT))
           ? lastPageParam + 1
           : undefined,
-      getPreviousPageParam: (lastPage, allPage, firstPageParam) =>
+      getPreviousPageParam: (_, __, firstPageParam) =>
         firstPageParam - 1 > 0 ? firstPageParam - 1 : undefined,
     });
   return {
@@ -30,7 +30,7 @@ export default function useGetShopItemsInvScroll(options: GetShopItemOptions) {
     hasNextPage,
     isFetching,
     shopItem: data?.pages?.reduce(
-      (acc, { count, rows }) => [...acc, ...rows],
+      (acc, { rows }) => [...acc, ...rows],
       [] as ShopItemRowType[]
     ),
   };

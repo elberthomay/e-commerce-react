@@ -17,8 +17,7 @@ function AddressRow({
   allowUnselect: boolean;
   onSelect: (id: string) => void;
 }) {
-  const { id, name, longitude, detail, phoneNumber, recipient, selected } =
-    address;
+  const { name, longitude, detail, phoneNumber, recipient, selected } = address;
   const { deleteAddress } = useDeleteAddress(address.id);
 
   function handleDelete() {

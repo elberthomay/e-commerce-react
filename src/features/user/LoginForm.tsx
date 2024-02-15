@@ -22,11 +22,10 @@ function LoginForm({
     reset,
     register,
     handleSubmit,
-    setError,
     formState: { errors },
   } = useForm<UserLoginType>();
 
-  const { isLoading, error, login } = useLogin();
+  const { isLoading, login } = useLogin();
 
   async function onSubmit(formData: UserLoginType) {
     const loginPromise = login({
@@ -35,7 +34,7 @@ function LoginForm({
     });
     toast.promise(loginPromise, {
       loading: "Logging in",
-      success: (data) => {
+      success: () => {
         onLogin();
         return "Login successful";
       },
@@ -84,7 +83,9 @@ function LoginForm({
           <Checkbox {...register("rememberMe")} id="rememberMe" />
           <label htmlFor="rememberMe">Remember me</label>
         </div>
-        <Button className="w-full">Submit</Button>
+        <Button disabled={isLoading} className="w-full">
+          Submit
+        </Button>
       </form>
       <TextBetweenDash>
         <p className="text-slate-400 text-sm">Other Login Method</p>

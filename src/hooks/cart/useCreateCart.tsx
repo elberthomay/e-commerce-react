@@ -10,7 +10,7 @@ export default function useCreateCart() {
     mutationKey: mutationKey,
     mutationFn: (cartData: { itemId: string; quantity: number }) =>
       createCart(cartData),
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cart"] });
       queryClient.invalidateQueries({ queryKey: ["currentUser"] });
     },

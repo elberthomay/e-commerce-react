@@ -23,7 +23,7 @@ export default function useDeleteCarts() {
       );
       return { prevCart };
     },
-    onSettled: (data) => queryClient.invalidateQueries(cartKeyObject),
+    onSettled: () => queryClient.invalidateQueries(cartKeyObject),
   });
   return { isLoading: isPending, error, deleteCarts: mutateAsync };
 }

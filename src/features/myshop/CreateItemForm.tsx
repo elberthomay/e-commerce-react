@@ -12,12 +12,11 @@ const CreateItemForm = forwardRef<HTMLDivElement, ComponentProps<"div">>(
     const [imagesToAdd, setImagesToAdd] = useState<
       { image: Blob; order: number; id: string }[]
     >([]);
-
-    const [imagesToDelete, setImagesToDelete] = useState<number[]>([]);
-    const [imagesOrder, setImagesOrder] = useState<number[] | null>(null);
+    const [, setImagesToDelete] = useState<number[]>([]);
+    const [, setImagesOrder] = useState<number[] | null>(null);
 
     function handleCreate(
-      isDirty: boolean,
+      _: unknown,
       formData: Pick<
         ItemDetailsOutputType,
         "name" | "description" | "price" | "quantity"

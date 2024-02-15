@@ -6,11 +6,9 @@ import AddressCreateDialog from "../address/AddressCreateDialog";
 import AddressList from "../address/AddressList";
 import Button from "../../ui/Button";
 import { FaPlus } from "react-icons/fa6";
-import CustomDialog, {
-  useCustomDialogContext,
-} from "../../components/CustomDialog";
+import CustomDialog from "../../components/CustomDialog";
 import { AddressOutputType } from "../../type/addressType";
-import { ButtonHTMLAttributes, HTMLAttributes, forwardRef } from "react";
+import { ButtonHTMLAttributes, forwardRef } from "react";
 import { twMerge } from "tailwind-merge";
 import CloseDialogConfirmation from "../../ui/CloseDialogConfirmation";
 

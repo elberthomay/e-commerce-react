@@ -12,7 +12,7 @@ import {
 import { IconType } from "react-icons";
 import { useMaxBreakpoints } from "../hooks/useWindowSize";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi2";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 import * as Tooltip from "@radix-ui/react-tooltip";
 
@@ -72,8 +72,7 @@ function SideNavigation({
 }
 
 function Trigger() {
-  const { isSm } = useMaxBreakpoints();
-  const { open, setOpen, size, setSize } = useSideNavigationContext();
+  const { setOpen, size, setSize } = useSideNavigationContext();
   return (
     <div className="flex items-center">
       <button

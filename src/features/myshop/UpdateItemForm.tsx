@@ -3,7 +3,6 @@ import useAddImage from "../../hooks/item/useAddImage";
 import useDeleteImage from "../../hooks/item/useDeleteImage";
 import useReorderImage from "../../hooks/item/useReorderImage";
 import useUpdateItem from "../../hooks/item/useUpdateItem";
-import { pick } from "lodash";
 import useGetItem from "../../hooks/item/useGetItem";
 import toast from "react-hot-toast";
 import { ItemDetailsOutputType } from "../../type/itemType";
@@ -33,12 +32,6 @@ const UpdateItemForm = forwardRef<
   const [imagesOrder, setImagesOrder] = useState<number[] | null>(null);
 
   const { close } = useCustomDialogContext();
-
-  const fieldValue = item
-    ? pick(item, ["name", "description", "price", "quantity"])
-    : undefined;
-
-  const { images } = item ?? {};
 
   async function update(
     isDirty: boolean,

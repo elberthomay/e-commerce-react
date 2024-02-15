@@ -9,7 +9,7 @@ function Logout({ children }: { children: React.ReactNode }) {
     const logoutPromise = logout();
     toast.promise(logoutPromise, {
       loading: "Logging out",
-      success: (data) => {
+      success: () => {
         navigate("/");
         return "Logout successful";
       },

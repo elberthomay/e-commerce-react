@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 
 // Hook that alerts clicks outside of the passed ref
 function useOutsideClickEvent(ref: any, callback: () => void) {

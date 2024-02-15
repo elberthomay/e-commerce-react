@@ -56,9 +56,9 @@ function ImageDisplay({
   if (images.length === 0) images = [{ imageName: "image-not-found.webp" }];
 
   const imageUrlStyle = {
-    "--image-url": `url(${createImageUrl(images[imageIndex]?.imageName, {
+    "--image-url": `url("${createImageUrl(images[imageIndex]?.imageName, {
       height: 700,
-    })})`,
+    })}")`,
   } as CSSProperties;
 
   return (

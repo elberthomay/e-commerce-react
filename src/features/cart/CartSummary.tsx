@@ -1,8 +1,4 @@
-import { useMutationState } from "@tanstack/react-query";
-import {
-  mutationKey,
-  useUpdateCartsIsLoading,
-} from "../../hooks/cart/useUpdateCarts";
+import { useUpdateCartsIsLoading } from "../../hooks/cart/useUpdateCarts";
 import { cartOutputType } from "../../type/cartType";
 import Button from "../../ui/Button";
 import ButtonSpinner from "../../ui/ButtonSpinner";

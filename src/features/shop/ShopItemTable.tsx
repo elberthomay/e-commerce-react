@@ -12,7 +12,7 @@ import Button from "../../ui/Button";
 function ShopItemTable({ shopId }: { shopId: string }) {
   const { limit, page, getPaginationFunctions } = useLimitAndPagination();
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const search = searchParams.get("search") ?? undefined;
   const orderBy = searchParams.get("sort") ?? undefined;
 

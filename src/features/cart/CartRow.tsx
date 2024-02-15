@@ -29,7 +29,7 @@ function CartRow({ cartItem }: { cartItem: cartOutputType }) {
   const setQuantity = useCallback(
     (quantity: number) => {
       updateCarts([{ itemId, updateData: { quantity } }], {
-        onError: (data) => {
+        onError: () => {
           setTempQuantity(quantity);
         },
       });

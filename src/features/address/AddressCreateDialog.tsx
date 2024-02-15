@@ -27,7 +27,7 @@ const AddressCreateDialog = forwardRef<
   }
 >(({ createAddress, ...props }, forwardedRef) => {
   const [state, setState] = useState<number>(0);
-  const { close, closeDialog } = useCustomDialogContext();
+  const { closeDialog } = useCustomDialogContext();
   const [address, setAddress] = useState<AddressCreateType>({
     name: "",
     phoneNumber: "",

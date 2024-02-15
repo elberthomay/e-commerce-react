@@ -11,11 +11,11 @@ import PagingPage from "../../components/PagingPage";
 
 function ItemTable() {
   const { limit, page, getPaginationFunctions } = useLimitAndPagination();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get("search") ?? "";
   const orderBy = searchParams.get("sort") ?? "";
 
-  const { isLoading, error, items } = useGetItems({
+  const { isLoading, items } = useGetItems({
     search: searchQuery,
     orderBy,
     limit,

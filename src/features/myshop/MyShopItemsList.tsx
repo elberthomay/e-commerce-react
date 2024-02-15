@@ -6,11 +6,11 @@ import MyShopItemsTable from "./MyShopItemsTable";
 
 function MyshopItemsList() {
   const { currentShop } = useGetCurrentShop();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   const search = searchParams.get("search") ?? undefined;
   const orderBy = searchParams.get("sort") ?? undefined;
-  const { isLoading, error, fetchNextPage, hasNextPage, isFetching, shopItem } =
+  const { fetchNextPage, hasNextPage, isFetching, shopItem } =
     useGetShopItemsInvScroll({
       search,
       orderBy,
