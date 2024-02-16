@@ -13,7 +13,7 @@ const CreateItemForm = forwardRef<HTMLDivElement, ComponentProps<"div">>(
       { image: Blob; order: number; id: string }[]
     >([]);
     const [, setImagesToDelete] = useState<number[]>([]);
-    const [, setImagesOrder] = useState<number[] | null>(null);
+    const [imageOrder, setImagesOrder] = useState<number[] | null>(null);
 
     function handleCreate(
       _: unknown,
@@ -22,9 +22,11 @@ const CreateItemForm = forwardRef<HTMLDivElement, ComponentProps<"div">>(
         "name" | "description" | "price" | "quantity"
       >
     ) {
-      const sortedNewImages = [...imagesToAdd]
-        .sort((a, b) => a.order - b.order)
-        .map((image) => image.image);
+      // reorder image before creating item
+      const sortedNewImages = imageOrder
+        ? imageOrder.map((index) => imagesToAdd[index].image)
+        : imagesToAdd.map((newImage) => newImage.image);
+
       const createPromise = createItem({
         itemData: formData,
         images: sortedNewImages,
