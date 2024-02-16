@@ -27,7 +27,7 @@ const AddToCartBox = forwardRef<
     <div
       {...props}
       className={twMerge(
-        " min-w-72 flex flex-col gap-8 border border-slate-300 rounded-lg p-4",
+        " min-w-60 flex flex-col gap-8 border border-slate-300 rounded-lg p-4",
         props.className
       )}
       ref={forwardedRef}

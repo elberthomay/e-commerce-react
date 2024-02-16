@@ -88,8 +88,8 @@ function ItemDetail() {
       )}
       {!isLoading && item && shop && (
         <>
-          <div className=" w-full max-w- p-4 pt-8 flex justify-center flex-col items-stretch sm:grid sm:grid-cols-[auto,1fr,auto] sm:items-start gap-x-6">
-            <ImageDisplay images={orderedImages} className="max-w-80" />
+          <div className=" w-full max-w- p-4 pt-8 flex justify-center flex-col items-stretch sm:grid sm:grid-cols-[minmax(18rem,0.7fr),minmax(20rem,1fr),minmax(15rem,17rem)] sm:items-start gap-x-6">
+            <ImageDisplay images={orderedImages} className="w-full" />
             <div className="flex flex-col gap-4 h-[200rem]">
               <h1 className="font-bold text-xl">{item.name}</h1>
               {!isSm && (
