@@ -1,0 +1,7 @@
+# Stage 1: Build Vite project
+FROM node:latest AS build
+WORKDIR /app
+COPY . .
+RUN npm install
+
+CMD ["npm", "run", "dev"]

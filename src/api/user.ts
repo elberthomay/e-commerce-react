@@ -2,13 +2,13 @@ import { RequestError } from "../error/RequestError";
 import { BASE_API_URL } from "../variables/constant";
 import { CurrentUserOutputType, UserUpdateType } from "../type/userType";
 
-const API_URL = BASE_API_URL + "user/";
+const API_URL = new URL("user/", BASE_API_URL).toString();
 
 export async function login(loginData: {
   email: string;
   password: string;
 }): Promise<{ status: "success" }> {
-  const url = API_URL + "login/password";
+  const url = new URL("login/password", API_URL).toString();
   const response = await fetch(url, {
     method: "POST",
     headers: {
@@ -27,7 +27,7 @@ export async function signup(userData: {
   name: string;
   password: string;
 }): Promise<{ status: "success"; email: string }> {
-  const url = API_URL + "register";
+  const url = new URL("register/", API_URL).toString();
   const response = await fetch(url, {
     method: "POST",
     headers: {
@@ -50,7 +50,7 @@ export async function getCurrentUser(): Promise<CurrentUserOutputType> {
 export async function changeUserAvatar(
   image: Blob
 ): Promise<{ status: "success" }> {
-  const url = API_URL + "avatar";
+  const url = new URL("avatar/", API_URL).toString();
   const formData = new FormData();
   formData.append("images", image);
 
@@ -83,7 +83,7 @@ export async function updateCurrentUser(updateData: UserUpdateType) {
 }
 
 export async function logout(): Promise<{ status: "success" }> {
-  const url = BASE_API_URL + "user/logout/";
+  const url = new URL("logout/", API_URL);
   const response = await fetch(url, { method: "POST", credentials: "include" });
   const body = await response.json();
   if (response.ok) return body;

@@ -1,5 +1,6 @@
 import { ReactElement, cloneElement, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { BASE_API_URL } from "../../variables/constant";
 
 function GoogleAuthComponent({
   onLogin,
@@ -29,7 +30,7 @@ function GoogleAuthComponent({
   function handleAuth() {
     setPopup(
       window.open(
-        "http://localhost:3000/api/user/login/auth/",
+        new URL("user/login/auth/", BASE_API_URL).toString(),
         "GoogleAuthPopup",
         "width=500,height=600"
       )

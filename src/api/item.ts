@@ -7,7 +7,7 @@ import {
   ItemUpdateType,
 } from "../type/itemType";
 
-const API_URL = BASE_API_URL + "item/";
+const API_URL = new URL("item/", BASE_API_URL).toString();
 
 export async function getItems({
   search,
@@ -38,7 +38,7 @@ export async function getItems({
 }
 
 export async function getItem(itemId: string): Promise<ItemDetailsOutputType> {
-  const url = API_URL + `${itemId}`;
+  const url = new URL(`${itemId}/`, API_URL).toString();
   const response = await fetch(url);
   const body = await response.json();
   if (response.ok) return body;
@@ -49,7 +49,7 @@ export async function updateItem(
   itemId: string,
   updateData: ItemUpdateType
 ): Promise<ItemDetailsOutputType> {
-  const url = API_URL + `${itemId}`;
+  const url = new URL(`${itemId}/`, API_URL).toString();
   const response = await fetch(url, {
     method: "PATCH",
     credentials: "include",
@@ -66,7 +66,7 @@ export async function updateItem(
 export async function deleteItem(
   itemId: string
 ): Promise<{ status: "success" }> {
-  const url = API_URL + `${itemId}`;
+  const url = new URL(`${itemId}/`, API_URL).toString();
   const response = await fetch(url, {
     method: "delete",
     credentials: "include",
@@ -102,7 +102,7 @@ export async function addItemImage(
   itemId: string,
   images: Blob[]
 ): Promise<{ status: "success" }> {
-  const url = `${API_URL}${itemId}/images`;
+  const url = new URL(`${itemId}/images/`, API_URL).toString();
   const formData = new FormData();
   for (const image of images) formData.append("images", image);
 
@@ -120,7 +120,7 @@ export async function reorderItemImage(
   itemId: string,
   order: number[]
 ): Promise<{ status: "success" }> {
-  const url = `${API_URL}${itemId}/images`;
+  const url = new URL(`${itemId}/images/`, API_URL).toString();
 
   const response = await fetch(url, {
     method: "PATCH",
@@ -139,7 +139,7 @@ export async function deleteItemImage(
   itemId: string,
   indexes: number[]
 ): Promise<{ status: "success" }> {
-  const url = `${API_URL}${itemId}/images`;
+  const url = new URL(`${itemId}/images/`, API_URL).toString();
 
   const response = await fetch(url, {
     method: "DELETE",

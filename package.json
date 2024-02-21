@@ -4,8 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --mode test",
-    "build": "tsc && vite build --mode production",
+    "dev": "vite --host --mode test",
+    "build": "tsc && vite build --mode prod",
+    "buildtest": "tsc && vite build --mode test",
     "tailwind-watch": "npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
