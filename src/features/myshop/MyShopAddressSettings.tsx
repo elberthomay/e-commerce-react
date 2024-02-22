@@ -2,6 +2,7 @@ import CustomDialog from "../../components/CustomDialog";
 import Spinner from "../../components/Spinner";
 import useCreateShopAddress from "../../hooks/address/useCreateShopAddress";
 import useGetShopAddresses from "../../hooks/address/useGetShopAddresses";
+import useSetTitle from "../../hooks/useSetTitle";
 import Button from "../../ui/Button";
 import CloseDialogConfirmation from "../../ui/CloseDialogConfirmation";
 import AddressCreateDialog from "../address/AddressCreateDialog";
@@ -10,7 +11,7 @@ import ShopAddressTable from "./ShopAddressTable";
 function MyShopAddressSettings() {
   const { isLoading, error, shopAddress } = useGetShopAddresses();
   const { createShopAddress } = useCreateShopAddress();
-  console.log(shopAddress);
+  useSetTitle((defaultTitle) => `Shop Address | ${defaultTitle}`);
   return (
     <>
       {isLoading && <Spinner />}

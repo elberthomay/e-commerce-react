@@ -6,9 +6,13 @@ import { RequestError } from "../error/RequestError";
 import ShopItemTable from "../features/shop/ShopItemTable";
 import GutteredBox from "../ui/GutteredBox";
 import ShopInformation from "../components/shop/ShopInformation";
+import useSetTitle from "../hooks/useSetTitle";
 function Shop() {
   const { shopId } = useParams();
   const { isLoading, error, shop } = useGetShop(shopId);
+  useSetTitle(
+    shop ? (defaultTitle) => `${shop.name} | ${defaultTitle}` : undefined
+  );
   return (
     <GutteredBox>
       {isLoading && <Spinner />}

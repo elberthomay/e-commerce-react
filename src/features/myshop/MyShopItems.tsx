@@ -3,8 +3,10 @@ import CustomDialog from "../../components/CustomDialog";
 import Button from "../../ui/Button";
 import CreateItemForm from "./CreateItemForm";
 import MyShopItemsList from "./MyShopItemsList";
+import useSetTitle from "../../hooks/useSetTitle";
 
 function MyShopItems() {
+  useSetTitle((defaultTitle) => `Shop Items | ${defaultTitle}`);
   return (
     <div className="flex flex-col gap-3">
       <h1 className="text-2xl font-bold">shop items</h1>

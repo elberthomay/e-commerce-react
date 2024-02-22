@@ -5,9 +5,11 @@ import CartSummary from "../features/cart/CartSummary";
 import useGetCart from "../hooks/cart/useGetCart";
 import Button from "../ui/Button";
 import GutteredBox from "../ui/GutteredBox";
+import useSetTitle from "../hooks/useSetTitle";
 
 function Cart() {
   const { isLoading, error, cart } = useGetCart();
+  useSetTitle((defaultTitle) => `Cart | ${defaultTitle}`);
 
   return (
     <GutteredBox>

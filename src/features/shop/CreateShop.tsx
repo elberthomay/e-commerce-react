@@ -12,11 +12,13 @@ import ButtonSpinner from "../../ui/ButtonSpinner";
 import TextArea from "../../ui/TextArea";
 import Button from "../../ui/Button";
 import GutteredBox from "../../ui/GutteredBox";
+import useSetTitle from "../../hooks/useSetTitle";
 
 function CreateShop() {
   const { currentUser } = useGetCurrentUser();
   const { checkShopName } = useCheckShopName();
   const { activateShop } = useActivateShop();
+  useSetTitle((defaultTitle) => `Create your shop | ${defaultTitle}`);
   const [step, setStep] = useState<number>(1);
 
   const {

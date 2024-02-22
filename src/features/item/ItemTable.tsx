@@ -5,15 +5,21 @@ import ItemList from "./ItemList";
 import useGetItems from "../../hooks/item/useGetItems";
 import Sort from "../../components/Sort";
 import ItemEmpty from "./ItemEmpty";
-import { useEffect } from "react";
 import PagingLimit from "../../components/PagingLimit";
 import PagingPage from "../../components/PagingPage";
+import useSetTitle from "../../hooks/useSetTitle";
 
 function ItemTable() {
   const { limit, page, getPaginationFunctions } = useLimitAndPagination();
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get("search") ?? "";
   const orderBy = searchParams.get("sort") ?? "";
+
+  useSetTitle(
+    searchQuery
+      ? (defaultTitle) => `Searching ${searchQuery} | ${defaultTitle}`
+      : undefined
+  );
 
   const { isLoading, items } = useGetItems({
     search: searchQuery,
@@ -22,16 +28,6 @@ function ItemTable() {
     page,
     tags: [],
   });
-
-  useEffect(() => {
-    if (searchQuery) {
-      const defaultTitle = document.title;
-      document.title = `Searching ${searchQuery} | ${defaultTitle}`;
-      return () => {
-        document.title = defaultTitle;
-      };
-    }
-  }, [searchQuery]);
 
   const { maxPage, startCount, endCount, setLimit, setPage } =
     getPaginationFunctions(items?.count ?? 0);

@@ -15,10 +15,12 @@ import { HiChevronRight } from "react-icons/hi2";
 import Button from "../../ui/Button";
 import { twMerge } from "tailwind-merge";
 import TextInput from "../../ui/TextInput";
+import useSetTitle from "../../hooks/useSetTitle";
 
 function UserData() {
   const { currentUser } = useGetCurrentUser();
   const { name } = currentUser ?? {};
+  useSetTitle((defaultTitle) => `User Data | ${defaultTitle}`);
   const { changeUserAvatar } = useChangeUserAvatar();
   const { isSm } = useMaxBreakpoints();
   const { avatar } = currentUser ?? {};

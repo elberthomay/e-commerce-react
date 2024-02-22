@@ -21,13 +21,17 @@ import { useMaxBreakpoints } from "../hooks/useWindowSize";
 import { AddtoCartFooter } from "../features/item/AddToCartDrawer";
 import GutteredBox from "../ui/GutteredBox";
 import LoginDialog from "../components/LoginDialog";
+import useSetTitle from "../hooks/useSetTitle";
+
 function ItemDetail() {
   const { itemId } = useParams();
   const { isLoading, error, item } = useGetItem(itemId ?? "");
+  const { isAuthenticated } = useGetCurrentUser();
+  const { shop } = useGetShop(item?.shopId);
+  useSetTitle(item ? `Shopping ${item.name} from ${item.shopName}` : item);
+
   const { createCart } = useCreateCart();
   const { isSm } = useMaxBreakpoints();
-  const { shop } = useGetShop(item?.shopId);
-  const { isAuthenticated } = useGetCurrentUser();
 
   const AddedToCartDialogRef = useRef<CustomDialogContextType | null>(null);
   const loginDialogRef = useRef<CustomDialogContextType | null>(null);
@@ -79,7 +83,7 @@ function ItemDetail() {
     <GutteredBox>
       {isLoading && <Spinner />}
       {!isLoading && error && (
-        <div>
+        <div className="mt-6 w-[min(40rem,59vw)] rounded-lg border border-slate-300 shadow mx-auto">
           <p>Oops. Looks like the item you're trying to access doesn't exist</p>
           <Link to="/">
             <Button>Return</Button>

@@ -3,11 +3,13 @@ import useGetCurrentUser from "../hooks/user/useGetCurrentUser";
 import Spinner from "../components/Spinner";
 import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import GutteredBox from "../ui/GutteredBox";
+import useSetTitle from "../hooks/useSetTitle";
 
 function Login() {
   const { isLoading, error, isAuthenticated } = useGetCurrentUser();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  useSetTitle((defaultTitle) => `Login | ${defaultTitle}`);
   const loginRedirect = searchParams.get("loginRedirect");
 
   function onLogin() {

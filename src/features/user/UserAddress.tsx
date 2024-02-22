@@ -11,10 +11,12 @@ import { AddressOutputType } from "../../type/addressType";
 import { ButtonHTMLAttributes, forwardRef } from "react";
 import { twMerge } from "tailwind-merge";
 import CloseDialogConfirmation from "../../ui/CloseDialogConfirmation";
+import useSetTitle from "../../hooks/useSetTitle";
 
 function UserAddress() {
   const { isLoading, isError, isSuccess, userAddresses } =
     useGetUserAddresses();
+  useSetTitle((defaultTitle) => `Address | ${defaultTitle}`);
   const { createUserAddress } = useCreateUserAddress();
   const { selectUserAddress } = useSelectUserAddress();
   return (

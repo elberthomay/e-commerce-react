@@ -6,11 +6,13 @@ import TextBetweenDash from "../ui/TextBetweenDash";
 import GoogleButton from "../ui/GoogleButton";
 import GoogleAuthComponent from "../features/auth/GoogleAuthComponent";
 import GutteredBox from "../ui/GutteredBox";
+import useSetTitle from "../hooks/useSetTitle";
 
 function Signup() {
   const { isAuthenticated } = useGetCurrentUser();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  useSetTitle((defaultTitle) => `Signup | ${defaultTitle}`);
   const loginRedirect = searchParams.get("loginRedirect");
   const onLogin = () => navigate(loginRedirect ?? "/", { replace: true });
   return isAuthenticated ? (

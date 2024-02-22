@@ -22,10 +22,12 @@ import CustomDialog, {
 import TextInput from "../../ui/TextInput";
 import Button from "../../ui/Button";
 import { twMerge } from "tailwind-merge";
+import useSetTitle from "../../hooks/useSetTitle";
 
 function MyShopDataSettings() {
   const { currentShop } = useGetCurrentShop();
   const { changeShopAvatar } = useChangeShopAvatar();
+  useSetTitle((defaultTitle) => `User Data | ${defaultTitle}`);
   const { id, avatar, name } = currentShop ?? {};
 
   async function handleChangeAvatar(
