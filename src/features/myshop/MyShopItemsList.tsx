@@ -4,7 +4,7 @@ import useGetShopItemsInvScroll from "../../hooks/shop/useGetShopItemsInvScroll"
 import Sort from "../../components/Sort";
 import MyShopItemsTable from "./MyShopItemsTable";
 
-function MyshopItemsList() {
+function MyShopItemsList() {
   const { currentShop } = useGetCurrentShop();
   const [searchParams] = useSearchParams();
 
@@ -34,4 +34,4 @@ function MyshopItemsList() {
   );
 }
 
-export default MyshopItemsList;
+export default MyShopItemsList;
