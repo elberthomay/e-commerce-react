@@ -1,12 +1,11 @@
 import { Outlet } from "react-router-dom";
 import Header from "./header/Header";
-function AppLayout() {
+import { ReactNode } from "react";
+function AppLayout({ children }: { children?: ReactNode }) {
   return (
     <>
       <Header />
-      <main id="main">
-        <Outlet />
-      </main>
+      <main id="main">{children ? children : <Outlet />}</main>
     </>
   );
 }

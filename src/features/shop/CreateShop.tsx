@@ -206,7 +206,7 @@ function CreateShopStepsItem({
         className="h-8 w-8 rounded-full flex justify-center items-center bg-slate-300 data-[ongoing=true]:bg-slate-100 border border-slate-300 data-[ongoing=true]:border-governor-bay-800 data-[completed=true]:bg-governor-bay-800"
       >
         {isCompleted ? (
-          <FaCheck className="h-4 w-4 text-slate-100" />
+          <FaCheck className="h-4 w-4 text-governor-bay-800" />
         ) : (
           <span
             data-ongoing={isOngoing}
