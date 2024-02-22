@@ -1,0 +1,20 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build -t elberthomax/ecommerce-react -t Dockerfile.prod .
+    - name: Login into dockerhub
+      run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      env: 
+        DOCKER_USERNAME: ${{ secrets.docker-account.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.docker-account.DOCKER_PASSWORD }}
+    - name: Push image to dockerhub
+      run: docker push elberthomax/ecommerce-react
