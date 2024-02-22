@@ -14,7 +14,7 @@ jobs:
     - name: Login into dockerhub
       run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
       env: 
-        DOCKER_USERNAME: ${{ secrets.docker-account.DOCKER_USERNAME }}
-        DOCKER_PASSWORD: ${{ secrets.docker-account.DOCKER_PASSWORD }}
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
     - name: Push image to dockerhub
       run: docker push elberthomax/ecommerce-react
