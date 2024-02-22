@@ -3,6 +3,7 @@ import {
   MutableRefObject,
   ReactElement,
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useState,
@@ -34,26 +35,30 @@ function CustomDialog({
     "closed"
   );
 
-  function handleOpen(open: boolean) {
-    if (open) setStatus("main"); // open signal could only when dialog is closed
-    else if (!open && status === "main" && confirmation)
-      setStatus("confirmation"); //open confirmation
-    else if (!open && status === "confirmation")
-      setStatus("main"); // can only close by calling closeDialog
-    else setStatus("closed"); // if confirm dialog is open, or element not provided
-  }
+  const handleOpen = useCallback(
+    (open: boolean) => {
+      if (open)
+        setStatus("main"); // open signal could only when dialog is closed
+      else if (!open && status === "main" && confirmation)
+        setStatus("confirmation"); //open confirmation
+      else if (!open && status === "confirmation")
+        setStatus("main"); // can only close by calling closeDialog
+      else setStatus("closed"); // if confirm dialog is open, or element not provided
+    },
+    [confirmation, status]
+  );
 
   const closeDialog = () => setStatus("closed");
   const closeConfirmation = () => setStatus("main");
-  const close = () => handleOpen(false);
-  const open = () => handleOpen(true);
+  const close = useCallback(() => handleOpen(false), [handleOpen]);
+  const open = useCallback(() => handleOpen(true), [handleOpen]);
 
   const isOpen = status !== "closed";
 
   useEffect(() => {
     if (contextRef)
       contextRef.current = { closeDialog, closeConfirmation, close, open };
-  }, [contextRef]);
+  }, [contextRef, open, close]);
 
   return (
     <CustomDialogContext.Provider

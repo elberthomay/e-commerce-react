@@ -3,7 +3,7 @@ import { createAvatarImageUrl } from "../../api/image";
 import useGetCurrentUser from "../../hooks/user/useGetCurrentUser";
 import Logout from "../Logout";
 import React, { ButtonHTMLAttributes, HTMLAttributes } from "react";
-import { twJoin } from "tailwind-merge";
+import { twJoin, twMerge } from "tailwind-merge";
 import CustomHoverCard, { useCustomHoverCardContext } from "../CustomHoverCard";
 
 export const HeaderUserButton = React.forwardRef<HTMLButtonElement>(
@@ -32,16 +32,26 @@ export const HeaderUserButton = React.forwardRef<HTMLButtonElement>(
 );
 
 const HeaderUserBody = React.forwardRef<HTMLDivElement>(
-  (props: HTMLAttributes<HTMLDivElement>, forwardedRef) => {
+  ({ className, ...props }: HTMLAttributes<HTMLDivElement>, forwardedRef) => {
     const { setOpen } = useCustomHoverCardContext();
     const closeHoverCard = () => setOpen(false);
     return (
-      <div {...props} ref={forwardedRef}>
+      <div
+        {...props}
+        ref={forwardedRef}
+        className={twMerge(className, "w-40 p-1")}
+      >
         <ul>
-          <li onClick={closeHoverCard}>
+          <li
+            onClick={closeHoverCard}
+            className="p-2 rounded-md hover:bg-slate-300"
+          >
             <Link to="/user/settings">Setting</Link>
           </li>
-          <li onClick={closeHoverCard}>
+          <li
+            onClick={closeHoverCard}
+            className="p-2 rounded-md hover:bg-slate-300"
+          >
             <Logout>Logout</Logout>
           </li>
         </ul>

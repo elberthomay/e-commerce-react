@@ -37,10 +37,12 @@ function CustomHoverCard({
         <HoverCard.Portal>
           <HoverCard.Content
             hideWhenDetached={false}
-            className="pt-2 origin-[var(--radix-hover-card-content-transform-origin)] animate-[fadeInDown_0.25s_linear] z-20 shadow-sm"
+            sideOffset={10}
+            className="origin-[var(--radix-hover-card-content-transform-origin)] animate-[fadeInDown_0.25s_linear] z-20 rounded-lg bg-white border border-slate-300 shadow"
+            collisionPadding={20}
             asChild
           >
-            <div>{children}</div>
+            {children}
           </HoverCard.Content>
         </HoverCard.Portal>
       </HoverCard.Root>
