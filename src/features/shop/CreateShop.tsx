@@ -113,6 +113,7 @@ function CreateShop() {
                             else return false;
                           }
                         },
+                        onChange: () => trigger("name"),
                       })}
                       onKeyDown={(e) =>
                         e.key === "Enter" ? handleNameCheck() : null
