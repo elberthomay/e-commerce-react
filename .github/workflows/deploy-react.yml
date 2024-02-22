@@ -9,12 +9,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    
     - name: Build the Docker image
       run: docker build -t elberthomax/ecommerce-react -f Dockerfile.prod .
+      
     - name: Login into dockerhub
       run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
       env: 
-        DOCKER_USERNAME: ${{ secrets.docker-account.DOCKER_USERNAME }}
-        DOCKER_PASSWORD: ${{ secrets.docker-account.DOCKER_PASSWORD }}
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        
     - name: Push image to dockerhub
       run: docker push elberthomax/ecommerce-react
+      
+    - uses: digitalocean/action-doctl@v2
+      with:
+        token: ${{ secrets.DO_KUBE_TOKEN }}
+    - run: doctl kubernetes cluster kubeconfig save ecommerce
+    - run: kubectl rollout restart deployment ecommerce-react-depl
+
+    
