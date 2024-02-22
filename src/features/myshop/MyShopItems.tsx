@@ -2,7 +2,7 @@ import { FaPlus } from "react-icons/fa6";
 import CustomDialog from "../../components/CustomDialog";
 import Button from "../../ui/Button";
 import CreateItemForm from "./CreateItemForm";
-import MyshopItemsList from "./MyshopItemsList";
+import MyShopItemsList from "./MyShopItemsList";
 
 function MyShopItems() {
   return (
@@ -17,7 +17,7 @@ function MyShopItems() {
       >
         <CreateItemForm />
       </CustomDialog>
-      <MyshopItemsList />
+      <MyShopItemsList />
     </div>
   );
 }
