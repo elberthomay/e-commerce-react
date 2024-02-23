@@ -3,6 +3,7 @@ import { deleteCart } from "../../api/cart";
 import { cartKeyObject } from "./useGetCart";
 import { cartOutputType } from "../../type/cartType";
 import useMutationIsLoading from "../useMutationIsLoading";
+import { currentUserKeyObject } from "../user/useGetCurrentUser";
 
 const mutationKey = ["deleteCart"];
 
@@ -23,7 +24,10 @@ export default function useDeleteCarts() {
       );
       return { prevCart };
     },
-    onSettled: () => queryClient.invalidateQueries(cartKeyObject),
+    onSettled: async () => {
+      await queryClient.invalidateQueries(cartKeyObject);
+      await queryClient.invalidateQueries(currentUserKeyObject);
+    },
   });
   return { isLoading: isPending, error, deleteCarts: mutateAsync };
 }

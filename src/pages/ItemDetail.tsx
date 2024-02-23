@@ -22,10 +22,19 @@ import { AddtoCartFooter } from "../features/item/AddToCartDrawer";
 import GutteredBox from "../ui/GutteredBox";
 import LoginDialog from "../components/LoginDialog";
 import useSetTitle from "../hooks/useSetTitle";
+import useImagePreloader from "../hooks/useImagePreloader";
 
 function ItemDetail() {
   const { itemId } = useParams();
-  const { isLoading, error, item } = useGetItem(itemId ?? "");
+  const { isLoading: itemIsLoading, error, item } = useGetItem(itemId ?? "");
+  const { imagesPreloaded } = useImagePreloader(
+    item?.images.map((image) =>
+      createImageUrl(image.imageName, {
+        height: 700,
+      })
+    )
+  );
+
   const { isAuthenticated } = useGetCurrentUser();
   const { shop } = useGetShop(item?.shopId);
   useSetTitle(item ? `Shopping ${item.name} from ${item.shopName}` : item);
@@ -78,6 +87,8 @@ function ItemDetail() {
   const orderedImages = [...(item?.images ?? [])].sort(
     (a, b) => a.order - b.order
   );
+
+  const isLoading = itemIsLoading || !imagesPreloaded;
 
   return (
     <GutteredBox>

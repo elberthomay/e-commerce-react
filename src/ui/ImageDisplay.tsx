@@ -9,7 +9,6 @@ import {
 } from "react";
 import { createImageUrl } from "../api/image";
 import { twMerge } from "tailwind-merge";
-import useImagePreloader from "../hooks/useImagePreloader";
 
 function ImageDisplay({
   images,
@@ -19,13 +18,6 @@ function ImageDisplay({
   const [imageIndex, setImageIndex] = useState<number>(0);
   const imageDivRef = useRef<ComponentRef<"div"> | null>(null);
   const [imageHovered, setImageHovered] = useState<boolean>(false);
-  useImagePreloader(
-    images.map((image) =>
-      createImageUrl(image.imageName, {
-        height: 700,
-      })
-    )
-  );
 
   const trackPosition = useCallback((e: MouseEvent) => {
     const rect = imageDivRef.current?.getBoundingClientRect();

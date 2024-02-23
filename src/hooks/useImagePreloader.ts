@@ -3,17 +3,17 @@ import { useEffect, useState } from "react";
 function preloadImage(src: string) {
   return new Promise<HTMLImageElement>((resolve, reject) => {
     const img = new Image();
-    img.onload = function () {
+    img.onload = () => {
       resolve(img);
     };
-    img.onerror = img.onabort = function () {
+    img.onerror = img.onabort = () => {
       reject(src);
     };
     img.src = src;
   });
 }
 
-export default function useImagePreloader(imageList: string[]) {
+export default function useImagePreloader(imageUrls: string[] = []) {
   const [imagesPreloaded, setImagesPreloaded] = useState<boolean>(false);
 
   useEffect(() => {
@@ -24,7 +24,7 @@ export default function useImagePreloader(imageList: string[]) {
         return;
       }
 
-      const imagesPromiseList = imageList.map((url) => preloadImage(url));
+      const imagesPromiseList = imageUrls.map((url) => preloadImage(url));
 
       await Promise.all(imagesPromiseList);
 
@@ -40,7 +40,7 @@ export default function useImagePreloader(imageList: string[]) {
     return () => {
       isCancelled = true;
     };
-  }, [imageList]);
+  }, [imageUrls]);
 
   return { imagesPreloaded };
 }
