@@ -41,7 +41,7 @@ function ItemForm({
 }) {
   const fieldValue = item
     ? pick(item, ["name", "description", "price", "quantity"])
-    : { name: "", description: "", price: 0, quantity: 0 };
+    : { name: "", description: "", price: 0, quantity: 1 };
   const { images } = item ?? {};
 
   const orderedImages = [...(images ?? [])].sort((a, b) => a.order - b.order);
@@ -72,13 +72,19 @@ function ItemForm({
             required: true,
             min: 0,
             max: 1000000000,
+            valueAsNumber: true,
           })}
         />
       </FormRow>
       <FormRow label="quantity" formErrors={errors}>
         <TextInput
           type="number"
-          {...register("quantity", { required: true, min: 0, max: 9999 })}
+          {...register("quantity", {
+            required: true,
+            min: 0,
+            max: 9999,
+            valueAsNumber: true,
+          })}
         />
       </FormRow>
       <FormRow
