@@ -9,6 +9,8 @@ import ItemDetail from "./pages/ItemDetail";
 const UserAddress = lazy(() => import("./features/user/UserAddress"));
 const UserSettings = lazy(() => import("./pages/UserSettings"));
 const UserData = lazy(() => import("./features/user/UserData"));
+const Orders = lazy(() => import("./pages/Orders"));
+const OrderDetail = lazy(() => import("./pages/OrderDetail"));
 const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/Signup"));
 import MainPage from "./pages/MainPage";
@@ -26,6 +28,7 @@ const MyShopAddressSettings = lazy(
   () => import("./features/myshop/MyShopAddressSettings")
 );
 import CursorFollowingCircle from "./components/CursorFollowingCircle";
+import OrderItem from "./pages/OrderItem";
 
 function App() {
   const queryClient = new QueryClient();
@@ -44,6 +47,36 @@ function App() {
                 <ProtectedRoute>
                   <Suspense>
                     <Cart />
+                  </Suspense>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/orders"
+              element={
+                <ProtectedRoute>
+                  <Suspense>
+                    <Orders />
+                  </Suspense>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/order/:orderId"
+              element={
+                <ProtectedRoute>
+                  <Suspense>
+                    <OrderDetail />
+                  </Suspense>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/order/:orderId/item/:itemId"
+              element={
+                <ProtectedRoute>
+                  <Suspense>
+                    <OrderItem />
                   </Suspense>
                 </ProtectedRoute>
               }

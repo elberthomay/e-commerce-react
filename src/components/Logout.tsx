@@ -1,10 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import useLogout from "../hooks/user/useLogout";
 import toast from "react-hot-toast";
+import { ReactElement, cloneElement } from "react";
 
-function Logout({ children }: { children: React.ReactNode }) {
+function Logout({ children }: { children: ReactElement }) {
   const { logout } = useLogout();
   const navigate = useNavigate();
+  const clonedChildren = cloneElement(children, {
+    ...children.props,
+    onClick: handleLogout,
+  });
   async function handleLogout() {
     const logoutPromise = logout();
     toast.promise(logoutPromise, {
@@ -17,7 +22,7 @@ function Logout({ children }: { children: React.ReactNode }) {
     });
     await logoutPromise;
   }
-  return <button onClick={handleLogout}>{children}</button>;
+  return clonedChildren;
 }
 
 export default Logout;

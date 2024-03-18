@@ -1,13 +1,18 @@
 import { RequestError } from "../error/RequestError";
 import { BASE_API_URL } from "../variables/constant";
-import { CurrentUserOutputType, UserUpdateType } from "../type/userType";
+import {
+  currentUserOutputSchema,
+  loginSchema,
+  registerSchema,
+  userUpdateSchema,
+} from "@elycommerce/common";
+import { z } from "zod";
 
 const API_URL = new URL("user/", BASE_API_URL).toString();
 
-export async function login(loginData: {
-  email: string;
-  password: string;
-}): Promise<{ status: "success" }> {
+export async function login(
+  loginData: z.input<typeof loginSchema>
+): Promise<{ status: "success" }> {
   const url = new URL("login/password", API_URL).toString();
   const response = await fetch(url, {
     method: "POST",
@@ -22,11 +27,9 @@ export async function login(loginData: {
   else throw new RequestError(response.status, body);
 }
 
-export async function signup(userData: {
-  email: string;
-  name: string;
-  password: string;
-}): Promise<{ status: "success"; email: string }> {
+export async function signup(
+  userData: z.input<typeof registerSchema>
+): Promise<{ status: "success"; email: string }> {
   const url = new URL("register/", API_URL).toString();
   const response = await fetch(url, {
     method: "POST",
@@ -40,7 +43,9 @@ export async function signup(userData: {
   else throw new RequestError(response.status, body);
 }
 
-export async function getCurrentUser(): Promise<CurrentUserOutputType> {
+export async function getCurrentUser(): Promise<
+  z.infer<typeof currentUserOutputSchema>
+> {
   const response = await fetch(API_URL, { credentials: "include" });
   const body = await response.json();
   if (response.ok) return body;
@@ -65,7 +70,9 @@ export async function changeUserAvatar(
   else throw new RequestError(response.status, body);
 }
 
-export async function updateCurrentUser(updateData: UserUpdateType) {
+export async function updateCurrentUser(
+  updateData: z.input<typeof userUpdateSchema>
+) {
   const url = API_URL;
 
   const response = await fetch(url, {

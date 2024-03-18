@@ -42,18 +42,30 @@ const HeaderUserBody = React.forwardRef<HTMLDivElement>(
         className={twMerge(className, "w-40 p-1")}
       >
         <ul>
-          <li
-            onClick={closeHoverCard}
-            className="p-2 rounded-md hover:bg-slate-300"
-          >
-            <Link to="/user/settings">Setting</Link>
-          </li>
-          <li
-            onClick={closeHoverCard}
-            className="p-2 rounded-md hover:bg-slate-300"
-          >
-            <Logout>Logout</Logout>
-          </li>
+          <Link to="/user/settings">
+            <li
+              onClick={closeHoverCard}
+              className="p-2 rounded-md hover:bg-slate-300"
+            >
+              Setting
+            </li>
+          </Link>
+          <Link to="/orders">
+            <li
+              onClick={closeHoverCard}
+              className="p-2 rounded-md hover:bg-slate-300"
+            >
+              Orders
+            </li>
+          </Link>
+          <Logout>
+            <li
+              onClick={closeHoverCard}
+              className="p-2 rounded-md hover:bg-slate-300 cursor-pointer"
+            >
+              Logout
+            </li>
+          </Logout>
         </ul>
       </div>
     );

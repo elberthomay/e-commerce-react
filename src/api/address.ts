@@ -1,15 +1,18 @@
 import { RequestError } from "../error/RequestError";
 import { BASE_API_URL } from "../variables/constant";
 import {
-  AddressCreateType,
-  AddressOutputType,
-  AddressUpdateType,
-} from "../type/addressType";
+  addressCreateSchema,
+  addressOutputArraySchema,
+  addressOutputSchema,
+  addressUpdateSchema,
+} from "@elycommerce/common";
+import { z } from "zod";
 
 const BASE_URL = BASE_API_URL + "address/";
 
 const getAddresses =
-  (type: "shop" | "user") => async (): Promise<AddressOutputType[]> => {
+  (type: "shop" | "user") =>
+  async (): Promise<z.infer<typeof addressOutputArraySchema>[]> => {
     const url = BASE_URL + type;
 
     const response = await fetch(url, { credentials: "include" });
@@ -29,7 +32,9 @@ export async function getShopAddresses() {
 
 const createAddress =
   (type: "shop" | "user") =>
-  async (addressData: AddressCreateType): Promise<AddressOutputType> => {
+  async (
+    addressData: z.infer<typeof addressCreateSchema>
+  ): Promise<z.infer<typeof addressOutputSchema>> => {
     const url = BASE_URL + type;
 
     const response = await fetch(url, {
@@ -45,21 +50,21 @@ const createAddress =
   };
 
 export async function createUserAddress(
-  addressData: AddressCreateType
-): Promise<AddressOutputType> {
+  addressData: z.infer<typeof addressCreateSchema>
+): Promise<z.infer<typeof addressOutputSchema>> {
   return await createAddress("user")(addressData);
 }
 
 export async function createShopAddress(
-  addressData: AddressCreateType
-): Promise<AddressOutputType> {
+  addressData: z.infer<typeof addressCreateSchema>
+): Promise<z.infer<typeof addressOutputSchema>> {
   return await createAddress("shop")(addressData);
 }
 
 export async function updateAddress(
   addressId: string,
-  updateData: AddressUpdateType
-): Promise<Omit<AddressOutputType, "selected">> {
+  updateData: z.infer<typeof addressUpdateSchema>
+): Promise<z.infer<typeof addressOutputSchema>> {
   const url = BASE_URL + addressId;
 
   const response = await fetch(url, {

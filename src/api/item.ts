@@ -1,11 +1,12 @@
 import { RequestError } from "../error/RequestError";
 import { BASE_API_URL } from "../variables/constant";
 import {
-  ItemCreateType,
-  ItemDetailsOutputType,
-  ItemGetType,
-  ItemUpdateType,
-} from "../type/itemType";
+  itemCreateSchema,
+  itemDetailsOutputSchema,
+  itemGetOutputSchema,
+  itemUpdateSchema,
+} from "@elycommerce/common";
+import { z } from "zod";
 
 const API_URL = new URL("item/", BASE_API_URL).toString();
 
@@ -21,7 +22,7 @@ export async function getItems({
   page?: number | null;
 
   tags?: number[];
-}): Promise<ItemGetType> {
+}): Promise<z.infer<typeof itemGetOutputSchema>> {
   const url = API_URL;
   const queryParams = new URLSearchParams();
 
@@ -32,12 +33,13 @@ export async function getItems({
 
   const response = await fetch(`${url}?${queryParams.toString()}`);
   const body = await response.json();
-  console.log(body);
   if (response.ok) return body;
   else throw new RequestError(response.status, body);
 }
 
-export async function getItem(itemId: string): Promise<ItemDetailsOutputType> {
+export async function getItem(
+  itemId: string
+): Promise<z.infer<typeof itemDetailsOutputSchema>> {
   const url = new URL(`${itemId}/`, API_URL).toString();
   const response = await fetch(url);
   const body = await response.json();
@@ -47,8 +49,8 @@ export async function getItem(itemId: string): Promise<ItemDetailsOutputType> {
 
 export async function updateItem(
   itemId: string,
-  updateData: ItemUpdateType
-): Promise<ItemDetailsOutputType> {
+  updateData: z.infer<typeof itemUpdateSchema>
+): Promise<z.infer<typeof itemDetailsOutputSchema>> {
   const url = new URL(`${itemId}/`, API_URL).toString();
   const response = await fetch(url, {
     method: "PATCH",
@@ -80,9 +82,9 @@ export async function createItem({
   itemData,
   images,
 }: {
-  itemData: ItemCreateType;
+  itemData: z.input<typeof itemCreateSchema>;
   images: Blob[];
-}): Promise<ItemDetailsOutputType> {
+}): Promise<z.infer<typeof itemDetailsOutputSchema>> {
   const url = API_URL;
   const formData = new FormData();
   formData.append("body", JSON.stringify(itemData));

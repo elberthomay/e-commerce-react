@@ -1,12 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { AddressCreateType } from "../../type/addressType";
 import { createUserAddress } from "../../api/address";
+import { addressCreateSchema } from "@elycommerce/common";
+import { z } from "zod";
 
 export default function useCreateUserAddress() {
   const queryClient = useQueryClient();
   const { isPending, error, mutateAsync } = useMutation({
     mutationKey: ["createUserAddress"],
-    mutationFn: (addressData: AddressCreateType) =>
+    mutationFn: (addressData: z.input<typeof addressCreateSchema>) =>
       createUserAddress(addressData),
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: ["userAddresses"] }),

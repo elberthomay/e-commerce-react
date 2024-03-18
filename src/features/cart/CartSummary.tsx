@@ -1,10 +1,18 @@
+import toast from "react-hot-toast";
 import { useUpdateCartsIsLoading } from "../../hooks/cart/useUpdateCarts";
+import useProcessOrders from "../../hooks/order/useProcessOrders";
 import { cartOutputType } from "../../type/cartType";
 import Button from "../../ui/Button";
 import ButtonSpinner from "../../ui/ButtonSpinner";
 import { formatPrice } from "../../utilities/intlUtils";
+import { RequestError } from "../../error/RequestError";
+import { useNavigate } from "react-router-dom";
 
 function CartSummary({ cart }: { cart: cartOutputType[] }) {
+  const updateIsLoading = useUpdateCartsIsLoading();
+  const { isLoading: orderProcessLoading, processOrders } = useProcessOrders();
+  const navigate = useNavigate();
+
   const allAvailable = cart.every(
     ({ quantity, inventory }) => quantity <= inventory
   );
@@ -20,9 +28,23 @@ function CartSummary({ cart }: { cart: cartOutputType[] }) {
     { itemCount: 0, itemPrice: 0 }
   );
 
-  const updateIsLoading = useUpdateCartsIsLoading();
+  function handleProcessOrders() {
+    const processOrdersPromise = processOrders();
+    toast.promise(processOrdersPromise, {
+      success: () => {
+        navigate("/orders");
+        return "Order successfully created";
+      },
+      loading: "Creating order",
+      error: (error) => {
+        if (error instanceof RequestError && error.status !== 500)
+          return error.message;
+        else return "Failed creating order";
+      },
+    });
+  }
 
-  const isLoading = updateIsLoading;
+  const isLoading = updateIsLoading || orderProcessLoading;
 
   const orderEnabled = itemCount > 0 && allAvailable && !isLoading;
 
@@ -41,7 +63,11 @@ function CartSummary({ cart }: { cart: cartOutputType[] }) {
         </p>
       </div>
       <div className="h-[1px] bg-slate-300 w-full my-3"></div>
-      <Button className="w-full flex justify-center" disabled={!orderEnabled}>
+      <Button
+        className="w-full flex justify-center"
+        disabled={!orderEnabled}
+        onClick={handleProcessOrders}
+      >
         {isLoading ? <ButtonSpinner /> : "Buy now"}
       </Button>
     </div>
