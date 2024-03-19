@@ -1,31 +1,30 @@
-import GutteredBox from "../ui/GutteredBox";
-import OrderList from "../features/order/OrderList";
-import useSetTitle from "../hooks/useSetTitle";
-import OrderItemSearchBar from "../features/order/OrderItemSearchBar";
-import OrderStatusCheckBox from "../features/order/OrderStatusCheckBox";
-import OrderNewerThanSelect from "../features/order/OrderNewerThanSelect";
-import OrderBySelect from "../features/order/OrderBySelect";
-import { addDays, startOfToday } from "date-fns";
 import { useSearchParams } from "react-router-dom";
-import useGetUserOrders from "../hooks/order/useGetUserOrders";
-import useGetCurrentUser from "../hooks/user/useGetCurrentUser";
+import useGetShopOrders from "../../hooks/order/useGetShopOrders";
+import useGetCurrentShop from "../../hooks/shop/useGetCurrentShop";
+import OrderBySelect from "../order/OrderBySelect";
+import OrderItemSearchBar from "../order/OrderItemSearchBar";
+import OrderList from "../order/OrderList";
+import OrderNewerThanSelect from "../order/OrderNewerThanSelect";
+import OrderStatusCheckBox from "../order/OrderStatusCheckBox";
+import { addDays, startOfToday } from "date-fns";
+import useSetTitle from "../../hooks/useSetTitle";
 
-function Orders() {
-  useSetTitle((defaultTitle) => `Orders | ${defaultTitle}`);
-  const { currentUser } = useGetCurrentUser();
+function MyShopOrders() {
+  const { currentShop } = useGetCurrentShop();
+  useSetTitle((defaultTitle) => `Shop Orders | ${defaultTitle}`);
 
-  const queryOption = useGetUserOrdersQueryOption();
+  const queryOption = useGetShopOrdersQueryOption();
 
   const { isLoading, error, orders, hasNextPage, fetchNextPage } =
-    useGetUserOrders(currentUser?.id ?? "", queryOption);
+    useGetShopOrders(currentShop?.id ?? "", queryOption);
 
   function handleFetchNextPage() {
     if (hasNextPage && !isLoading) fetchNextPage();
   }
 
   return (
-    <GutteredBox className="flex flex-col gap-4">
-      <h1 className="text-3xl font-bold">Orders</h1>
+    <div className="flex flex-col gap-4">
+      <h1 className="text-3xl font-bold">Shop orders</h1>
       <div className="flex gap-x-2 justify-around flex-wrap">
         <OrderItemSearchBar />
         <OrderStatusCheckBox />
@@ -41,15 +40,15 @@ function Orders() {
       <OrderList
         isLoading={isLoading}
         error={error}
-        fetchNextPage={handleFetchNextPage}
         hasNextPage={hasNextPage}
+        fetchNextPage={handleFetchNextPage}
         orders={orders}
       />
-    </GutteredBox>
+    </div>
   );
 }
 
-function useGetUserOrdersQueryOption() {
+function useGetShopOrdersQueryOption() {
   const [searchParams] = useSearchParams();
   return {
     limit: searchParams.get("limit") ?? undefined,
@@ -70,4 +69,4 @@ function useGetUserOrdersQueryOption() {
   };
 }
 
-export default Orders;
+export default MyShopOrders;

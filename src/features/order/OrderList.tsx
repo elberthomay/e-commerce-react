@@ -1,57 +1,30 @@
-import { useSearchParams } from "react-router-dom";
-import { createItemCardImageUrl } from "../../api/image";
 import Spinner from "../../components/Spinner";
 import { RequestError } from "../../error/RequestError";
-import useGetUserOrders from "../../hooks/order/useGetUserOrders";
-import useImagePreloader from "../../hooks/useImagePreloader";
-import useGetCurrentUser from "../../hooks/user/useGetCurrentUser";
-import { addDays, startOfToday } from "date-fns";
 import OrderListItem from "./OrderListItem";
 import { useInView } from "react-intersection-observer";
+import { z } from "zod";
+import { getOrdersOutputSchema } from "@elycommerce/common";
 
-function OrderList() {
-  const { currentUser } = useGetCurrentUser();
-  const [searchParams] = useSearchParams();
-
-  const queryOption = {
-    limit: searchParams.get("limit") ?? undefined,
-    orderBy: searchParams.get("sortBy") ?? undefined,
-    itemName:
-      searchParams.get("query") && searchParams.get("query")?.trim() !== ""
-        ? searchParams.get("query")?.trim()
-        : undefined,
-    newerThan:
-      searchParams.get("newerThan") &&
-      !isNaN(Number(searchParams.get("newerThan")))
-        ? addDays(
-            startOfToday(),
-            -Number(searchParams.get("newerThan"))
-          ).toISOString()
-        : undefined,
-    status: searchParams.get("status") ?? undefined,
-  };
-
-  const {
-    isLoading: getUserIsLoading,
-    error,
-    orders,
-    hasNextPage,
-    fetchNextPage,
-  } = useGetUserOrders(currentUser?.id ?? "", queryOption);
-
-  const { imagesPreloaded } = useImagePreloader(
-    orders?.map(({ image }) => createItemCardImageUrl(image))
-  );
-
+function OrderList({
+  isLoading,
+  error,
+  fetchNextPage,
+  hasNextPage,
+  orders,
+}: {
+  isLoading: boolean;
+  error: unknown;
+  fetchNextPage: () => void;
+  hasNextPage: boolean;
+  orders?: z.infer<typeof getOrdersOutputSchema>;
+}) {
   function handleFetchNewPage(inView: boolean) {
-    if (hasNextPage && inView && !getUserIsLoading) fetchNextPage();
+    if (inView) fetchNextPage();
   }
 
   const { ref } = useInView({
     onChange: handleFetchNewPage,
   });
-
-  const isLoading = getUserIsLoading || !imagesPreloaded;
 
   return (
     <>

@@ -1,7 +1,14 @@
 import { Outlet } from "react-router-dom";
 import SideNavigation from "../../components/SideNavigation";
 import { BsGraphUpArrow } from "react-icons/bs";
-import { HiArchiveBox, HiOutlineArchiveBox } from "react-icons/hi2";
+import {
+  HiArchiveBox,
+  HiChartPie,
+  HiOutlineArchiveBox,
+  HiOutlineChartPie,
+  HiOutlineSwatch,
+  HiSwatch,
+} from "react-icons/hi2";
 import { PiGear, PiGearFill } from "react-icons/pi";
 import Header from "../../components/header/Header";
 
@@ -12,8 +19,8 @@ function ShopMain() {
       <div className="h-full grid grid-cols-[auto_minmax(0,1fr)]">
         <SideNavigation className="h-full">
           <SideNavigation.Item
-            IconRender={BsGraphUpArrow}
-            IconFilledRender={BsGraphUpArrow}
+            IconRender={HiOutlineChartPie}
+            IconFilledRender={HiChartPie}
             to="/myshop/"
             end
           >
@@ -29,6 +36,14 @@ function ShopMain() {
           </SideNavigation.Item>
 
           <SideNavigation.Item
+            IconRender={HiOutlineSwatch}
+            IconFilledRender={HiSwatch}
+            to="/myshop/orders"
+          >
+            Orders
+          </SideNavigation.Item>
+
+          <SideNavigation.Item
             IconRender={PiGear}
             IconFilledRender={PiGearFill}
             to="/myshop/settings"
@@ -36,7 +51,7 @@ function ShopMain() {
             Settings
           </SideNavigation.Item>
 
-          {Array.from({ length: 20 }).map((_) => (
+          {/* {Array.from({ length: 20 }).map((_) => (
             <SideNavigation.Item
               IconRender={PiGear}
               IconFilledRender={PiGearFill}
@@ -44,7 +59,7 @@ function ShopMain() {
             >
               Settings
             </SideNavigation.Item>
-          ))}
+          ))} */}
         </SideNavigation>
         <main className="h-full p-2 sm:p-6 flex-grow overflow-y-auto">
           <div className="h-[100rem]">

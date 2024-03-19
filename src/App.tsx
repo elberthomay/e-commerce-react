@@ -27,6 +27,7 @@ const MyShopSetting = lazy(() => import("./features/myshop/MyShopSetting"));
 const MyShopAddressSettings = lazy(
   () => import("./features/myshop/MyShopAddressSettings")
 );
+const MyShopOrders = lazy(() => import("./features/myshop/MyShopOrders"));
 import CursorFollowingCircle from "./components/CursorFollowingCircle";
 import OrderItem from "./pages/OrderItem";
 
@@ -156,6 +157,14 @@ function App() {
               element={
                 <Suspense>
                   <MyShopItems />
+                </Suspense>
+              }
+            />
+            <Route
+              path="orders"
+              element={
+                <Suspense>
+                  <MyShopOrders />
                 </Suspense>
               }
             />
