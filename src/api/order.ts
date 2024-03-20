@@ -80,3 +80,45 @@ export async function processOrder(): Promise<
   if (response.ok) return body;
   else throw new RequestError(response.status, body);
 }
+
+export async function deliverOrder(
+  orderId: string
+): Promise<z.infer<typeof getOrdersOutputSchema>[number]> {
+  const url = API_URL + `${orderId}/deliver`;
+
+  const response = await fetch(url, {
+    credentials: "include",
+    method: "POST",
+  });
+  const body = await response.json();
+  if (response.ok) return body;
+  else throw new RequestError(response.status, body);
+}
+
+export async function confirmOrder(
+  orderId: string
+): Promise<z.infer<typeof getOrdersOutputSchema>[number]> {
+  const url = API_URL + `${orderId}/confirm`;
+
+  const response = await fetch(url, {
+    credentials: "include",
+    method: "POST",
+  });
+  const body = await response.json();
+  if (response.ok) return body;
+  else throw new RequestError(response.status, body);
+}
+
+export async function cancelOrder(
+  orderId: string
+): Promise<z.infer<typeof getOrdersOutputSchema>[number]> {
+  const url = API_URL + `${orderId}/cancel`;
+
+  const response = await fetch(url, {
+    credentials: "include",
+    method: "POST",
+  });
+  const body = await response.json();
+  if (response.ok) return body;
+  else throw new RequestError(response.status, body);
+}

@@ -5,7 +5,7 @@ import Spinner from "../components/Spinner";
 import { RequestError } from "../error/RequestError";
 import { orderStatusDisplayText } from "../variables/orderStatusBoxClassName";
 import { z } from "zod";
-import { getOrderDetailOutputSchema } from "@elycommerce/common";
+import { OrderStatuses, getOrderDetailOutputSchema } from "@elycommerce/common";
 import { format } from "date-fns";
 import { HiChevronRight } from "react-icons/hi2";
 import { useState } from "react";
@@ -13,10 +13,36 @@ import { createItemCardImageUrl } from "../api/image";
 import { formatPrice } from "../utilities/intlUtils";
 import Button from "../ui/Button";
 import ErrorBody from "../components/ErrorBody";
+import useGetCurrentUser from "../hooks/user/useGetCurrentUser";
+import useGetCurrentShop from "../hooks/shop/useGetCurrentShop";
+import useCancelOrder from "../hooks/order/useCancelOrder";
+import toast from "react-hot-toast";
+import CustomDialog from "../components/CustomDialog";
+import OrderConfirmationBody from "../features/order/OrderConfirmationBody";
+import useDeliverOrder from "../hooks/order/useDeliverOrder";
+import useConfirmOrder from "../hooks/order/useConfirmOrder";
 
 function OrderDetail() {
   const { orderId } = useParams();
-  const { isLoading, error, orderDetail } = useGetOrderDetail(orderId ?? "");
+  const {
+    isLoading: getOrderIsLoading,
+    error,
+    orderDetail,
+  } = useGetOrderDetail(orderId ?? "");
+  const { isLoading: getCurrentUserIsLoading, currentUser } =
+    useGetCurrentUser();
+  const { isLoading: getCurrentShopIsLoading, currentShop } =
+    useGetCurrentShop();
+
+  const isLoading =
+    getOrderIsLoading || getCurrentUserIsLoading || getCurrentShopIsLoading;
+
+  const accessor: "shop" | "user" =
+    currentShop?.id === orderDetail?.shopId ||
+    currentUser?.privilege === 0 ||
+    currentUser?.privilege === 1
+      ? "shop"
+      : "user";
 
   const notFoundError =
     error instanceof RequestError &&
@@ -30,14 +56,16 @@ function OrderDetail() {
         ) : (
           <ErrorBody />
         ))}
-      {orderDetail && <OrderDetailBody orderDetail={orderDetail} />}
+      {orderDetail && (
+        <OrderDetailBody orderDetail={orderDetail} accessor={accessor} />
+      )}
     </>
   );
 }
 
 function OrderNotFoundError({ orderId }: { orderId: string }) {
   return (
-    <div className="flex gap-4 justify-center items-center mt-6">
+    <div className="flex flex-col gap-4 justify-center items-center mt-6">
       <p>Order {orderId} does not exist</p>
       <Link to="/orders">
         <Button>Return to order list</Button>
@@ -48,9 +76,43 @@ function OrderNotFoundError({ orderId }: { orderId: string }) {
 
 function OrderDetailBody({
   orderDetail,
+  accessor,
 }: {
   orderDetail: z.infer<typeof getOrderDetailOutputSchema>;
+  accessor: "user" | "shop";
 }) {
+  // const {confirmOrder} = useConfirmOrder()
+  const { confirmOrder } = useConfirmOrder(orderDetail.id);
+  const { deliverOrder } = useDeliverOrder(orderDetail.id);
+  const { cancelOrder } = useCancelOrder(orderDetail.id);
+
+  function handleConfirmOrder() {
+    const confirmOrderPromise = confirmOrder();
+    toast.promise(confirmOrderPromise, {
+      loading: "Confirming Order",
+      error: "Error confirming order",
+      success: "Order confirmed successfully",
+    });
+  }
+
+  function handleDeliverOrder() {
+    const deliverOrderPromise = deliverOrder();
+    toast.promise(deliverOrderPromise, {
+      loading: "Initiating delivery Order",
+      error: "Error initiating delivery order",
+      success: "Order delivery initiated successfully",
+    });
+  }
+
+  function handleCancelOrder() {
+    const cancelOrderPromise = cancelOrder();
+    toast.promise(cancelOrderPromise, {
+      loading: "Cancelling Order",
+      error: "Error cancelling order",
+      success: "Order cancelled successfully",
+    });
+  }
+
   const {
     id,
     shopId,
@@ -133,6 +195,38 @@ function OrderDetailBody({
       <div className="flex justify-between font-bold">
         <p>Total</p>
         <p>{formatPrice(totalPrice)}</p>
+      </div>
+      <div className="flex justify-around">
+        {status === OrderStatuses.AWAITING && accessor === "shop" && (
+          <CustomDialog trigger={<Button>Confirm Order</Button>}>
+            <OrderConfirmationBody
+              message="Would you like to confirm this order?"
+              confirmationString="confirm order"
+              onConfirm={handleConfirmOrder}
+            />
+          </CustomDialog>
+        )}
+        {status === OrderStatuses.CONFIRMED && accessor === "shop" && (
+          <CustomDialog
+            trigger={<Button variant="green">Deliver Order</Button>}
+          >
+            <OrderConfirmationBody
+              message="Would you like to deliver this order?"
+              confirmationString="deliver order"
+              onConfirm={handleDeliverOrder}
+            />
+          </CustomDialog>
+        )}
+        {(status === OrderStatuses.AWAITING ||
+          (status === OrderStatuses.CONFIRMED && accessor === "shop")) && (
+          <CustomDialog trigger={<Button variant="red">Cancel Order</Button>}>
+            <OrderConfirmationBody
+              message="Would you like to cancel this order?"
+              confirmationString="cancel order"
+              onConfirm={handleCancelOrder}
+            />
+          </CustomDialog>
+        )}
       </div>
     </GutteredBox>
   );
