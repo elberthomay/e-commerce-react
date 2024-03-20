@@ -1,9 +1,5 @@
 import { HTMLAttributes, forwardRef, useState } from "react";
-import {
-  AddressCreateType,
-  AddressOutputType,
-  CoordinateType,
-} from "../../type/addressType";
+import { CoordinateType } from "../../type/addressType";
 import AddressForm from "./AddressForm";
 import AddressSearch from "./AddressSearch";
 import { HiArrowLeft } from "react-icons/hi2";
@@ -14,21 +10,23 @@ import { UseMutateAsyncFunction } from "@tanstack/react-query";
 import { useCustomDialogContext } from "../../components/CustomDialog";
 import { twMerge } from "tailwind-merge";
 import { FaCheck } from "react-icons/fa6";
+import { z } from "zod";
+import { addressCreateSchema, addressOutputSchema } from "@elycommerce/common";
 
 const AddressCreateDialog = forwardRef<
   HTMLDivElement,
   HTMLAttributes<HTMLDivElement> & {
     createAddress: UseMutateAsyncFunction<
-      AddressOutputType,
+      z.infer<typeof addressOutputSchema>,
       Error,
-      AddressCreateType,
+      z.input<typeof addressCreateSchema>,
       unknown
     >;
   }
 >(({ createAddress, ...props }, forwardedRef) => {
   const [state, setState] = useState<number>(0);
   const { closeDialog } = useCustomDialogContext();
-  const [address, setAddress] = useState<AddressCreateType>({
+  const [address, setAddress] = useState<z.infer<typeof addressCreateSchema>>({
     name: "",
     phoneNumber: "",
     detail: "",
@@ -53,7 +51,7 @@ const AddressCreateDialog = forwardRef<
 
   function handleMapSubmit(
     location: Pick<
-      AddressCreateType,
+      z.infer<typeof addressCreateSchema>,
       | "latitude"
       | "longitude"
       | "village"
@@ -67,7 +65,7 @@ const AddressCreateDialog = forwardRef<
     nextState();
   }
 
-  function handleCreateAddress(formData: AddressCreateType) {
+  function handleCreateAddress(formData: z.infer<typeof addressCreateSchema>) {
     const addressPromise = createAddress(formData);
     toast.promise(addressPromise, {
       loading: "Creating address",

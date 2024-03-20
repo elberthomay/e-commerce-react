@@ -1,19 +1,20 @@
 import { LuMapPin, LuMapPinOff } from "react-icons/lu";
 import useDeleteAddress from "../../hooks/address/useDeleteAddress";
-import { AddressOutputType } from "../../type/addressType";
 import toast from "react-hot-toast";
 import AddressEditDialog from "./AddressEditDialog";
 import Button from "../../ui/Button";
 import { HiCheck } from "react-icons/hi2";
 import CustomDialog from "../../components/CustomDialog";
 import AddressDeleteConfirmation from "./AddressDeleteConfirmation";
+import { z } from "zod";
+import { addressOutputSchema } from "@elycommerce/common";
 
 function AddressRow({
   address,
   allowUnselect,
   onSelect,
 }: {
-  address: AddressOutputType;
+  address: z.infer<typeof addressOutputSchema>;
   allowUnselect: boolean;
   onSelect: (id: string) => void;
 }) {

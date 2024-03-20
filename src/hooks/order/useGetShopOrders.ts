@@ -17,7 +17,7 @@ export default function useGetShopOrders(
       queryFn: ({ pageParam }) =>
         getShopOrders(shopId, { ...queryData, page: String(pageParam) }),
       initialPageParam: 1,
-      getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) =>
+      getNextPageParam: (lastPage, _, lastPageParam, __) =>
         lastPage.length !== 0 ? lastPageParam + 1 : undefined,
       retry: (failureCount, error) => {
         if (error instanceof RequestError) return false;

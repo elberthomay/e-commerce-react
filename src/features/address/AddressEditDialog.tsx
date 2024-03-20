@@ -1,5 +1,4 @@
 import { HTMLAttributes, forwardRef, useState } from "react";
-import { AddressCreateType, AddressOutputType } from "../../type/addressType";
 import toast from "react-hot-toast";
 import useUpdateAddress from "../../hooks/address/useUpdateAddress";
 import { omit } from "lodash";
@@ -10,15 +9,19 @@ import { toAdministrativeString } from "../../utilities/addressUtils";
 import useLocationQuerySearch from "../../hooks/location/useLocationQuerySearch";
 import { twMerge } from "tailwind-merge";
 import { useCustomDialogContext } from "../../components/CustomDialog";
+import { addressCreateSchema, addressOutputSchema } from "@elycommerce/common";
+import { z } from "zod";
 
 const AddressEditDialog = forwardRef<
   HTMLDivElement,
-  HTMLAttributes<HTMLDivElement> & { address: AddressOutputType }
+  HTMLAttributes<HTMLDivElement> & {
+    address: z.infer<typeof addressOutputSchema>;
+  }
 >(({ address, ...props }, forwardedRef) => {
   const [state, setState] = useState<number>(0);
-  const [addressValues, setAddressValues] = useState<AddressCreateType>(
-    omit(address, ["id", "selected"])
-  );
+  const [addressValues, setAddressValues] = useState<
+    z.input<typeof addressCreateSchema>
+  >(omit(address, ["id", "selected"]));
   const { closeDialog } = useCustomDialogContext();
   const { longitude, latitude } = addressValues;
   const administrativeString = toAdministrativeString(addressValues);
@@ -38,7 +41,7 @@ const AddressEditDialog = forwardRef<
 
   function handleMapSubmit(
     location: Pick<
-      AddressCreateType,
+      z.input<typeof addressCreateSchema>,
       | "latitude"
       | "longitude"
       | "village"
@@ -58,7 +61,7 @@ const AddressEditDialog = forwardRef<
     closeLocationMap();
   }
 
-  function handleSubmit(formData: AddressCreateType) {
+  function handleSubmit(formData: z.input<typeof addressCreateSchema>) {
     //when updating village and district should not be undefined
     const { village, district } = formData;
     const addressPromise = updateAddress({

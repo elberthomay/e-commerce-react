@@ -1,4 +1,3 @@
-import { AddressOutputType } from "../../type/addressType";
 import {
   createColumnHelper,
   getCoreRowModel,
@@ -22,8 +21,13 @@ import { PopoverContent } from "@radix-ui/react-popover";
 import { useRef } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import CustomTable from "../../ui/CustomTable";
+import { z } from "zod";
+import {
+  addressOutputArraySchema,
+  addressOutputSchema,
+} from "@elycommerce/common";
 
-const columnHelper = createColumnHelper<AddressOutputType>();
+const columnHelper = createColumnHelper<z.infer<typeof addressOutputSchema>>();
 
 const defaultColumns = [
   columnHelper.accessor("name", {
@@ -85,7 +89,7 @@ const defaultColumns = [
 function ShopAddressTable({
   shopAddress,
 }: {
-  shopAddress: AddressOutputType[];
+  shopAddress: z.infer<typeof addressOutputArraySchema>;
 }) {
   const table = useReactTable({
     columns: defaultColumns,
@@ -130,7 +134,7 @@ function PinpointDisplay({
 function ShopAddressSwitch({
   shopAddress,
 }: {
-  shopAddress: AddressOutputType;
+  shopAddress: z.infer<typeof addressOutputSchema>;
 }) {
   const { id, name, selected } = shopAddress;
   const { isLoading, toggleShopAddress } = useToggleShopAddress();
@@ -150,7 +154,7 @@ function ShopAddressSwitch({
 function ShopAddressActions({
   shopAddress,
 }: {
-  shopAddress: AddressOutputType;
+  shopAddress: z.infer<typeof addressOutputSchema>;
 }) {
   const { id, name } = shopAddress;
   const { deleteAddress } = useDeleteAddress(id);

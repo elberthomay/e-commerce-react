@@ -1,12 +1,13 @@
 import AddressRow from "./AddressRow";
-import { AddressOutputType } from "../../type/addressType";
+import { z } from "zod";
+import { addressOutputArraySchema } from "@elycommerce/common";
 
 function AddressList({
   addresses,
   onSelect,
   allowUnselect,
 }: {
-  addresses: AddressOutputType[];
+  addresses: z.infer<typeof addressOutputArraySchema>;
   onSelect: (id: string) => void;
   allowUnselect: boolean;
 }) {

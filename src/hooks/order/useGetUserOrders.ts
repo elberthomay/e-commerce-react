@@ -1,5 +1,5 @@
 import { getOrdersQuery } from "@elycommerce/common";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { z } from "zod";
 import { getUserOrders } from "../../api/order";
 import { RequestError } from "../../error/RequestError";
@@ -17,7 +17,7 @@ export default function useGetUserOrders(
       queryFn: ({ pageParam }) =>
         getUserOrders(userId, { ...queryData, page: String(pageParam) }),
       initialPageParam: 1,
-      getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) =>
+      getNextPageParam: (lastPage, _, lastPageParam, __) =>
         lastPage.length !== 0 ? lastPageParam + 1 : undefined,
       retry: (failureCount, error) => {
         if (error instanceof RequestError) return false;

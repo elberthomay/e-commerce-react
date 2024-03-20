@@ -85,7 +85,7 @@ function UserData() {
               </button>
             }
           >
-            <UserNameChangeDialog name={name} />
+            <UserNameChangeDialog name={name!} />
           </CustomDialog>
         </div>
       </div>

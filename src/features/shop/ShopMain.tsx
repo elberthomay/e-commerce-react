@@ -1,6 +1,5 @@
 import { Outlet } from "react-router-dom";
 import SideNavigation from "../../components/SideNavigation";
-import { BsGraphUpArrow } from "react-icons/bs";
 import {
   HiArchiveBox,
   HiChartPie,

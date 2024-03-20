@@ -12,7 +12,7 @@ const BASE_URL = BASE_API_URL + "address/";
 
 const getAddresses =
   (type: "shop" | "user") =>
-  async (): Promise<z.infer<typeof addressOutputArraySchema>[]> => {
+  async (): Promise<z.infer<typeof addressOutputArraySchema>> => {
     const url = BASE_URL + type;
 
     const response = await fetch(url, { credentials: "include" });

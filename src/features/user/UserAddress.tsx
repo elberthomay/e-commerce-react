@@ -7,11 +7,12 @@ import AddressList from "../address/AddressList";
 import Button from "../../ui/Button";
 import { FaPlus } from "react-icons/fa6";
 import CustomDialog from "../../components/CustomDialog";
-import { AddressOutputType } from "../../type/addressType";
 import { ButtonHTMLAttributes, forwardRef } from "react";
 import { twMerge } from "tailwind-merge";
 import CloseDialogConfirmation from "../../ui/CloseDialogConfirmation";
 import useSetTitle from "../../hooks/useSetTitle";
+import { z } from "zod";
+import { addressOutputSchema } from "@elycommerce/common";
 
 function UserAddress() {
   const { isLoading, isError, isSuccess, userAddresses } =
@@ -51,7 +52,7 @@ function UserAddress() {
 const UseraddressCreateButton = forwardRef<
   HTMLButtonElement,
   ButtonHTMLAttributes<HTMLButtonElement> & {
-    userAddresses: AddressOutputType[];
+    userAddresses: z.infer<typeof addressOutputSchema>[];
   }
 >(({ userAddresses, ...props }, forwardedRef) => {
   return (
