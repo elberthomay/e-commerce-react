@@ -21,6 +21,8 @@ import CustomDialog from "../components/CustomDialog";
 import OrderConfirmationBody from "../features/order/OrderConfirmationBody";
 import useDeliverOrder from "../hooks/order/useDeliverOrder";
 import useConfirmOrder from "../hooks/order/useConfirmOrder";
+import Timer from "../components/Timer";
+import { useQueryClient } from "@tanstack/react-query";
 
 function OrderDetail() {
   const { orderId } = useParams();
@@ -85,6 +87,7 @@ function OrderDetailBody({
   const { confirmOrder } = useConfirmOrder(orderDetail.id);
   const { deliverOrder } = useDeliverOrder(orderDetail.id);
   const { cancelOrder } = useCancelOrder(orderDetail.id);
+  const queryClient = useQueryClient();
 
   function handleConfirmOrder() {
     const confirmOrderPromise = confirmOrder();
@@ -130,6 +133,7 @@ function OrderDetailBody({
     country,
     postCode,
     addressDetail,
+    timeout,
   } = orderDetail;
   const totalItemCount = items.reduce((sum, { quantity }) => sum + quantity, 0);
   const totalItemPrice = items.reduce(
@@ -139,7 +143,22 @@ function OrderDetailBody({
   return (
     <GutteredBox className="flex flex-col gap-5 p-2">
       <h1 className="text-3xl font-bold">Order Detail</h1>
-      <p className="font-bold">Order {orderStatusDisplayText[status]}</p>
+      <div className="flex justify-between">
+        <p className="font-bold">Order {orderStatusDisplayText[status]}</p>
+        {(status === OrderStatuses.AWAITING ||
+          status === OrderStatuses.CONFIRMED) && (
+          <p className="font-bold">
+            Order would be automatically cancelled{" "}
+            <Timer
+              timeout={new Date(timeout ?? 0)}
+              onTimeout={() =>
+                queryClient.invalidateQueries({ queryKey: ["orderDetail"] })
+              }
+            />
+          </p>
+        )}
+      </div>
+
       <div className="grid grid-cols-2 justify-between gap-2 text-sm">
         <p className="text-slate-400">Order Id</p>
         <p className="font-bold text-right">{id}</p>
