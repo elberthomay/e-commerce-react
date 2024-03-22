@@ -34,23 +34,52 @@ const HeaderShopBody = React.forwardRef<HTMLDivElement>(
   (props: HTMLAttributes<HTMLDivElement>, forwardedRef) => {
     const navigate = useNavigate();
     const { setOpen } = useCustomHoverCardContext();
-    const { hasShop } = useGetCurrentShop();
-    const handleMyShopNavigation = () => {
-      navigate("/myshop");
+    const { currentShop } = useGetCurrentShop();
+    const handleMyShopNavigation = (link: string) => {
+      navigate(link);
+
+      console.log(link);
       setOpen(false);
     };
 
-    return hasShop ? (
+    return currentShop ? (
       <div
         {...props}
         ref={forwardedRef}
         className={twMerge(
-          "text-center p-5 bg-white rounded-md flex justify-center items-center",
+          "grid grid-cols-[3rem_1fr] justify-center items-center text-center p-5 bg-white rounded-md",
           props?.className
         )}
-        onClick={handleMyShopNavigation}
       >
-        <p className="text-bold">Shop has been created</p>
+        <div className="w-full"></div>
+        <div className="flex flex-col gap-1 w-full border-l border-slate-400 text-bold pl-2">
+          <button
+            className="font-bold text-ellipsis line-clamp-2 hover:text-slate-800"
+            onClick={() => handleMyShopNavigation("/myshop")}
+          >
+            {currentShop.name}
+          </button>
+          <div className="flex flex-col items-start pl-1 text-sm text-slate-400 ">
+            <button
+              className="hover:text-slate-600"
+              onClick={() => handleMyShopNavigation("/myshop/items")}
+            >
+              Items
+            </button>
+            <button
+              className="hover:text-slate-600"
+              onClick={() => handleMyShopNavigation("/myshop/orders/")}
+            >
+              Orders
+            </button>
+            <button
+              className="hover:text-slate-600"
+              onClick={() => handleMyShopNavigation("/myshop/settings/")}
+            >
+              Settings
+            </button>
+          </div>
+        </div>
       </div>
     ) : (
       <NoShopBody {...props} ref={forwardedRef} />

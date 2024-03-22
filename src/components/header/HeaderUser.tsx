@@ -5,6 +5,9 @@ import Logout from "../Logout";
 import React, { ButtonHTMLAttributes, HTMLAttributes } from "react";
 import { twJoin, twMerge } from "tailwind-merge";
 import CustomHoverCard, { useCustomHoverCardContext } from "../CustomHoverCard";
+import useGetUserOrders from "../../hooks/order/useGetUserOrders";
+import { OrderStatuses } from "@elycommerce/common";
+import { CgSpinnerAlt } from "react-icons/cg";
 
 export const HeaderUserButton = React.forwardRef<HTMLButtonElement>(
   (props: ButtonHTMLAttributes<HTMLButtonElement>, forwardedRef) => {
@@ -33,6 +36,16 @@ export const HeaderUserButton = React.forwardRef<HTMLButtonElement>(
 
 const HeaderUserBody = React.forwardRef<HTMLDivElement>(
   ({ className, ...props }: HTMLAttributes<HTMLDivElement>, forwardedRef) => {
+    const { currentUser } = useGetCurrentUser();
+    const { orders } = useGetUserOrders(currentUser?.id ?? "", {
+      limit: "11",
+      status: [
+        OrderStatuses.AWAITING,
+        OrderStatuses.CONFIRMED,
+        OrderStatuses.DELIVERING,
+      ].join(","),
+    });
+
     const { setOpen } = useCustomHoverCardContext();
     const closeHoverCard = () => setOpen(false);
     return (
@@ -53,9 +66,18 @@ const HeaderUserBody = React.forwardRef<HTMLDivElement>(
           <Link to="/orders">
             <li
               onClick={closeHoverCard}
-              className="p-2 rounded-md hover:bg-slate-300"
+              className="flex justify-between p-2 rounded-md hover:bg-slate-300"
             >
-              Orders
+              <span>Orders</span>
+              {orders ? (
+                orders.length > 0 && (
+                  <div className="h-6 aspect-square mr-2 p-1 rounded-md bg-red-600 text-slate-100 flex justify-center items-center text-xs">
+                    {orders.length > 10 ? "10+" : String(orders.length)}
+                  </div>
+                )
+              ) : (
+                <CgSpinnerAlt className="h-6 aspect-square animate-spin" />
+              )}
             </li>
           </Link>
           <Logout>

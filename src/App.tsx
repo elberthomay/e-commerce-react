@@ -11,6 +11,7 @@ const UserSettings = lazy(() => import("./pages/UserSettings"));
 const UserData = lazy(() => import("./features/user/UserData"));
 const Orders = lazy(() => import("./pages/Orders"));
 const OrderDetail = lazy(() => import("./pages/OrderDetail"));
+const OrderItem = lazy(() => import("./pages/OrderItem"));
 const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/Signup"));
 import MainPage from "./pages/MainPage";
@@ -29,7 +30,6 @@ const MyShopAddressSettings = lazy(
 );
 const MyShopOrders = lazy(() => import("./features/myshop/MyShopOrders"));
 import CursorFollowingCircle from "./components/CursorFollowingCircle";
-import OrderItem from "./pages/OrderItem";
 
 function App() {
   const queryClient = new QueryClient();
