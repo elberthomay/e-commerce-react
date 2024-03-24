@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { createAvatarImageUrl } from "../../api/image";
 import useGetCurrentShop from "../../hooks/shop/useGetCurrentShop";
 import React, { ButtonHTMLAttributes, HTMLAttributes } from "react";
@@ -32,17 +32,10 @@ export const HeaderShopButton = React.forwardRef<HTMLButtonElement>(
 
 const HeaderShopBody = React.forwardRef<HTMLDivElement>(
   (props: HTMLAttributes<HTMLDivElement>, forwardedRef) => {
-    const navigate = useNavigate();
     const { setOpen } = useCustomHoverCardContext();
-    const { currentShop } = useGetCurrentShop();
-    const handleMyShopNavigation = (link: string) => {
-      navigate(link);
+    const { hasShop, currentShop } = useGetCurrentShop();
 
-      console.log(link);
-      setOpen(false);
-    };
-
-    return currentShop ? (
+    return hasShop ? (
       <div
         {...props}
         ref={forwardedRef}
@@ -53,31 +46,35 @@ const HeaderShopBody = React.forwardRef<HTMLDivElement>(
       >
         <div className="w-full"></div>
         <div className="flex flex-col gap-1 w-full border-l border-slate-400 text-bold pl-2">
-          <button
+          <Link
+            to={"/myshop"}
             className="font-bold text-ellipsis line-clamp-2 hover:text-slate-800"
-            onClick={() => handleMyShopNavigation("/myshop")}
+            onClick={() => setOpen(false)}
           >
-            {currentShop.name}
-          </button>
+            {currentShop!.name}
+          </Link>
           <div className="flex flex-col items-start pl-1 text-sm text-slate-400 ">
-            <button
+            <Link
+              to={"/myshop/items"}
               className="hover:text-slate-600"
-              onClick={() => handleMyShopNavigation("/myshop/items")}
+              onClick={() => setOpen(false)}
             >
               Items
-            </button>
-            <button
+            </Link>
+            <Link
+              to={"/myshop/orders/"}
               className="hover:text-slate-600"
-              onClick={() => handleMyShopNavigation("/myshop/orders/")}
+              onClick={() => setOpen(false)}
             >
               Orders
-            </button>
-            <button
+            </Link>
+            <Link
+              to={"/myshop/settings/"}
               className="hover:text-slate-600"
-              onClick={() => handleMyShopNavigation("/myshop/settings/")}
+              onClick={() => setOpen(false)}
             >
               Settings
-            </button>
+            </Link>
           </div>
         </div>
       </div>
