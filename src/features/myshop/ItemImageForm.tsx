@@ -56,6 +56,8 @@ function ItemImageForm({
         : (e as DragEvent<HTMLLabelElement>).dataTransfer.files;
 
     if (selectedFile) {
+      // return early when no file is added, this trigger when item selection window is closed in windows
+      if (selectedFile.length === 0) return;
       // image count must not exceed 10
       if (selectedFile.length + imageList.length <= 10) {
         //would throw error if image is invalid
