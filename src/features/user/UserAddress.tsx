@@ -7,19 +7,45 @@ import AddressList from "../address/AddressList";
 import Button from "../../ui/Button";
 import { FaPlus } from "react-icons/fa6";
 import CustomDialog from "../../components/CustomDialog";
-import { ButtonHTMLAttributes, forwardRef } from "react";
+import {
+  ButtonHTMLAttributes,
+  forwardRef,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { twMerge } from "tailwind-merge";
 import CloseDialogConfirmation from "../../ui/CloseDialogConfirmation";
 import useSetTitle from "../../hooks/useSetTitle";
 import { z } from "zod";
 import { addressOutputSchema } from "@elycommerce/common";
+import SearchBar from "../../ui/SearchBar";
+import { useSearchParams } from "react-router-dom";
 
 function UserAddress() {
+  const [tempSearchQuery, setTempSearchQuery] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const { isLoading, isError, isSuccess, userAddresses } =
     useGetUserAddresses();
   useSetTitle((defaultTitle) => `Address | ${defaultTitle}`);
   const { createUserAddress } = useCreateUserAddress();
   const { selectUserAddress } = useSelectUserAddress();
+
+  useEffect(() => {
+    if ((searchParams.get("addressSearch") ?? "") !== tempSearchQuery) {
+      const func = () => {
+        const newSearchParams = new URLSearchParams(searchParams);
+        if (tempSearchQuery.length !== 0)
+          newSearchParams.set("addressSearch", tempSearchQuery);
+        else newSearchParams.delete("addressSearch");
+        setSearchParams(newSearchParams);
+      };
+      const timeoutId = setTimeout(func, 500);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [searchParams, setSearchParams, tempSearchQuery]);
+
   return (
     <>
       {isLoading && <Spinner />}
@@ -27,7 +53,13 @@ function UserAddress() {
       {isSuccess && userAddresses && (
         <div className="flex p-8 flex-col gap-4">
           <div className="flex items-center justify-between">
-            <div>searchbar</div>
+            <SearchBar.Box>
+              <SearchBar.Icon />
+              <SearchBar.Input
+                value={tempSearchQuery}
+                onChange={(e) => setTempSearchQuery(e.target.value)}
+              />
+            </SearchBar.Box>
             <CustomDialog
               trigger={
                 <UseraddressCreateButton userAddresses={userAddresses} />
