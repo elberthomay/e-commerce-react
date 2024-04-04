@@ -9,10 +9,10 @@ function useOutsideClickEvent(ref: any, callback: () => void) {
       }
     }
     // Bind the event listener
-    document.addEventListener("click", handleClickOutside);
+    document.addEventListener("click", handleClickOutside, true);
     return () => {
       // Unbind the event listener on clean up
-      document.removeEventListener("click", handleClickOutside);
+      document.removeEventListener("click", handleClickOutside, true);
     };
   }, [ref, callback]);
 }

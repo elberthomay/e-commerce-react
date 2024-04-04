@@ -64,21 +64,6 @@ function AddressSearch({
         </SearchBar.Box>
         {dropdownIsOpen && (
           <div className="flex flex-col w-full border border-slate-300 rounded-lg justify-start *:border-b *:border-slate-300">
-            <button
-              className="p-3 pl-5 flex items-center gap-3"
-              onClick={handleGeolocate}
-              tabIndex={-1}
-            >
-              <FaLocationCrosshairs className="h-5 w-5 text-slate-500" />
-              Use your current location
-            </button>
-            <button
-              className="p-3 pl-5 text-slate-500 text-left"
-              onClick={onSearchManually}
-              tabIndex={-1}
-            >
-              Your address doesn't appear? Search manually
-            </button>
             {locationSearchIsLoading && (
               <div className="p-3 text-slate-500">Loading...</div>
             )}
@@ -100,6 +85,21 @@ function AddressSearch({
                 ))}
               </div>
             )}
+            <button
+              className="p-3 pl-5 flex items-center gap-3"
+              onClick={handleGeolocate}
+              tabIndex={-1}
+            >
+              <FaLocationCrosshairs className="h-5 w-5 text-slate-500" />
+              Use your current location
+            </button>
+            <button
+              className="p-3 pl-5 text-slate-500 text-left"
+              onClick={onSearchManually}
+              tabIndex={-1}
+            >
+              Your address doesn't appear? Search manually
+            </button>
           </div>
         )}
       </div>
@@ -117,7 +117,7 @@ function LocationItem(props: ButtonHTMLAttributes<HTMLButtonElement>) {
     <button
       {...props}
       className={twMerge(
-        "p-3 flex justify-start items-center gap-3",
+        "w-full p-3 flex justify-start items-center gap-3",
         props.className
       )}
     >
