@@ -4,6 +4,7 @@ import Spinner from "../components/Spinner";
 import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import GutteredBox from "../ui/GutteredBox";
 import useSetTitle from "../hooks/useSetTitle";
+import ShopHubHeader from "../ui/ShopHubHeader";
 
 function Login() {
   const { isLoading, error, isAuthenticated } = useGetCurrentUser();
@@ -23,7 +24,8 @@ function Login() {
         <Navigate to={loginRedirect ?? "/"} />
       )}
       {!isLoading && !error && !isAuthenticated && (
-        <main className="flex justify-center mt-8">
+        <main className="flex flex-col items-center mt-6 gap-6">
+          <ShopHubHeader />
           <div className=" flex flex-col gap-6 w-full max-w-md p-8 border shadow-sm border-slate-300 rounded-lg">
             <h1 className="text-center text-2xl font-bold">Login</h1>
             <LoginForm onLogin={onLogin} />
