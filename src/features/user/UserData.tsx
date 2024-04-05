@@ -33,16 +33,19 @@ function UserData() {
         ? (e as ChangeEvent<HTMLInputElement>).target.files
         : (e as DragEvent<HTMLLabelElement>).dataTransfer.files;
 
+    if (selectedFiles?.length === 0) return;
+
     if (selectedFiles) {
-      const image = await resizeImageFile(selectedFiles[0]);
-      if (image) {
-        const changeUserAvatarPromise = changeUserAvatar(image.image);
+      const imageOrError = await resizeImageFile(selectedFiles[0]);
+
+      if (typeof imageOrError === "object" && imageOrError !== null) {
+        const changeUserAvatarPromise = changeUserAvatar(imageOrError.image);
         toast.promise(changeUserAvatarPromise, {
-          loading: "Changing user avatar",
+          loading: "Changing shop avatar",
           success: "Avatar successfuly changed",
-          error: "Error changing user avatar",
+          error: "Error changing shop avatar",
         });
-      } else toast.error("Invalid image");
+      } else toast.error(imageOrError ?? "Invalid image");
     }
   }
   return (

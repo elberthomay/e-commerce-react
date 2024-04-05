@@ -38,16 +38,19 @@ function MyShopDataSettings() {
         ? (e as ChangeEvent<HTMLInputElement>).target.files
         : (e as DragEvent<HTMLLabelElement>).dataTransfer.files;
 
+    if (selectedFiles?.length === 0) return;
+
     if (selectedFiles) {
-      const image = await resizeImageFile(selectedFiles[0]);
-      if (image) {
-        const changeUserAvatarPromise = changeShopAvatar(image.image);
+      const imageOrError = await resizeImageFile(selectedFiles[0]);
+
+      if (typeof imageOrError === "object" && imageOrError !== null) {
+        const changeUserAvatarPromise = changeShopAvatar(imageOrError.image);
         toast.promise(changeUserAvatarPromise, {
           loading: "Changing shop avatar",
           success: "Avatar successfuly changed",
           error: "Error changing shop avatar",
         });
-      } else toast.error("Invalid image");
+      } else toast.error(imageOrError ?? "Invalid image");
     }
   }
 

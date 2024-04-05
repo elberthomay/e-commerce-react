@@ -3,7 +3,7 @@ import { ItemDetailsOutputType } from "../../type/itemType";
 import toast from "react-hot-toast";
 import { createImageUrl } from "../../api/image";
 import { v4 as uuid } from "uuid";
-import { processImageFiles, resizeImageFile } from "../../utilities/imageUtils";
+import { processImageFiles } from "../../utilities/imageUtils";
 import { RxCross2 } from "react-icons/rx";
 
 function ItemImageForm({
