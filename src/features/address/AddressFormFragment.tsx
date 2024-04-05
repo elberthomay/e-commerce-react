@@ -303,10 +303,8 @@ function PhoneCodeSelector({
 }: ButtonHTMLAttributes<HTMLButtonElement> & {
   formApi: UseFormReturn<any, any, undefined>;
 }) {
-  const [selectWindowOpen, setSearchWindowOpen] = useState<boolean>(false);
-  const [phoneCodeIndex, setPhoneCodeIndex] = useState<number>(0);
+  const { register, setValue, getValues } = formApi;
 
-  const { register, setValue } = formApi;
   const mappedPhoneCode = useMemo(
     () =>
       countryPhoneCode.map(({ prefix, emoji, name }, index) => ({
@@ -317,6 +315,18 @@ function PhoneCodeSelector({
       })),
     []
   );
+
+  const [selectWindowOpen, setSearchWindowOpen] = useState<boolean>(false);
+  const [phoneCodeIndex, setPhoneCodeIndex] = useState<number>(() => {
+    const currentPhoneCode = getValues("phoneCountryCode");
+    if (currentPhoneCode) {
+      const currentPhoneCodeIndex = mappedPhoneCode.findIndex(
+        ({ value }) => value === currentPhoneCode
+      );
+      return currentPhoneCodeIndex !== -1 ? currentPhoneCodeIndex : 0;
+    } else return 0;
+  });
+
   const selectedPhoneCode = mappedPhoneCode[phoneCodeIndex];
   const phoneCodeButtonString =
     selectedPhoneCode !== undefined
