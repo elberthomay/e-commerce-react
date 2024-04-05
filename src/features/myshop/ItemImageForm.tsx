@@ -3,7 +3,7 @@ import { ItemDetailsOutputType } from "../../type/itemType";
 import toast from "react-hot-toast";
 import { createImageUrl } from "../../api/image";
 import { v4 as uuid } from "uuid";
-import { resizeImageFile } from "../../utilities/imageUtils";
+import { processImageFiles, resizeImageFile } from "../../utilities/imageUtils";
 import { RxCross2 } from "react-icons/rx";
 
 function ItemImageForm({
@@ -60,21 +60,21 @@ function ItemImageForm({
       if (selectedFile.length === 0) return;
       // image count must not exceed 10
       if (selectedFile.length + imageList.length <= 10) {
-        //would throw error if image is invalid
-        const newImages = (
-          await Promise.all(
-            Array.from(selectedFile).map((file) => resizeImageFile(file))
-          )
-        )
-          .filter((i): i is Exclude<typeof i, null> => !!i)
-          .map((image, index) => ({
+        const imagesAndErrors = await processImageFiles(selectedFile);
+        if (imagesAndErrors.errors.length !== 0) {
+          toast.error(
+            <div>
+              {imagesAndErrors.errors.map((error, i) =>
+                error ? <p key={i}>{`${i + 1}. ${error}`}</p> : false
+              )}
+            </div>
+          );
+        } else {
+          const newImages = imagesAndErrors.images.map((image, index) => ({
             ...image,
             order: highestIndex + index + 1,
             id: uuid(),
           }));
-
-        if (newImages.length === 0) toast.error("Image(s) are invalid");
-        else {
           setImageList((images) => [...images, ...newImages]);
           setImagesToAdd((images) => [...images, ...newImages]);
           //add orders of new images to if images are scheduled to be reordered
