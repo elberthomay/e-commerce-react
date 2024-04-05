@@ -7,13 +7,7 @@ import AddressList from "../address/AddressList";
 import Button from "../../ui/Button";
 import { FaPlus } from "react-icons/fa6";
 import CustomDialog from "../../components/CustomDialog";
-import {
-  ButtonHTMLAttributes,
-  forwardRef,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { ButtonHTMLAttributes, forwardRef, useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import CloseDialogConfirmation from "../../ui/CloseDialogConfirmation";
 import useSetTitle from "../../hooks/useSetTitle";
