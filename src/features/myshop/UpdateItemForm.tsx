@@ -26,9 +26,8 @@ const UpdateItemForm = forwardRef<
 
   async function update(
     isDirty: boolean,
-    formData: Pick<
-      ItemDetailsOutputType,
-      "name" | "description" | "price" | "quantity"
+    formData: Partial<
+      Pick<ItemDetailsOutputType, "name" | "description" | "price" | "quantity">
     >
   ) {
     await updateItem({
@@ -44,20 +43,36 @@ const UpdateItemForm = forwardRef<
     });
   }
 
-  function handleUpdate(
-    isDirty: boolean,
+  function handleUpdate({
+    isDirty,
+    formData,
+    dirtyFields,
+  }: {
+    isDirty: boolean;
     formData: Pick<
       ItemDetailsOutputType,
       "name" | "description" | "price" | "quantity"
-    >
-  ) {
+    >;
+    dirtyFields: Partial<{
+      name?: boolean | undefined;
+      description?: boolean | undefined;
+      price?: boolean | undefined;
+      quantity?: boolean | undefined;
+    }>;
+  }) {
     if (
       isDirty ||
       imagesToAdd.length > 0 ||
       imagesToDelete.length > 0 ||
       imagesOrder
     ) {
-      const updatePromise = update(isDirty, formData);
+      const filteredEntries = Object.entries(formData).filter(
+        (item) => dirtyFields[item[0] as keyof typeof formData]
+      );
+      const updatePromise = update(
+        isDirty,
+        Object.fromEntries(filteredEntries)
+      );
       toast.promise(updatePromise, {
         loading: "Updating item",
         success: () => {

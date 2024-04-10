@@ -15,13 +15,14 @@ const CreateItemForm = forwardRef<HTMLDivElement, ComponentProps<"div">>(
     const [, setImagesToDelete] = useState<number[]>([]);
     const [imageOrder, setImagesOrder] = useState<number[] | null>(null);
 
-    function handleCreate(
-      _: unknown,
+    function handleCreate({
+      formData,
+    }: {
       formData: Pick<
         ItemDetailsOutputType,
         "name" | "description" | "price" | "quantity"
-      >
-    ) {
+      >;
+    }) {
       // reorder image before creating item
       const sortedNewImages = imageOrder
         ? imageOrder.map((index) => imagesToAdd[index].image)

@@ -29,13 +29,19 @@ function ItemForm({
   >;
   setImagesToDelete: Dispatch<React.SetStateAction<number[]>>;
   setImagesOrder: Dispatch<React.SetStateAction<number[] | null>>;
-  onSubmit: (
-    isDirty: boolean,
+  onSubmit: (data: {
+    isDirty: boolean;
     formData: Pick<
       ItemDetailsOutputType,
       "name" | "description" | "price" | "quantity"
-    >
-  ) => void;
+    >;
+    dirtyFields: Partial<{
+      name?: boolean | undefined;
+      description?: boolean | undefined;
+      price?: boolean | undefined;
+      quantity?: boolean | undefined;
+    }>;
+  }) => void;
   onCancel: () => void;
   buttonText: string;
 }) {
@@ -50,11 +56,15 @@ function ItemForm({
     handleSubmit,
     register,
     watch,
-    formState: { errors, isDirty },
+    formState: { errors, isDirty, dirtyFields },
   } = useForm({ defaultValues: fieldValue });
 
   return (
-    <form onSubmit={handleSubmit((formData) => onSubmit(isDirty, formData))}>
+    <form
+      onSubmit={handleSubmit((formData) =>
+        onSubmit({ isDirty, formData, dirtyFields })
+      )}
+    >
       <FormRow
         label="name"
         formErrors={errors}
