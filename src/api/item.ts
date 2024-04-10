@@ -49,20 +49,31 @@ export async function getItem(
 
 export async function updateItem(
   itemId: string,
-  updateData: z.infer<typeof itemUpdateSchema>
+  {
+    updateData,
+    newImages,
+  }: { updateData: z.infer<typeof itemUpdateSchema>; newImages?: Blob[] }
 ): Promise<z.infer<typeof itemDetailsOutputSchema>> {
   const url = new URL(`${itemId}/`, API_URL).toString();
+  let body: string | FormData;
+  if (newImages) {
+    body = new FormData();
+    body.append("body", JSON.stringify(updateData));
+    for (const image of newImages) body.append("images", image);
+  } else body = JSON.stringify(updateData);
   const response = await fetch(url, {
     method: "PATCH",
     credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(updateData),
+    headers: newImages
+      ? undefined
+      : {
+          "Content-Type": "application/json",
+        },
+    body,
   });
-  const body = await response.json();
-  if (response.ok) return body;
-  else throw new RequestError(response.status, body);
+  const responseBody = await response.json();
+  if (response.ok) return responseBody;
+  else throw new RequestError(response.status, responseBody);
 }
 
 export async function deleteItem(

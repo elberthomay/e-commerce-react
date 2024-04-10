@@ -1,7 +1,4 @@
 import { ComponentProps, forwardRef, useState } from "react";
-import useAddImage from "../../hooks/item/useAddImage";
-import useDeleteImage from "../../hooks/item/useDeleteImage";
-import useReorderImage from "../../hooks/item/useReorderImage";
 import useUpdateItem from "../../hooks/item/useUpdateItem";
 import useGetItem from "../../hooks/item/useGetItem";
 import toast from "react-hot-toast";
@@ -17,12 +14,6 @@ const UpdateItemForm = forwardRef<
 >(({ id, ...props }, forwardedRef) => {
   const { isLoading: itemIsLoading, error: itemError, item } = useGetItem(id);
   const { updateItem } = useUpdateItem(id);
-
-  const { addItemImage } = useAddImage(id);
-
-  const { deleteItemImage } = useDeleteImage(id);
-
-  const { reorderItemImage } = useReorderImage(id);
 
   const [imagesToAdd, setImagesToAdd] = useState<
     { image: Blob; order: number; id: string }[]
@@ -40,11 +31,17 @@ const UpdateItemForm = forwardRef<
       "name" | "description" | "price" | "quantity"
     >
   ) {
-    if (isDirty) await updateItem(formData);
-    if (imagesToDelete.length > 0) await deleteItemImage(imagesToDelete);
-    if (imagesToAdd.length > 0)
-      await addItemImage(imagesToAdd.map((img) => img.image));
-    if (imagesOrder) await reorderItemImage(imagesOrder);
+    await updateItem({
+      updateData: {
+        ...(isDirty ? formData : {}),
+        imagesDelete: imagesToDelete.length > 0 ? imagesToDelete : undefined,
+        imagesReorder: imagesOrder ? imagesOrder : undefined,
+      },
+      newImages:
+        imagesToAdd.length > 0
+          ? imagesToAdd.map((img) => img.image)
+          : undefined,
+    });
   }
 
   function handleUpdate(
