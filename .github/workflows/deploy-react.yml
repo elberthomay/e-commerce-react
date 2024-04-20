@@ -34,7 +34,7 @@ jobs:
     # Authenticate with IBM Cloud CLI
     - name: Authenticate with IBM Cloud CLI
       run: |
-        ibmcloud login --apikey "${{ secrets.IBM_CLOUD_API_KEY }}" -r "${{ secrets.IBM_CLOUD_REGION }}" -g default
+        ibmcloud login --apikey "${{ secrets.IBM_CLOUD_API_KEY }}" -r "${{ secrets.IBM_CLOUD_REGION }}" -g Default
         ibmcloud cr region-set "${{ secrets.IBM_CLOUD_REGION }}"
         ibmcloud cr login
         ibmcloud ks cluster config --cluster ${{ secrets.IKS_CLUSTER }}
