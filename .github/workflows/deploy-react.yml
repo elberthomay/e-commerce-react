@@ -22,10 +22,23 @@ jobs:
     - name: Push image to dockerhub
       run: docker push elberthomax/ecommerce-react
       
-    - uses: digitalocean/action-doctl@v2
-      with:
-        token: ${{ secrets.DO_KUBE_TOKEN }}
-    - run: doctl kubernetes cluster kubeconfig save ecommerce
+    # Download and Install IBM Cloud CLI
+    - name: Install IBM Cloud CLI
+      run: |
+        curl -fsSL https://clis.cloud.ibm.com/install/linux | sh
+        ibmcloud --version
+        ibmcloud config --check-version=false
+        ibmcloud plugin install -f kubernetes-service
+        ibmcloud plugin install -f container-registry
+
+    # Authenticate with IBM Cloud CLI
+    - name: Authenticate with IBM Cloud CLI
+      run: |
+        ibmcloud login --apikey "${{ secrets.IBM_CLOUD_API_KEY }}" -r "${{ secrets.IBM_CLOUD_REGION }}" -g default
+        ibmcloud cr region-set "${{ secrets.IBM_CLOUD_REGION }}"
+        ibmcloud cr login
+        ibmcloud ks cluster config --cluster ${{ secrets.IKS_CLUSTER }}
+        
     - run: kubectl rollout restart deployment ecommerce-react-depl
 
     
