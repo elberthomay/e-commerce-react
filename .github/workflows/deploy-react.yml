@@ -36,8 +36,8 @@ jobs:
       - name: Get K8s context
         uses: azure/aks-set-context@v3
         with:
-          resource-group: ${{ env.AZURE_CLUSTER_NAME }}
-          cluster-name: ${{ env.AZURE_CLUSTER_NAME }}
+          resource-group: ${{ secrets.AZURE_CLUSTER_NAME }}
+          cluster-name: ${{ secrets.AZURE_CLUSTER_NAME }}
           admin: 'false'
           use-kubelogin: 'true'
       - run: kubectl rollout restart deployment ecommerce-react-depl
