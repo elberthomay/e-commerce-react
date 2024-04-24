@@ -8,37 +8,34 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
     
-    - name: Build the Docker image
-      run: docker build -t elberthomax/ecommerce-react -f Dockerfile.prod .
+      - name: Build the Docker image
+        run: docker build -t elberthomax/ecommerce-react -f Dockerfile.prod .
       
-    - name: Login into dockerhub
-      run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-      env: 
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Login into dockerhub
+        run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        env: 
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         
-    - name: Push image to dockerhub
-      run: docker push elberthomax/ecommerce-react
+      - name: Push image to dockerhub
+        run: docker push elberthomax/ecommerce-react
       
-    # Download and Install IBM Cloud CLI
-    - name: Install IBM Cloud CLI
-      run: |
-        curl -fsSL https://clis.cloud.ibm.com/install/linux | sh
-        ibmcloud --version
-        ibmcloud config --check-version=false
-        ibmcloud plugin install -f kubernetes-service
-        ibmcloud plugin install -f container-registry
-
-    # Authenticate with IBM Cloud CLI
-    - name: Authenticate with IBM Cloud CLI
-      run: |
-        ibmcloud login --apikey "${{ secrets.IBM_CLOUD_API_KEY }}" -r "${{ secrets.IBM_CLOUD_REGION }}" -g Default
-        ibmcloud cr region-set "${{ secrets.IBM_CLOUD_REGION }}"
-        ibmcloud cr login
-        ibmcloud ks cluster config --cluster ${{ secrets.IKS_CLUSTER }}
-        
-    - run: kubectl rollout restart deployment ecommerce-react-depl
+      # Download and Install IBM Cloud CLI
+      - name: Azure login
+        uses: azure/login@v1.4.6
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Get K8s context
+        uses: azure/aks-set-context@v3
+        with:
+          resource-group: ${{ env.AZURE_CLUSTER_NAME }}
+          cluster-name: ${{ env.AZURE_CLUSTER_NAME }}
+          admin: 'false'
+          use-kubelogin: 'true'
+      - run: kubectl rollout restart deployment ecommerce-react-depl
 
     
